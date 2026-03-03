@@ -13,37 +13,6 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(helmet());
 // app.use(favicon(path.join(__dirname, "favicon.ico")));
-// Home route - HTML
-app.get("/", (req, res) => {
-  res.type("html").send(`
-    <!doctype html>
-    <html>
-      <head>
-        <meta charset="utf-8"/>
-        <title>Express on Vercel</title>
-        <link rel="stylesheet" href="../public/style.css" />
-      </head>
-      <body>
-        <nav>
-          <a href="/">Home</a>
-          <a href="/about">About</a>
-          <a href="/api-data">API Data</a>
-          <a href="/healthz">Health</a>
-        </nav>
-        <h1>Welcome to Express + TypeScript on Vercel 🚀</h1>
-        <p>This is a minimal example without a database or forms.</p>
-        <img src="../public/logo.png" alt="Logo" width="120" />
-      </body>
-    </html>
-  `);
-});
-
-app.get("/about", function (req, res) {
-  const filePath = path.join(__dirname, "..", "components", "about.htm");
-  res.sendFile(filePath, (err) => {
-    if (err) res.status(404).send("Not found");
-  });
-});
 
 // Example API endpoint - JSON
 app.get("/api-data", (req, res) => {
@@ -57,14 +26,7 @@ app.get("/api-data", (req, res) => {
 app.get("/healthz", (req, res) => {
   res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
 });
-void (async () => {
-  // 1. ensure database is connected
-  await Database.getInstance();
-  // 2. start the server
-  app.listen(process.env.PORT, () => {
-    logger.log(`🚀 Server is running on port ${process.env.PORT}`);
-  });
-})();
+
 export { app };
 export const handler = serverless(app);
 // @types/node-cron @types/multer
