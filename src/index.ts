@@ -4,7 +4,6 @@ import favicon from "serve-favicon";
 import path from "path";
 import { fileURLToPath } from "url";
 import helmet from "helmet";
-import { GlobalErrorHandler } from "./global/GlobalErrorHandler";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -52,7 +51,5 @@ app.get("/api-data", (req, res) => {
 app.get("/healthz", (req, res) => {
   res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
 });
-GlobalErrorHandler(app);
 export default app;
 // @types/node-cron @types/multer
-
