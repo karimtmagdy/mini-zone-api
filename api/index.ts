@@ -1,4 +1,3 @@
-import { handler } from "../src/index.js";
+import { app } from "../src/index.js";
 
-
-export default handler;
+export default app;

@@ -37,7 +37,10 @@ app.get("/", (req, res) => {
 });
 
 app.get("/about", function (req, res) {
-  res.sendFile(path.join(__dirname, "..", "components", "about.htm"));
+  const filePath = path.join(__dirname, "..", "components", "about.htm");
+  res.sendFile(filePath, (err) => {
+    if (err) res.status(404).send("Not found");
+  });
 });
 
 // Example API endpoint - JSON
