@@ -1,5 +1,5 @@
 import express, { type Application } from "express";
-import { GlobalErrorHandler } from "./global/GlobalErrorHandler";
+import { GlobalErrorHandler } from "./global/GlobalErrorHandler.ts";
 const app: Application = express();
 const PORT = 8000;
 
