@@ -52,5 +52,6 @@ app.get("/api-data", (req, res) => {
 app.get("/healthz", (req, res) => {
   res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
 });
+export { app };
 export default serverless(app);
 // @types/node-cron @types/multer

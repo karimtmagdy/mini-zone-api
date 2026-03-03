@@ -15,3 +15,9 @@ app.listen(PORT, () => {
 });
 
 export { app };
+// {
+//   "version": 2,
+//   "builds": [{ "src": "dist/server.js", "use": "@vercel/node" }],
+//   "routes": [{ "src": "/(.*)", "dest": "dist/server.js" }],
+//   "crons": [{ "path": "/src/index.ts", "schedule": "0 10 * * *" }]
+// }
