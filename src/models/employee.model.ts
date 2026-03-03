@@ -5,7 +5,7 @@ import { PersonSchemaFields } from "./shard.schema.js";
 const EmployeeSchema = new Schema<IEmployee>(
   {
     ...PersonSchemaFields,
-    employeeId: { type: String, required: true, unique: true },
+    code: { type: String, required: true, unique: true },
     department: { type: String, required: true },
     jobTitle: { type: String, required: true },
     salary: { type: Number },
@@ -29,8 +29,6 @@ const EmployeeSchema = new Schema<IEmployee>(
   },
 );
 
-EmployeeSchema.index({ email: 1 });
 EmployeeSchema.index({ department: 1 });
-EmployeeSchema.index({ employeeId: 1 });
 
 export const EmployeeModel = model<IEmployee>("Employee", EmployeeSchema);

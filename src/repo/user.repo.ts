@@ -12,6 +12,14 @@ export class UserRepo extends AbstractRepo<IUser> {
     return this.model.findOne({ email: email.toLowerCase() }).exec();
   }
 
+  async findByUsername(username: string): Promise<IUser | null> {
+    return this.model.findOne({ username }).exec();
+  }
+
+  async findByEmployee(employee: string): Promise<IUser | null> {
+    return this.model.findOne({ employee }).exec();
+  }
+
   async findByRole(role: UserRole): Promise<IUser[]> {
     return this.model.find({ role, status: UserStatusEnum.ACTIVE }).exec();
   }
@@ -22,5 +30,9 @@ export class UserRepo extends AbstractRepo<IUser> {
 
   async updateRole(id: string, role: UserRole): Promise<IUser | null> {
     return this.model.findByIdAndUpdate(id, { role }, { new: true }).exec();
+  }
+
+  async updateStatus(id: string, status: UserStatusEnum): Promise<IUser | null> {
+    return this.model.findByIdAndUpdate(id, { status }, { new: true }).exec();
   }
 }

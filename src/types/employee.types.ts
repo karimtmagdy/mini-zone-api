@@ -1,7 +1,7 @@
 import { IBase } from "./base.types.js";
 
 export interface IEmployee extends IBase {
-  employeeId: string;
+  code: string;
   department: string;
   jobTitle: string;
   salary: number;

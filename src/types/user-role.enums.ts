@@ -9,6 +9,7 @@ export const USER_ROLES = [
   "staff",
   "customer-support",
   "vendor",
+  "hr",
 ] as const;
 export type UserRole = (typeof USER_ROLES)[number];
 export enum UserRoleEnum {
@@ -22,6 +23,7 @@ export enum UserRoleEnum {
   STAFF = "staff",
   CUSTOMER_SUPPORT = "customer-support",
   VENDOR = "vendor",
+  HR = "hr",
 }
 export const USER_STATE = ["online", "offline"] as const;
 export type UserState = (typeof USER_STATE)[number];

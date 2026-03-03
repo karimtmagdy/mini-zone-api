@@ -13,7 +13,7 @@ export class User extends AbstractPerson<IUser> {
   // Properties unique to User or that need explicit override
   username: string;
   role: UserRole;
-  employeeId?: string | undefined;
+  employee?: string | undefined;
   gender?: UserGender | undefined;
   slug: string;
   password: string;
@@ -36,7 +36,7 @@ export class User extends AbstractPerson<IUser> {
     // Explicitly assign fields that are not in the base getters
     this.username = doc.username;
     this.role = doc.role;
-    this.employeeId = doc.employeeId?.toString();
+    this.employee = doc.employee?.toString();
     this.gender = doc.gender;
     this.slug = doc.slug;
     this.password = doc.password;
@@ -79,8 +79,12 @@ export class User extends AbstractPerson<IUser> {
       image: this.image,
       status: this.status,
       state: this.state,
-      employeeId: this.employeeId,
+      employee: this.employee,
       lastLoginAt: this.lastLoginAt,
     };
+  }
+
+  get fullName(): string {
+    return `${this.name.first} ${this.name.last}`;
   }
 }

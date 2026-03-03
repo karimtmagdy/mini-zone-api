@@ -19,7 +19,6 @@ const UserSchema = new Schema<IUser>(
     username: {
       type: String,
       required: true,
-      unique: true,
       minlength: [3, "Username must be at least 3 characters"],
       maxlength: [50, "Username must be at most 50 characters"],
     },
@@ -54,7 +53,7 @@ const UserSchema = new Schema<IUser>(
       enum: USER_ROLES,
       default: UserRoleEnum.USER,
     },
-    employeeId: { type: Schema.Types.ObjectId, ref: "Employee" },
+    employee: { type: Schema.Types.ObjectId, ref: "Employee" },
     lastLoginAt: { type: Date },
     slug: {
       type: String,
@@ -123,7 +122,7 @@ UserSchema.pre("updateOne", async function () {
     user.slug = slugify(user.username);
   }
 });
-UserSchema.index({ email: 1 });
+// UserSchema.index({ email: 1 });
 UserSchema.index({ role: 1 });
 
 export const UserModel = model<IUser>("User", UserSchema);

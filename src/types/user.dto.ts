@@ -12,7 +12,7 @@ export interface IUser extends IBase {
   slug: string;
   role: UserRole;
   gender?: UserGender;
-  employeeId?: string;
+  employee?: string;
   lastLoginAt: Date;
   passwordChangedAt?: Date;
   state: UserState;

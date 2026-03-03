@@ -1,9 +1,9 @@
 import { IEmployee } from "../types/employee.types.js";
 import { AbstractPerson } from "./abstract.person.js";
 
-export abstract class Employee extends AbstractPerson<IEmployee> {
+export class Employee extends AbstractPerson<IEmployee> {
   // Properties unique to Employee
-  public employeeId: string;
+  public code: string;
   public department: string;
   public jobTitle: string;
   public salary?: number | undefined;
@@ -12,7 +12,7 @@ export abstract class Employee extends AbstractPerson<IEmployee> {
 
   constructor(doc: IEmployee) {
     super(doc);
-    this.employeeId = doc.employeeId;
+    this.code = doc.code;
     this.department = doc.department;
     this.jobTitle = doc.jobTitle;
     this.salary = doc.salary;
@@ -27,7 +27,7 @@ export abstract class Employee extends AbstractPerson<IEmployee> {
       email: this.email,
       phone: this.phone,
       image: this.image,
-      employeeId: this.employeeId,
+      code: this.code,
       department: this.department,
       jobTitle: this.jobTitle,
       salary: this.salary,

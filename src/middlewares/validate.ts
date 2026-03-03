@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ZodSchema, ZodError } from "zod";
+import { ZodSchema } from "zod";
 
 type ValidationTarget = "body" | "query" | "params";
 
@@ -13,24 +13,9 @@ export const validate =
     const result = schema.safeParse(req[target]);
 
     if (!result.success) {
-      const errors = formatZodErrors(result.error);
-      res.status(422).json({
-        status: "fail",
-        message: "Validation failed",
-        errors,
-      });
-      return;
+      return next(result.error);
     }
 
     req[target] = result.data;
     next();
   };
-
-function formatZodErrors(error: ZodError): Record<string, string[]> {
-  return error.errors.reduce<Record<string, string[]>>((acc, err) => {
-    const key = err.path.join(".") || "root";
-    if (!acc[key]) acc[key] = [];
-    acc[key].push(err.message);
-    return acc;
-  }, {});
-}

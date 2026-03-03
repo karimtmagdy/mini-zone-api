@@ -9,7 +9,7 @@ export type Image = {
   publicId: string | null;
 };
 export const DEFAULT_USER_IMAGE =
-  "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+  "https://www.vecteezy.com/png/24983914-simple-user-default-icon";
 
 // export interface GlobalResponse<T> {
 //   status: string;

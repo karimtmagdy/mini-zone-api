@@ -5,18 +5,43 @@ import {
   PasswordZod,
   regexPhone,
 } from "./shard.schema.js";
+import { UserRoleEnum } from "../types/user-role.enums.js";
 
-const PersonBaseZod = z.object({
-  username: z.string(),
-  name: z.object({
-    first: z.string().min(1).max(50).trim(),
-    last: z.string().min(1).max(50).trim(),
+export const PersonBaseZod = z.object({
+  username: z.string({
+    message: "Username is required and must be a valid string",
   }),
+  name: z.object(
+    {
+      first: z
+        .string({
+          message: "First name is required and must be a valid string",
+        })
+        .min(1, "First name cannot be empty")
+        .max(50)
+        .trim(),
+      last: z
+        .string({
+          message: "Last name is required and must be a valid string",
+        })
+        .min(1, "Last name cannot be empty")
+        .max(50)
+        .trim(),
+    },
+    { message: "Name object is required" },
+  ),
   email: EmailZod,
-  phone: z.string().regex(regexPhone).optional(),
-  gender: z.enum(["male", "female"]).optional(),
+  phone: z
+    .string({ message: "Phone must be a valid string" })
+    .regex(regexPhone, "Invalid phone number format")
+    .optional(),
+  gender: z
+    .enum(["male", "female"], {
+      message: "Gender must be either 'male' or 'female'",
+    })
+    .optional(),
 });
-const registerZod = PersonBaseZod.pick({
+export const registerUserZod = PersonBaseZod.pick({
   username: true,
   email: true,
 })
@@ -28,9 +53,10 @@ const registerZod = PersonBaseZod.pick({
     error: "passwords do not match",
     path: ["confirm"],
   });
-const LoginZod = registerZod.omit({
-  username: true,
-  confirm: true,
+const LoginZod = PersonBaseZod.pick({
+  email: true,
+}).extend({
+  password: PasswordZod,
 });
 const ChangePasswordZod = z
   .object({
@@ -52,16 +78,18 @@ const ForogtPasswordZod = PersonBaseZod.pick({ email: true })
 const SendOTPZod = z.object({
   code: z.string().length(6, "OTP code must be 6 digits"),
 });
-const createUserZod = PersonBaseZod.pick({
-  name: true,
-  email: true,
-  phone: true,
+export const createUserZod = PersonBaseZod.pick({
+  username: true,
 }).extend({
-  role: z.enum([]),
+  role: z.nativeEnum(UserRoleEnum, {
+    message: "Role is required and must be a valid specified option",
+  }),
   password: PasswordZod,
-  employeeId: ObjectIdZod.optional(),
+  employee: ObjectIdZod.describe(
+    "The ID of the Employee to link this User account to",
+  ),
 });
-const UpdateUserZod = createUserZod.partial().omit({ password: true });
+export const updateUserZod = createUserZod.partial().omit({ password: true });
 const CreateEmployeeZod = PersonBaseZod.pick({
   name: true,
   email: true,
@@ -73,10 +101,10 @@ const deleteUserZod = z.object({
 const deactivateUserZod = z.object({
   password: z.string("Password is required to confirm deactivation"),
 });
-export type RegisterDTO = z.infer<typeof registerZod>;
+export type RegisterDTO = z.infer<typeof registerUserZod>;
 export type LoginDTO = z.infer<typeof LoginZod>;
 export type RefreshTokenDTO = z.infer<typeof RefreshTokenZod>;
-export type UpdateUserDTO = z.infer<typeof UpdateUserZod>;
+export type UpdateUserDTO = z.infer<typeof updateUserZod>;
 export type CreateEmployeeDTO = z.infer<typeof CreateEmployeeZod>;
 export type SendOTPDTO = z.infer<typeof SendOTPZod>;
 export type ForogtPasswordDTO = z.infer<typeof ForogtPasswordZod>;
