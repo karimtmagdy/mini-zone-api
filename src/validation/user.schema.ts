@@ -4,7 +4,7 @@ import {
   ObjectIdZod,
   PasswordZod,
   regexPhone,
-} from "./shard.schema";
+} from "./shard.schema.js";
 
 const PersonBaseZod = z.object({
   username: z.string(),

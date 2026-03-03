@@ -3,11 +3,10 @@ import express from "express";
 import serverless from "serverless-http";
 
 import { configApp } from "./config/config-app.js";
+import { MissingRouteHandler } from "./global/GlobalErrorHandler.js";
 
 const app = express();
 configApp(app);
-
-
 
 // Example API endpoint - JSON
 app.get(["/"], (_req, res) => {
@@ -23,7 +22,6 @@ app.get(["/"], (_req, res) => {
     time: new Date().toISOString(),
   });
 });
-
+MissingRouteHandler(app);
 export { app };
 export const handler = serverless(app);
-

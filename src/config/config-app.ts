@@ -7,6 +7,7 @@ import hpp from "hpp";
 import favicon from "serve-favicon";
 import path from "path";
 import { fileURLToPath } from "url";
+import morgan from "morgan";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,14 +16,17 @@ export function configApp(app: Express) {
   // Use serve-favicon library
   // You can point this to a real file if you have one, e.g., path.join(__dirname, "favicon.ico")
   const faviconPath = path.join(__dirname, "favicon.ico");
-  
-  // To avoid "file not found" errors if the file doesn't exist, 
+
+  // To avoid "file not found" errors if the file doesn't exist,
   // we check for it, or you can just ensure the file exists.
   try {
     app.use(favicon(faviconPath));
   } catch (e) {
     // If file doesn't exist, we use a transparent pixel buffer to satisfy the library
-    const icon = Buffer.from('AAABAAEAEBAQAAAAAAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==', 'base64');
+    const icon = Buffer.from(
+      "AAABAAEAEBAQAAAAAAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+      "base64",
+    );
     app.use(favicon(icon));
   }
 
@@ -42,4 +46,5 @@ export function configApp(app: Express) {
   app.use(compression());
   // Prevent HTTP Parameter Pollution
   app.use(hpp());
+  if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 }

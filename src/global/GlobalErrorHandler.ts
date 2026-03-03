@@ -17,3 +17,10 @@ export const GlobalErrorHandler = (app: Application) => {
     res.status(status).json({ success: false, message: err.message });
   });
 };
+export const MissingRouteHandler = (app: Application) => {
+  app.use((_req: Request, _res: Response, _next: NextFunction) => {
+    const error = new Error(`can't find ${_req.originalUrl} on this server`);
+    _next(error);
+  });
+  GlobalErrorHandler(app);
+};
