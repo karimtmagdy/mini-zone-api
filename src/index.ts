@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+import serverless from "serverless-http";
 import favicon from "serve-favicon";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -51,5 +52,5 @@ app.get("/api-data", (req, res) => {
 app.get("/healthz", (req, res) => {
   res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
 });
-export default app;
+export default serverless(app);
 // @types/node-cron @types/multer
