@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
           <a href="/api-data">API Data</a>
           <a href="/healthz">Health</a>
         </nav>
-        <h1>Welcome to Express on Vercel 🚀</h1>
+        <h1>Welcome to Express + TypeScript on Vercel 🚀</h1>
         <p>This is a minimal example without a database or forms.</p>
         <img src="/logo.png" alt="Logo" width="120" />
       </body>
@@ -53,5 +53,5 @@ app.get("/healthz", (req, res) => {
   res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
 });
 export { app };
-export default serverless(app);
+export const handler = serverless(app);
 // @types/node-cron @types/multer
