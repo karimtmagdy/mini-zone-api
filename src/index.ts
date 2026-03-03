@@ -5,9 +5,11 @@ import serverless from "serverless-http";
 import path from "path";
 import { fileURLToPath } from "url";
 import helmet from "helmet";
+import { Database } from "./config/data/db";
+import { logger } from "./lib/logger";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
- 
+
 const app = express();
 app.use(helmet());
 // app.use(favicon(path.join(__dirname, "favicon.ico")));
@@ -55,6 +57,14 @@ app.get("/api-data", (req, res) => {
 app.get("/healthz", (req, res) => {
   res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
 });
+void (async () => {
+  // 1. ensure database is connected
+  await Database.getInstance();
+  // 2. start the server
+  app.listen(process.env.PORT, () => {
+    logger.log(`🚀 Server is running on port ${process.env.PORT}`);
+  });
+})();
 export { app };
 export const handler = serverless(app);
 // @types/node-cron @types/multer
