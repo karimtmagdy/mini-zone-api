@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
       <head>
         <meta charset="utf-8"/>
         <title>Express on Vercel</title>
-        <link rel="stylesheet" href="/style.css" />
+        <link rel="stylesheet" href="../style.css" />
       </head>
       <body>
         <nav>
@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
         </nav>
         <h1>Welcome to Express + TypeScript on Vercel 🚀</h1>
         <p>This is a minimal example without a database or forms.</p>
-        <img src="/logo.png" alt="Logo" width="120" />
+        <img src="../logo.png" alt="Logo" width="120" />
       </body>
     </html>
   `);
