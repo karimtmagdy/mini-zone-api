@@ -1,12 +1,13 @@
 import "dotenv/config";
 import express from "express";
 import serverless from "serverless-http";
-// import favicon from "serve-favicon";
-import helmet from "helmet";
+
+import { configApp } from "./config/config-app.js";
 
 const app = express();
-app.use(helmet());
-// app.use(favicon(path.join(__dirname, "favicon.ico")));
+configApp(app);
+
+
 
 // Example API endpoint - JSON
 app.get(["/"], (_req, res) => {
@@ -25,4 +26,4 @@ app.get(["/"], (_req, res) => {
 
 export { app };
 export const handler = serverless(app);
-// @types/node-cron @types/multer
+
