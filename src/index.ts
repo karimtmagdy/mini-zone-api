@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 import helmet from "helmet";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
+ 
 const app = express();
 app.use(helmet());
 // app.use(favicon(path.join(__dirname, "favicon.ico")));
@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
       <head>
         <meta charset="utf-8"/>
         <title>Express on Vercel</title>
-        <link rel="stylesheet" href="../style.css" />
+        <link rel="stylesheet" href="../public/style.css" />
       </head>
       <body>
         <nav>
@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
         </nav>
         <h1>Welcome to Express + TypeScript on Vercel 🚀</h1>
         <p>This is a minimal example without a database or forms.</p>
-        <img src="../logo.png" alt="Logo" width="120" />
+        <img src="../public/logo.png" alt="Logo" width="120" />
       </body>
     </html>
   `);
