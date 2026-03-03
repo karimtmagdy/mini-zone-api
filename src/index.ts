@@ -5,8 +5,8 @@ import serverless from "serverless-http";
 import path from "path";
 import { fileURLToPath } from "url";
 import helmet from "helmet";
-import { Database } from "./config/data/db";
-import { logger } from "./lib/logger";
+import { Database } from "./config/data/db.js";
+import { logger } from "./lib/logger.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 

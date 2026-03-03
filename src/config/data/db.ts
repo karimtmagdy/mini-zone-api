@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { logger } from "../../lib/logger";
+import { logger } from "../../lib/logger.js";
 
 export class Database {
   private static instance: Database;
