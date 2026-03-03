@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(helmet());
-app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
+app.use(favicon(path.join(__dirname, "favicon.ico")));
 // Home route - HTML
 app.get("/", (req, res) => {
   res.type("html").send(`
