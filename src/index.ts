@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import serverless from "serverless-http";
-import favicon from "serve-favicon";
+// import favicon from "serve-favicon";
 import path from "path";
 import { fileURLToPath } from "url";
 import helmet from "helmet";
@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(helmet());
-app.use(favicon(path.join(__dirname, "favicon.ico")));
+// app.use(favicon(path.join(__dirname, "favicon.ico")));
 // Home route - HTML
 app.get("/", (req, res) => {
   res.type("html").send(`
