@@ -3,7 +3,7 @@ export default app;
 // import express from "express";
 // import { GlobalErrorHandler } from "./global/GlobalErrorHandler";
 // const app = express();
-// const PORT = 8000;
+const PORT = 8000;
 
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
@@ -12,9 +12,9 @@ export default app;
 //   res.send("<h1></h1>");
 // });
 // GlobalErrorHandler(app);
-// app.listen(PORT, () => {
-//   console.log(`Server running on http://localhost:${PORT}`);
-// });
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
 
 // export { app };
 // // {
