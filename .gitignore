@@ -1,5 +1,29 @@
+.vscode/
 node_modules
-.env
+.gitignore
+/dist
+
 .vercel
-/new
-.vscode
+ 
+# env
+.env
+.env.*
+.env.local
+.env*.local
+.env.*.local
+env.example
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# md
+new.md
+title.md
+vercel-commands.md
+
+# OS
+.DS_Store
+Thumbs.db

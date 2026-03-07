@@ -48,3 +48,9 @@ export function configApp(app: Express) {
   app.use(hpp());
   if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 }
+// app.use(
+//   rateLimit({
+//     windowMs: 15 * 60 * 1000, // 15 minutes
+//     max: 100, // limit each IP to 100 requests per windowMs
+//   }),
+// );

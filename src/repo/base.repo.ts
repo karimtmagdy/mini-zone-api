@@ -1,16 +1,9 @@
 import { Document, Model, QueryFilter, UpdateQuery } from "mongoose";
-
-export interface PaginationOptions {
-  page: number;
-  limit: number;
-}
-
-export interface PaginatedResult<T> {
-  data: T[];
-  total: number;
-  page: number;
-  totalPages: number;
-}
+import { APIFeatures } from "../class/api.feature.js";
+import {
+  APIFeaturesResultDto,
+  QueryStringDto,
+} from "../unity/core/query.dto.js";
 
 /**
  * AbstractRepository — generic CRUD base for all Mongoose repositories.
@@ -22,25 +15,17 @@ export abstract class AbstractRepo<T extends Document> {
     return this.model.findById(id).exec();
   }
 
-  async findOne(filter: QueryFilter<T>): Promise<T | null> {
-    return this.model.findOne(filter).exec();
-  }
-
-  async findAll(
-    filter: QueryFilter<T> = {},
-    options: PaginationOptions = { page: 1, limit: 10 },
-  ): Promise<PaginatedResult<T>> {
-    const skip = (options.page - 1) * options.limit;
-    const [data, total] = await Promise.all([
-      this.model.find(filter).skip(skip).limit(options.limit).exec(),
-      this.model.countDocuments(filter).exec(),
-    ]);
-    return {
-      data,
-      total,
-      page: options.page,
-      totalPages: Math.ceil(total / options.limit),
-    };
+  async findAllWithFeatures(
+    queryString: QueryStringDto,
+    searchFields: string[] = [],
+  ): Promise<APIFeaturesResultDto<T>> {
+    const features = new APIFeatures<T>(this.model, queryString)
+      .filter()
+      .search(searchFields)
+      .sort()
+      .limitFields()
+      .paginate();
+    return features.execute();
   }
 
   async create(payload: Partial<T>): Promise<T> {
@@ -60,5 +45,18 @@ export abstract class AbstractRepo<T extends Document> {
 
   async exists(filter: QueryFilter<T>): Promise<boolean> {
     return (await this.model.exists(filter)) !== null;
+  }
+
+  async deleteMany(filter: QueryFilter<T>): Promise<boolean> {
+    const result = await this.model.deleteMany(filter).exec();
+    return result.deletedCount > 0;
+  }
+
+  async updateMany(
+    filter: QueryFilter<T>,
+    update: UpdateQuery<T>,
+  ): Promise<number> {
+    const result = await this.model.updateMany(filter, update).exec();
+    return result.modifiedCount;
   }
 }

@@ -3,8 +3,8 @@ import express from "express";
 import serverless from "serverless-http";
 
 import { configApp } from "./config/config-app.js";
-import { MissingRouteHandler } from "./global/global.error.js";
-import rootRouter from "./router/index.js";
+import { MissingRouteHandler } from "./middlewares/global.error.js";
+// import rootRouter from "./router/index.js";
 
 const app = express();
 configApp(app);
@@ -25,7 +25,7 @@ app.get(["/"], (_req, res) => {
 });
 
 // API Routes
-app.use("/api/v1", rootRouter);
+// app.use("/api/v1", rootRouter);
 
 MissingRouteHandler(app);
 export { app };

@@ -1,4 +1,5 @@
 import cors from "cors";
+import { AppError } from "../class/api.error.js";
 
 export const corsOption = () => {
   return cors({
@@ -8,7 +9,7 @@ export const corsOption = () => {
       if (!origin || allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
-        callback(new Error("Not allowed by CORS"));
+        callback(AppError.forbidden("Not allowed by CORS"));
       }
     },
     methods: ["GET", "PUT", "PATCH", "POST", "DELETE"],

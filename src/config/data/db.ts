@@ -32,3 +32,9 @@ export class Database {
     return Database.instance;
   }
 }
+// Recommended settings for Serverless environments
+// bufferCommands: false, // Fail fast instead of buffering
+// serverSelectionTimeoutMS: 10000, // 10s to find a server
+// socketTimeoutMS: 45000, // 45s idle socket timeout
+// connectTimeoutMS: 10000, // 10s to establish connection
+// maxPoolSize: 10, // Limit connection pool for serverless
