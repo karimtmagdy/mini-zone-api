@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import { logger } from "../../lib/logger.js";
 import { enviro } from "../../lib/local.env.js";
-import { attachDatabasePool } from "@vercel/functions";
+// import { attachDatabasePool } from "@vercel/functions";
+// import '../../scripts/sync-env-vercel.js'
 export class Database {
   private static instance: Database;
   private constructor() {}
@@ -16,10 +17,17 @@ export class Database {
     const cache = global.__mongoose_cache;
 
     const mongoURI = mongoURL?.replace("<db_password>", String(dbPass)) || dbLocal;
-    console.log(mongoURI)
+    // console.log(mongoURI)
+
     // Create new connection if not cached
     if (!cache.promise) {
-      cache.promise = mongoose.connect(String(mongoURI));
+      cache.promise = mongoose.connect(String(mongoURI), {
+        bufferCommands: false, // Fail fast instead of buffering
+        serverSelectionTimeoutMS: 10000, // 10s to find a server
+        socketTimeoutMS: 45000, // 45s idle socket timeout
+        connectTimeoutMS: 10000, // 10s to establish connection
+        maxPoolSize: 10, // Limit connection pool for serverless
+      });
     }
     try {
       cache.conn = await cache.promise;
@@ -36,9 +44,3 @@ export class Database {
     return Database.instance;
   }
 }
-// Recommended settings for Serverless environments
-// bufferCommands: false, // Fail fast instead of buffering
-// serverSelectionTimeoutMS: 10000, // 10s to find a server
-// socketTimeoutMS: 45000, // 45s idle socket timeout
-// connectTimeoutMS: 10000, // 10s to establish connection
-// maxPoolSize: 10, // Limit connection pool for serverless

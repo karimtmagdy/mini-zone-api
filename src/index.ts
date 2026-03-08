@@ -3,6 +3,7 @@ import express from "express";
 import serverless from "serverless-http";
 
 import { configApp } from "./config/config-app.js";
+import { Database } from "./config/data/db.js";
 import { MissingRouteHandler } from "./middlewares/global.error.js";
 import { setupRoutes } from "./router/index.js";
 
@@ -25,6 +26,15 @@ app.get(["/"], (_req, res) => {
 });
 
 // API Routes
+app.use(async (_req, _res, next) => {
+  try {
+    await Database.getInstance();
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
 setupRoutes(app);
 
 MissingRouteHandler(app);

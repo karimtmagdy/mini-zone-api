@@ -5,7 +5,6 @@ import { enviro } from "../lib/local.env";
 dotenv.config();
 
 const { vercelToken, vercelProjectId, vercelTeamId, vercelApi } = enviro;
-
 if (!vercelToken || !vercelProjectId) {
   throw new Error("Missing VERCEL_TOKEN or VERCEL_PROJECTID in .env");
 }
