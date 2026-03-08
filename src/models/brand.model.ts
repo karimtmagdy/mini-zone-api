@@ -34,5 +34,5 @@ const BrandSchema = new Schema<IBrand>(
 
 applySlugMiddleware(BrandSchema, "name");
 applySoftDeleteMiddleware(BrandSchema);
-BrandSchema.index({ name: 1 });
+// BrandSchema.index({ name: 1 });
 export const brandModel = model<IBrand>("Brand", BrandSchema);

@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
 import { logger } from "../../lib/logger.js";
-
+import { enviro } from "../../lib/local.env.js";
+import { attachDatabasePool } from "@vercel/functions";
 export class Database {
   private static instance: Database;
   private constructor() {}
   public static async getInstance(): Promise<Database> {
-    if (!process.env.DB_LOCAL) {
+    const { dbLocal, mongoURL, dbPass } = enviro;
+    if (!dbLocal) {
       throw new Error("Please add your Mongo URI to .env.local");
     }
     if (!global.__mongoose_cache) {
@@ -13,9 +15,11 @@ export class Database {
     }
     const cache = global.__mongoose_cache;
 
+    const mongoURI = mongoURL?.replace("<db_password>", String(dbPass)) || dbLocal;
+    console.log(mongoURI)
     // Create new connection if not cached
     if (!cache.promise) {
-      cache.promise = mongoose.connect(String(process.env.DB_LOCAL));
+      cache.promise = mongoose.connect(String(mongoURI));
     }
     try {
       cache.conn = await cache.promise;
