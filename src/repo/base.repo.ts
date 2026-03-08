@@ -8,7 +8,7 @@ import {
 /**
  * AbstractRepository — generic CRUD base for all Mongoose repositories.
  */
-export abstract class AbstractRepo<T extends Document> {
+export abstract class AbstractRepo<T> {
   constructor(protected readonly model: Model<T>) {}
 
   async findById(id: string): Promise<T | null> {

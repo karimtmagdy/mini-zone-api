@@ -1,0 +1,31 @@
+import { Types } from "mongoose";
+import { Image } from "../core/global.dto";
+import { ProductStatus } from "../types/product.types";
+export type ProductDto = {
+  name: string;
+  price: number;
+  PriceAfterDiscount: number;
+  description: string;
+  slug: string;
+  sku: string;
+  stock: number;
+  cover?: Image;
+  sold: number;
+  status: ProductStatus;
+  tags: string[];
+  colors: string[];
+  images: Image[];
+  discount: number;
+  ratingsAverage: number;
+  ratingsCount: number;
+  category: Types.ObjectId[];
+  subcategory: Types.ObjectId[];
+  brand: Types.ObjectId;
+  deletedAt: Date | null;
+};
+export type ProductFilterDTO = {
+  status?: ProductStatus;
+  category?: string;
+  brand?: string;
+  search?: string;
+};

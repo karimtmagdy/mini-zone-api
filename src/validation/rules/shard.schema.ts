@@ -43,3 +43,12 @@ export const dateZod = z.object({
 });
 
 export type DateDto = z.infer<typeof dateZod>;
+
+// image is NOT validated here — it arrives via Multer (req.file), NOT req.body
+// image: z.object({ url: z.string(), publicId: z.string() }).optional(),
+export const imageZod = z.object({
+  url: z.string(),
+  publicId: z.string(),
+});
+
+export type ImageDto = z.infer<typeof imageZod>;
