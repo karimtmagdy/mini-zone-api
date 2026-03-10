@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { categoryCtrl } from "../controllers/category.controller.js";
-import { createBrandZod, updateBrandZod } from "../validation/brand.schema.js";
+import { createCategoryZod, updateCategoryZod } from "../validation/category.schema.js";
 import { validate } from "../middlewares/validate.js";
 import { IdParamZod } from "../validation/rules/shard.schema.js";
 const router = Router();
@@ -8,7 +8,7 @@ const router = Router();
 router
   .route("/")
   .get(categoryCtrl.getAll)
-  .post(validate(createBrandZod), categoryCtrl.create);
+  .post(validate(createCategoryZod), categoryCtrl.create);
 
 router.get("/trash", categoryCtrl.getDeleted);
 
@@ -17,7 +17,7 @@ router
   .get(validate(IdParamZod, "params"), categoryCtrl.getOne)
   .patch(
     validate(IdParamZod, "params"),
-    validate(updateBrandZod),
+    validate(updateCategoryZod),
     categoryCtrl.update,
   )
   .delete(validate(IdParamZod, "params"), categoryCtrl.softDelete);
