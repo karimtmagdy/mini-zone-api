@@ -24,7 +24,7 @@ export const queryZod = StandradQueryZod.extend({
   sortOrder: sortOptions,
   skip: z.number().default(0),
   fields: z.string().default(""),
-}).catchall(z.any());
+});
 // export const getProductsSchema = z.object({
 //   query: z.object({
 //     page: z.string().optional().default("1"),

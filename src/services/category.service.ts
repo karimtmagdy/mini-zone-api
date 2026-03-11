@@ -32,10 +32,8 @@ export class CategoryService extends AbstractService<ICategory> {
     return category!;
   }
 
-  async getDeleted(query: any): Promise<any> {
-    // We force status to 'archived' so that APIFeatures logic correctly 
-    // applies the deletedAt filter and withDeleted options.
-    return this.categoryRepo.findAllWithFeatures({ ...query, status: "archived" });
+  async getDeleted(): Promise<ICategory[]> {
+    return this.categoryRepo.findDeleted();
   }
 }
 
