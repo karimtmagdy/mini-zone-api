@@ -1,6 +1,6 @@
 import { Model, Query, QueryFilter } from "mongoose";
-import { APIFeaturesResultDto, QueryStringDto } from "../types/query.dto.js";
-
+import { APIFeaturesResultDto, QueryStringDto } from "../unity/core/query.dto";
+ 
 class APIFeatures<T> {
   private model: Model<T>;
   private query: Query<T[], T>;
@@ -36,10 +36,19 @@ class APIFeatures<T> {
     // const regex: RegExp = /\b(gte|gt|lte|lt|in|nin|ne|eq)\b/gi;
     queryStr = queryStr.replace(regex, (match) => `$${match}`);
     this.FQ = JSON.parse(queryStr);
-    this.query = this.model.find(this.FQ);
 
-    // Apply withDeleted option if provided in query string
-    if (this.QS.withDeleted === "true" || this.QS.status === "archived") {
+    let withDeleted = false;
+    if (this.QS.status === "archived") {
+      this.FQ = { ...this.FQ, deletedAt: { $ne: null } } as any;
+      delete (this.FQ as any).status;
+      withDeleted = true;
+    } else if (this.QS.withDeleted === "true") {
+      withDeleted = true;
+    }
+
+    this.query = this.model.find(this.FQ);
+    
+    if (withDeleted) {
       this.query.setOptions({ withDeleted: true });
     }
 

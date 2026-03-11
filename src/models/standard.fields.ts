@@ -70,7 +70,7 @@ export const applySlugMiddleware = <T extends { slug: string }>(
 };
 
 export const applySoftDeleteMiddleware = (schema: Schema) => {
-  schema.pre(/^find/, function (this: any) {
+  schema.pre(/^(find|count)/, function (this: any) {
     if (this.getOptions().withDeleted) {
       return;
     }
