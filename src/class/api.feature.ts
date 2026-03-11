@@ -39,7 +39,14 @@ class APIFeatures<T> {
 
     let withDeleted = false;
     if (this.QS.status === "archived") {
-      this.FQ = { ...this.FQ, deletedAt: { $ne: null } } as any;
+      // Unify both types of "archived" records
+      this.FQ = {
+        ...this.FQ,
+        $or: [
+          { status: "archived" },
+          { deletedAt: { $ne: null } }
+        ]
+      } as any;
       delete (this.FQ as any).status;
       withDeleted = true;
     } else if (this.QS.withDeleted === "true") {
