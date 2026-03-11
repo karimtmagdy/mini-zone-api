@@ -1,124 +1,97 @@
-import { Model } from "mongoose";
-import { QueryStringDto } from "../unity/core/query.dto";
+import { Model, Query, QueryFilter } from "mongoose";
+import { APIFeaturesResultDto, QueryStringDto } from "../unity/core/query.dto";
  
 class APIFeatures<T> {
   private model: Model<T>;
+  private query: Query<T[], T>;
   private QS: QueryStringDto;
-  private FQ: any = {};
-  private searchFilter: any = {};
+  private FQ: QueryFilter<T>;
   private page: number = 1;
   private limit: number = 10;
-  private withDeleted: boolean = false;
-  private populateFields: any = null;
-  private selectedFields: string = "-__v";
-  private sortQuery: string = "-createdAt id";
+  private skip: number = 0;
   private readonly DEFAULT_LIMIT = 10;
   private readonly MAX_LIMIT = 50;
 
   constructor(model: Model<T>, queryString: QueryStringDto) {
     this.model = model;
     this.QS = queryString;
+    this.FQ = {};
+    // Initialize query with empty filter (will be populated by filter method)
+    this.query = this.model.find();
   }
-
   filter(): this {
+    // Create shallow copy of query string
     const queryObj = { ...this.QS };
-    const excludedFields: any[] = [
+    const excludedFields: (keyof QueryStringDto)[] = [
       "page",
       "limit",
       "sort",
       "fields",
       "search",
-      "withDeleted",
     ];
     excludedFields.forEach((field) => delete queryObj[field]);
-
     let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(
-      /\b(gte|gt|lte|lt|in|nin|ne|eq)\b/g,
-      (match) => `$${match}`,
-    );
+    const regex: RegExp = /\b(gte|gt|lte|lt|in|nin|ne|eq)\b/g;
+    // const regex: RegExp = /\b(gte|gt|lte|lt|in|nin|ne|eq)\b/gi;
+    queryStr = queryStr.replace(regex, (match) => `$${match}`);
     this.FQ = JSON.parse(queryStr);
-
-    if (this.QS.status === "archived") {
-      this.FQ = {
-        ...this.FQ,
-        $or: [{ status: "archived" }, { deletedAt: { $ne: null } }],
-      };
-      delete this.FQ.status;
-      this.withDeleted = true;
-    } else if (this.QS.withDeleted === "true") {
-      this.withDeleted = true;
-    }
-
+    this.query = this.model.find(this.FQ);
     return this;
   }
-
   sort(): this {
     if (this.QS.sort) {
-      this.sortQuery = (this.QS.sort as string).split(",").join(" ") + " id";
+      // Convert comma-separated values to space-separated for Mongoose
+      const sortBy = (this.QS.sort as string).split(",").join(" ") + " id";
+      this.query = this.query.sort(sortBy);
+    } else {
+      this.query = this.query.sort("-createdAt id");
     }
     return this;
   }
-
   limitFields(): this {
     if (this.QS.fields) {
-      this.selectedFields = (this.QS.fields as string).split(",").join(" ");
+      const fields = (this.QS.fields as string).split(",").join(" ");
+      this.query = this.query.select(fields);
+    } else {
+      this.query = this.query.select("-__v");
     }
     return this;
   }
-
   paginate(): this {
     const pageNum = Number(this.QS.page);
     this.page = pageNum > 0 ? pageNum : 1;
     const limitNum = Number(this.QS.limit);
     this.limit =
       limitNum > 0 ? Math.min(limitNum, this.MAX_LIMIT) : this.DEFAULT_LIMIT;
+    this.skip = (this.page - 1) * this.limit;
+    this.query = this.query.skip(this.skip).limit(this.limit);
     return this;
   }
-
   search(searchFields: string[]): this {
     if (this.QS.search && searchFields.length > 0) {
       const searchTerm = this.QS.search as string;
       const searchConditions = searchFields.map((field) => ({
         [field]: { $regex: searchTerm, $options: "i" },
       }));
-      this.searchFilter = { $or: searchConditions };
+      const searchQuery: QueryFilter<T> = {
+        $or: searchConditions,
+      } as QueryFilter<T>;
+      this.query = this.model.find({
+        $and: [this.FQ, searchQuery],
+      } as QueryFilter<T>);
     }
     return this;
   }
-
   populate(fields: any): this {
-    this.populateFields = fields;
+    this.query = this.query.populate(fields);
     return this;
   }
-
-  async execute(): Promise<any> {
-    // Combine everything into one final filter
-    const finalFilter =
-      Object.keys(this.searchFilter).length > 0
-        ? { $and: [this.FQ, this.searchFilter] }
-        : this.FQ;
-
-    // 1. Get accurate TOTAL count
-    const countQuery = this.model.countDocuments(finalFilter);
-    if (this.withDeleted) countQuery.setOptions({ withDeleted: true });
-    const total = await countQuery;
-
-    // 2. Get accurate DATA
-    const skip = (this.page - 1) * this.limit;
-    let dataQuery = this.model
-      .find(finalFilter)
-      .sort(this.sortQuery)
-      .select(this.selectedFields)
-      .skip(skip)
-      .limit(this.limit);
-
-    if (this.withDeleted) dataQuery.setOptions({ withDeleted: true });
-    if (this.populateFields) dataQuery = dataQuery.populate(this.populateFields);
-
-    const data = await dataQuery;
+  async execute(): Promise<APIFeaturesResultDto<T>> {
+    const total = await this.model.countDocuments(
+      this.query.getFilter() as QueryFilter<T>,
+    );
+    const data = await this.query;
     const pages = Math.ceil(total / this.limit);
-
     return {
       data,
       meta: {

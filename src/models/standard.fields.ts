@@ -1,6 +1,5 @@
 import { Schema, SchemaDefinition } from "mongoose";
-import _slugify from "slugify";
-const slugify = (_slugify as any).default || _slugify;
+import slugify from "slugify";
 
 export const SchemaFields: SchemaDefinition = {
   slug: { type: String, trim: true, lowercase: true, unique: true },
@@ -32,7 +31,7 @@ export interface ISlugable {
 }
 
 export const applySlugMiddleware = <T extends { slug: string }>(
-  schema: Schema<any>,
+  schema: Schema<T>,
   sourceField: keyof T,
 ) => {
   // Hook for .save() and .create()
