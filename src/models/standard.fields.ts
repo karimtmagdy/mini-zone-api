@@ -1,5 +1,6 @@
 import { Schema, SchemaDefinition } from "mongoose";
-import slugify from "slugify";
+import _slugify from "slugify";
+const slugify = (_slugify as any).default || _slugify;
 
 export const SchemaFields: SchemaDefinition = {
   slug: { type: String, trim: true, lowercase: true, unique: true },
