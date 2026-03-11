@@ -32,7 +32,7 @@ export interface ISlugable {
 }
 
 export const applySlugMiddleware = <T extends { slug: string }>(
-  schema: Schema<T>,
+  schema: Schema<any>,
   sourceField: keyof T,
 ) => {
   // Hook for .save() and .create()

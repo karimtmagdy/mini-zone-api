@@ -44,7 +44,7 @@ const CategorySchema = new Schema<ICategory>(
   getSchemaOptions("categories"),
 );
 
-applySlugMiddleware(CategorySchema, "name");
+applySlugMiddleware<ICategory>(CategorySchema, "name");
 applySoftDeleteMiddleware(CategorySchema);
 // CategorySchema.index({ name: 1 });
 export const categoryModel = model<ICategory>("Category", CategorySchema);
