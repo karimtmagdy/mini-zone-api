@@ -34,11 +34,11 @@ export class CategoryController extends AbstractController<ICategory> {
     res.status(STATUS_CODE.OK).json(response);
   });
 
-  getDeleted = catchError(async (req: Request, res: Response) => {
-    const data = await this.categoryService.getDeleted(req.query);
-    const response: ResponseDto<any> = {
+  getDeleted = catchError(async (_req: Request, res: Response) => {
+    const data = await this.categoryService.getDeleted();
+    const response: ResponseDto<ICategory[]> = {
       status: "success",
-      ...data,
+      data,
     };
     res.status(STATUS_CODE.OK).json(response);
   });
