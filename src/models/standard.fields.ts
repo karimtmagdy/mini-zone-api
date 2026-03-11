@@ -71,7 +71,6 @@ export const applySlugMiddleware = <T extends { slug: string }>(
 
 export const applySoftDeleteMiddleware = (schema: Schema) => {
   schema.pre(/^find/, function (this: any) {
-    // If the query has the 'withDeleted' option, skip the filter
     if (this.getOptions().withDeleted) {
       return;
     }

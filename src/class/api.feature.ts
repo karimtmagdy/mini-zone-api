@@ -28,6 +28,7 @@ class APIFeatures<T> {
       "sort",
       "fields",
       "search",
+      "withDeleted" as any,
     ];
     excludedFields.forEach((field) => delete queryObj[field]);
     let queryStr = JSON.stringify(queryObj);
@@ -36,6 +37,12 @@ class APIFeatures<T> {
     queryStr = queryStr.replace(regex, (match) => `$${match}`);
     this.FQ = JSON.parse(queryStr);
     this.query = this.model.find(this.FQ);
+
+    // Apply withDeleted option if provided in query string
+    if (this.QS.withDeleted === "true" || this.QS.status === "archived") {
+      this.query.setOptions({ withDeleted: true });
+    }
+
     return this;
   }
   sort(): this {
@@ -87,9 +94,20 @@ class APIFeatures<T> {
     return this;
   }
   async execute(): Promise<APIFeaturesResultDto<T>> {
-    const total = await this.model.countDocuments(
-      this.query.getFilter() as QueryFilter<T>,
-    );
+    // Check if withDeleted option was set on the main query
+    const options = this.query.getOptions();
+    const withDeleted = !!options.withDeleted;
+
+    // Get filter from the main query to use for counting
+    const queryFilter = this.query.getFilter() as QueryFilter<T>;
+    const countQuery = this.model.countDocuments(queryFilter);
+
+    // Apply withDeleted to count query if needed
+    if (withDeleted) {
+      countQuery.setOptions({ withDeleted: true });
+    }
+
+    const total = await countQuery;
     const data = await this.query;
     const pages = Math.ceil(total / this.limit);
     return {
