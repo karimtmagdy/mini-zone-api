@@ -102,26 +102,20 @@ class APIFeatures<T> {
     this.query = this.query.populate(fields);
     return this;
   }
-  async execute(): Promise<APIFeaturesResultDto<T>> {
-    // Check if withDeleted option was set on the main query
-    const options = this.query.getOptions();
-    const withDeleted = !!options.withDeleted;
-
-    // Get filter from the main query to use for counting
+  async execute(): Promise<any> {
     const queryFilter = this.query.getFilter() as QueryFilter<T>;
-    const countQuery = this.model.countDocuments(queryFilter);
+    const options = this.query.getOptions();
 
-    // Apply withDeleted to count query if needed
-    if (withDeleted) {
-      countQuery.setOptions({ withDeleted: true });
-    }
+    // Create count query and inherit ALL options (especially withDeleted)
+    const countQuery = this.model.countDocuments(queryFilter).setOptions(options);
 
     const total = await countQuery;
     const data = await this.query;
     const pages = Math.ceil(total / this.limit);
+
     return {
       data,
-      pagination: {
+      meta: {
         page: this.page,
         pages,
         limit: this.limit,
