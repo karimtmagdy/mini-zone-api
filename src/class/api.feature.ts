@@ -113,8 +113,11 @@ class APIFeatures<T> {
     const queryFilter = this.query.getFilter() as QueryFilter<T>;
     const options = this.query.getOptions();
 
-    // Create count query and inherit ALL options (especially withDeleted)
-    const countQuery = this.model.countDocuments(queryFilter).setOptions(options);
+    // Explicitly set withDeleted on countDocuments if it's set on the main query
+    const countQuery = this.model.countDocuments(queryFilter);
+    if (options.withDeleted) {
+      countQuery.setOptions({ withDeleted: true });
+    }
 
     const total = await countQuery;
     const data = await this.query;
