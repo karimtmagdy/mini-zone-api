@@ -1,5 +1,6 @@
 // enable @alias imports at runtime
 import "module-alias/register";
+import "tsconfig-paths/register";
 import "dotenv/config";
 import express from "express";
 import serverless from "serverless-http";
