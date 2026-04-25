@@ -1,6 +1,3 @@
- // enable @alias imports at runtime
-import "module-alias/register";
-import "tsconfig-paths/register";
 import mongoose from "mongoose";
 import "dotenv/config";
 import { Database } from "@/config/data/db";

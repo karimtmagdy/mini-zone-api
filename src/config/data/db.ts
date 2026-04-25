@@ -7,21 +7,18 @@ export class Database {
   private static instance: Database;
   private constructor() {}
   public static async getInstance(): Promise<Database> {
-    const { nodeEnv, dbLocal, mongoURL, dbPass } = enviro;
-    if (!dbLocal) {
-      throw new Error("Please add your Mongo URI to .env.local");
+    const { mongoURL } = enviro;
+    
+    if (!mongoURL) {
+      throw new Error("Please add your ZONE_MONGODB_URI to .env");
     }
-    if (!global.__mongoose_cache) {
-      global.__mongoose_cache = { conn: null, promise: null };
+    
+    if (!(global as any).__mongoose_cache) {
+      (global as any).__mongoose_cache = { conn: null, promise: null };
     }
-    const cache = global.__mongoose_cache;
+    const cache = (global as any).__mongoose_cache;
 
-    const isDev = nodeEnv === "dev";
-
-    const mongoURI = isDev
-      ? mongoURL?.replace("<db_password>", String(dbPass))
-      : dbLocal;
-    // console.log(mongoURI)
+    const mongoURI = mongoURL;
 
     // Create new connection if not cached
     if (!cache.promise) {

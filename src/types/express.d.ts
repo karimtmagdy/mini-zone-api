@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { UserRole } from "./unity/enums/user-enums.js";
+import { UserRole } from "./user.types";
 import { IRouter, Router } from "express";
 
 
