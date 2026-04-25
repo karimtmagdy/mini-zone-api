@@ -21,8 +21,9 @@
     "lint:fix": "eslint . --ext .ts --fix",
     "random": "node -e \"console.log(crypto.randomBytes(32).toString('hex'))\"",
     "dev": "nodemon",
+    "test:cleanup": "npx tsx src/scripts/test-cleanup.ts",
     "clean": "npx tsx src/scripts/clean-fields.ts",
-    "test:cleanup": "npx tsx src/scripts/test-cleanup.ts"
+    "postinstall": "ts-patch install"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
@@ -102,15 +103,17 @@
     "@types/ua-parser-js": "^0.7.39",
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
+    "ts-patch": "^3.3.0",
     "tsc-alias": "^1.8.16",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-transform-paths": "^3.5.6"
   },
   "engines": {
     "node": "24.x"
   },
   "_moduleAliases": {
-    "@": "src"
+    "@": "dist"
   },
   "repository": {
     "type": "git",
