@@ -1,16 +1,10 @@
 {
   "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "api/index.ts",
-      "use": "@vercel/node"
+      "source": "/(.*)",
+      "destination": "/api/index.ts"
     }
   ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "api/index.ts"
-    }
-  ],
-  "crons": [{ "path": "/src/index.ts", "schedule": "0 10 * * *" }]
+  "crons": [{ "path": "/", "schedule": "0 10 * * *" }]
 }
