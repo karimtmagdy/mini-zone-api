@@ -1,14 +1,11 @@
 import { Schema, model } from "mongoose";
-import { IBrand } from "../unity/interface/brand.interface.js";
-import { BRAND_STATUS } from "../unity/types/brand.types.js";
+import { IBrand, BRAND_STATUS, BrandStatusEnum } from "@/types/brand.dto";
+import { SchemaFields, SchemaImageFields } from "@/lib/schema/definition";
 import {
-  SchemaFields,
-  applySlugMiddleware,
   getSchemaOptions,
-  applySoftDeleteMiddleware,
-  SchemaImageFields,
-} from "./standard.fields.js";
-import { BrandStatusEnum } from "../unity/enums/brand.enums.js";
+  applySoftDelete,
+  applySlugify,
+} from "@/lib/schema/fields";
 
 const BrandSchema = new Schema<IBrand>(
   {
@@ -31,8 +28,7 @@ const BrandSchema = new Schema<IBrand>(
   },
   getSchemaOptions("brands"),
 );
+applySlugify(BrandSchema, "name");
+applySoftDelete(BrandSchema);
 
-applySlugMiddleware(BrandSchema, "name");
-applySoftDeleteMiddleware(BrandSchema);
-// BrandSchema.index({ name: 1 });
 export const brandModel = model<IBrand>("Brand", BrandSchema);

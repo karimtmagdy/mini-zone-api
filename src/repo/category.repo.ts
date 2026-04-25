@@ -1,7 +1,6 @@
-import { AbstractRepo } from "./base.repo.js";
-import { ICategory } from "../unity/interface/category.interface.js";
-import { categoryModel } from "../models/category.model.js";
-import { CategoryStatusEnum } from "../unity/enums/category.enums.js";
+import { AbstractRepo } from "@/repo/base.repo";
+import { ICategory, CategoryStatusEnum } from "@/types/category.dto";
+import { categoryModel } from "@/models/category.model";
 export class CategoryRepo extends AbstractRepo<ICategory> {
   constructor() {
     super(categoryModel);

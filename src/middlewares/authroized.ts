@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { jwtUitl } from "../lib/jwt.lib.js";
-import { catchError } from "../lib/catch.error.js";
-import { UserRole } from "../unity/types/user.types.js";
-import { AppError } from "../class/api.error.js";
+import { jwtUitl } from "@/lib/jwt.lib";
+import { catchError } from "@/lib/catch.error";
+import { AppError } from "@/class/api.error";
+import { UserRole } from "@/types/user.types";
 
 export const authenticated = catchError(
   async (req: Request, _: Response, next: NextFunction) => {
@@ -11,7 +11,7 @@ export const authenticated = catchError(
     const token = authHeader.split(" ")[1];
     if (!token) AppError.unauthorized("No authentication token provided");
     try {
-      const decodedToken = jwtUitl.verifyAccessToken(token);
+      const decodedToken = jwtUitl.verification.access(token);
       req.user = decodedToken;
       next();
     } catch (error) {

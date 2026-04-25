@@ -1,5 +1,5 @@
 import { z } from "zod/v4";
-import { paginationZod } from "./query.schema.js";
+import { paginationZod } from "@/validation/rules/query.schema";
 
 export const baseResponseZod = z.object({
   status: z.enum(["success", "fail", "error"]),
@@ -14,3 +14,13 @@ export const responseWithMetaZod = baseResponseZod.extend({
 export const responseZod = baseResponseZod.extend({
   data: z.unknown(),
 });
+
+export type ResponseWithMetaDto<T> = Omit<
+  z.infer<typeof responseWithMetaZod>,
+  "data"
+> & {
+  data: T;
+};
+export type ResponseDto<T> = Omit<z.infer<typeof responseZod>, "data"> & {
+  data?: T;
+};

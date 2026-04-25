@@ -1,5 +1,5 @@
+ import { APIFeaturesResultDto, QueryStringDto } from "@/validation/rules/query.schema";
 import { Model, Query, QueryFilter } from "mongoose";
-import { APIFeaturesResultDto, QueryStringDto } from "../unity/core/query.dto.js";
  
 class APIFeatures<T> {
   private model: Model<T>;

@@ -1,8 +1,8 @@
 import { z } from "zod/v4";
-import { ObjectIdZod, PasswordZod } from "./rules/shard.schema.js";
-import { PersonBaseZod } from "./rules/person.schema.js";
-import { queryZod } from "./rules/query.schema.js";
-import { UserRoleEnum } from "../unity/enums/user-enums.js";
+import { ObjectIdZod, PasswordZod } from "./rules/shard.schema";
+import { PersonBaseZod } from "./rules/person.schema";
+import { queryZod } from "./rules/query.schema";
+import { UserRoleEnum } from "@/types/user.types";
 
 export const createUserZod = PersonBaseZod.pick({
   username: true,

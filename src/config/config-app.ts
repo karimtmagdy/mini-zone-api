@@ -1,16 +1,15 @@
 import express, { Express } from "express";
-import { corsOption } from "./cors-option.js";
+import { corsOption } from "./cors-option";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import compression from "compression";
 import hpp from "hpp";
 import favicon from "serve-favicon";
 import path from "path";
-import { fileURLToPath } from "url";
-import morgan from "morgan";
+ import morgan from "morgan";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.resolve();
 
 export function configApp(app: Express) {
   // Use serve-favicon library

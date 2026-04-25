@@ -1,6 +1,6 @@
 import { z } from "zod/v4";
-import { PersonBaseZod } from "./rules/person.schema.js";
-import { EmailZod, PasswordZod } from "./rules/shard.schema.js";
+import { EmailZod, PasswordZod } from "@/validation/rules/shard.schema";
+import { PersonBaseZod } from "@/validation/rules/person.schema";
 
 const registerBase = PersonBaseZod.pick({
   email: true,
@@ -27,7 +27,7 @@ export const LoginZod = registerBase.pick({
   password: true,
 });
 
-export const ChangePasswordZod = z
+export const changePasswordZod = z
   .object({
     current: PasswordZod.describe("Enter your current password"),
     new: PasswordZod.describe("Enter your new password"),
@@ -39,13 +39,13 @@ export const ChangePasswordZod = z
   })
   .required();
 
-export const RefreshTokenZod = z.object({
+export const refreshTokenZod = z.object({
   refreshToken: z.string({ message: "Refresh token is missing" }).min(1, {
     message: "Refresh token cannot be empty",
   }),
 });
 
-export const ForogtPasswordZod = PersonBaseZod.pick({ email: true })
+export const forogtPasswordZod = PersonBaseZod.pick({ email: true })
   .strict()
   .required();
 

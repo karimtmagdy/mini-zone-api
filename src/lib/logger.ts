@@ -1,6 +1,6 @@
+import { enviro } from "@/lib/local.env";
 class Logger {
-  // Only logs in development environment
-  private isDev = process.env.NODE_ENV === "development";
+  private isDev = enviro;
   log(...args: any[]) {
     if (this.isDev) {
       console.log("[LOG]", ...args);
@@ -8,7 +8,7 @@ class Logger {
   }
   error(...args: any[]) {
     if (this.isDev) {
-      console.error("[ERROR]", ...args);
+      console.error("[ERR]", ...args);
     }
   }
   warn(...args: any[]) {

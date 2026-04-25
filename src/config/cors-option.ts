@@ -1,5 +1,5 @@
 import cors from "cors";
-import { AppError } from "../class/api.error.js";
+import { AppError } from "@/class/api.error";
 
 export const corsOption = () => {
   return cors({

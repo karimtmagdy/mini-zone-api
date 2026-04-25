@@ -1,14 +1,16 @@
 import { Schema, model } from "mongoose";
-import { ICategory } from "../unity/interface/category.interface.js";
-import { CATEGORY_STATUS } from "../unity/types/category.types.js";
 import {
-  SchemaFields,
-  applySlugMiddleware,
+  ICategory,
+  CATEGORY_STATUS,
+  CategoryStatusEnum,
+} from "@/types/category.dto";
+import { SchemaFields, SchemaImageFields } from "@/lib/schema/definition";
+import {
+  applySlugify,
   getSchemaOptions,
-  applySoftDeleteMiddleware,
-  SchemaImageFields,
-} from "./standard.fields.js";
-import { CategoryStatusEnum } from "../unity/enums/category.enums.js";
+  applySoftDelete,
+  applyVirtual,
+} from "@/lib/schema/fields";
 
 const CategorySchema = new Schema<ICategory>(
   {
@@ -39,12 +41,17 @@ const CategorySchema = new Schema<ICategory>(
       enum: CATEGORY_STATUS,
       default: CategoryStatusEnum.ACTIVE,
     },
-    products: { type: Number, default: 0 },
+    // products: { type: Number, default: 0 },
   },
   getSchemaOptions("categories"),
 );
 
-applySlugMiddleware(CategorySchema, "name");
-applySoftDeleteMiddleware(CategorySchema);
-// CategorySchema.index({ name: 1 });
+applySlugify(CategorySchema, "name");
+applyVirtual({
+  schema: CategorySchema,
+  ref: "Product",
+  collection: "categories",
+});
+applySoftDelete(CategorySchema);
+
 export const categoryModel = model<ICategory>("Category", CategorySchema);

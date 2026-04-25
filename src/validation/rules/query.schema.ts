@@ -25,6 +25,9 @@ export const queryZod = StandradQueryZod.extend({
   skip: z.number().default(0),
   fields: z.string().default(""),
 });
+
+ 
+
 // export const getProductsSchema = z.object({
 //   query: z.object({
 //     page: z.string().optional().default("1"),
@@ -42,3 +45,9 @@ export const queryZod = StandradQueryZod.extend({
 //   }),
 // });
 // export type GetProductsQuery = z.infer<typeof getProductsSchema>["query"];
+export type QueryStringDto = z.infer<typeof queryZod>;
+export type PaginationDto = z.infer<typeof paginationZod>;
+export type APIFeaturesResultDto<T> = {
+  data: T[];
+  meta: PaginationDto;
+};

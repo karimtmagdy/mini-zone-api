@@ -1,7 +1,6 @@
 import { z } from "zod/v4";
-import { CATEGORY_STATUS } from "../unity/types/category.types.js";
-import { imageZod } from "./rules/shard.schema.js";
-import { CategoryStatusEnum } from "../unity/enums/category.enums.js";
+import { CATEGORY_STATUS, CategoryStatusEnum } from "@/types/category.dto";
+import { imageZod } from "@/validation/rules/shard.schema";
 
 export const CoreCategoryZod = z
   .object({
@@ -26,12 +25,11 @@ export const CoreCategoryZod = z
 
 export const createCategoryZod = CoreCategoryZod;
 
-export const updateCategoryZod = CoreCategoryZod
-  .pick({
-    name: true,
-    description: true,
-    status: true,
-  })
+export const updateCategoryZod = CoreCategoryZod.pick({
+  name: true,
+  description: true,
+  status: true,
+})
   .refine((data) => data.status, {
     message: "select a valid status",
   })

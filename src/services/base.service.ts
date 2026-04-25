@@ -1,5 +1,5 @@
-import { AbstractRepo } from "../repo/base.repo.js";
-import { AppError } from "../class/api.error.js";
+import { AbstractRepo } from "@/repo/base.repo";
+import { AppError } from "@/class/api.error";
 
 export abstract class AbstractService<T> {
   constructor(protected readonly repo: AbstractRepo<T>) {}

@@ -2,10 +2,10 @@ import "dotenv/config";
 import express from "express";
 import serverless from "serverless-http";
 
-import { configApp } from "./config/config-app.js";
-import { Database } from "./config/data/db.js";
-import { MissingRouteHandler } from "./middlewares/global.error.js";
-import { setupRoutes } from "./router/index.js";
+import { configApp } from "@/config/config-app";
+import { Database } from "@/config/data/db";
+import { setupRoutes } from "@/router/index";
+import { MissingRouteHandler } from "@/middlewares/global.error";
 
 const app = express();
 configApp(app);

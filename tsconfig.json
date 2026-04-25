@@ -1,20 +1,28 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    "target": "ES6",
+    "module": "commonjs",
     "outDir": "./dist",
     "rootDir": ".",
-    "esModuleInterop": true,
     "noUncheckedIndexedAccess": true,
+    "noEmit": false,
+    "removeComments": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true,
-    "allowImportingTsExtensions": true,
-    "exactOptionalPropertyTypes": true,
-    "noEmit": true,
+    "strict": true,
     "skipLibCheck": true,
-    "strict": true
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "typeRoots": ["./src/types"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }
+// "exec": "tsx ./src/server.ts"
+
+// "moduleResolution": "bundler",
+// "allowSyntheticDefaultImports": true,
+// "exactOptionalPropertyTypes": true,
+// "allowImportingTsExtensions": true,
+//  "build": "tsc -p tsconfig.json",

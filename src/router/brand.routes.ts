@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { brandCtrl } from "../controllers/brand.controller.js";
-import { createBrandZod, updateBrandZod } from "../validation/brand.schema.js";
-import { validate } from "../middlewares/validate.js";
-import { IdParamZod } from "../validation/rules/shard.schema.js";
+import { brandCtrl } from "@/controllers/brand.controller";
+import { createBrandZod, updateBrandZod } from "@/validation/brand.schema";
+import { validate } from "@/middlewares/validate";
+import { IdParamZod } from "@/validation/rules/shard.schema";
 const router = Router();
 
 router
@@ -24,6 +24,11 @@ router
 // Default delete is now soft delete
 
 router.patch("/:id/restore", validate(IdParamZod, "params"), brandCtrl.restore);
+
+// router.patch("/:id/restore", validate(IdParamZod, "params"), brandCtrl.restore);
+// .delete(validate(MultipleBulkZod), brandCtrl.deleteBulk);
+//   checkPermission(["admin"]),
+//   upload.single("image"),
 
 export default {
   path: "/brands",

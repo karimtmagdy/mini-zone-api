@@ -1,4 +1,4 @@
-import { STATUS_CODE } from "../lib/statuscode.js";
+import { STATUS_CODE } from "@/lib/statuscode";
 
 class ApiError extends Error {
   status: string;

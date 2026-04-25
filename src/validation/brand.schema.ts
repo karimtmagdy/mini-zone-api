@@ -1,7 +1,6 @@
 import { z } from "zod/v4";
-import { BrandStatusEnum } from "../unity/enums/brand.enums.js";
-import { BRAND_STATUS } from "../unity/types/brand.types.js";
-import { imageZod } from "./rules/shard.schema.js";
+import { BRAND_STATUS, BrandStatusEnum } from "@/types/brand.dto";
+import { imageZod } from "@/validation/rules/shard.schema";
 
 export const CoreBrandZod = z.object({
   name: z

@@ -1,7 +1,7 @@
-import { AbstractService } from "./base.service.js";
-import { AppError } from "../class/api.error.js";
-import { CategoryRepo, categoryRepo } from "../repo/category.repo.js";
-import { ICategory } from "../unity/interface/category.interface.js";
+import { AbstractService } from "@/services/base.service";
+import { CategoryRepo, categoryRepo } from "@/repo/category.repo";
+import { ICategory } from "@/types/category.dto";
+import { AppError } from "@/class/api.error";
 
 export class CategoryService extends AbstractService<ICategory> {
   constructor(private readonly categoryRepo: CategoryRepo) {
@@ -25,7 +25,7 @@ export class CategoryService extends AbstractService<ICategory> {
   }
 
   async restore(id: string): Promise<ICategory> {
-    const isExist = await this.categoryRepo.exists({ _id: id as any }); // Use withDeleted or direct repo check
+    const isExist = await this.categoryRepo.exists({ _id: id }); // Use withDeleted or direct repo check
     if (!isExist) throw AppError.notFound("Category not found in trash");
 
     const category = await this.categoryRepo.restore(id);

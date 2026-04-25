@@ -2,9 +2,9 @@
 import mongoose from "mongoose";
 
 import "dotenv/config";
-import { Database } from "./config/data/db.js";
-import { logger } from "./lib/logger.js";
-import { app } from "./index.js";
+import { Database } from "@/config/data/db";
+import { logger } from "@/lib/logger";
+import { app } from "@/index";
 // import { injectSpeedInsights } from "@vercel/speed-insights";
 void (async () => {
   try {

@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import { AbstractService } from "../services/base.service.js";
-import { STATUS_CODE } from "../lib/statuscode.js";
-import { catchError } from "../lib/catch.error.js";
+import { AbstractService } from "@/services/base.service";
+import { STATUS_CODE } from "@/lib/statuscode";
+import { catchError } from "@/lib/catch.error";
 import {
   ResponseDto,
   ResponseWithMetaDto,
-} from "../unity/core/response.dto.js";
+} from "@/validation/rules/response.schema";
 
 export abstract class AbstractController<T> {
   constructor(protected readonly service: AbstractService<T>) {}
@@ -24,8 +24,7 @@ export abstract class AbstractController<T> {
     const result = await this.service.getAll(req.query);
     const response: ResponseWithMetaDto<T[]> = {
       status: "success",
-      message: "Resources has been retrieved successfully",
-      meta: result.pagination,
+      meta: result.meta,
       data: result.data,
     };
     res.status(STATUS_CODE.OK).json(response);
@@ -35,7 +34,6 @@ export abstract class AbstractController<T> {
     const data = await this.service.getById(req.params.id as string);
     const response: ResponseDto<T> = {
       status: "success",
-      message: "Resource has been retrieved successfully",
       data,
     };
     res.status(STATUS_CODE.OK).json(response);

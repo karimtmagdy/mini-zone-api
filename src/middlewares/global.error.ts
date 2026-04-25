@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response, Application } from "express";
 import { z } from "zod/v4";
 import { Error as MongooseError } from "mongoose";
-import { AppError } from "../class/api.error.js";
-import { STATUS_CODE } from "../lib/statuscode.js";
-import { logger } from "../lib/logger.js";
+import { AppError } from "@/class/api.error";
+import { STATUS_CODE } from "@/lib/statuscode";
+import { logger } from "@/lib/logger";
 
 function formatZodErrors(error: z.ZodError): Record<string, string[]> {
   const issues = (error as any).issues || (error as any).errors;

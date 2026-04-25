@@ -1,10 +1,7 @@
 import { Document, Model, QueryFilter, UpdateQuery } from "mongoose";
-import { APIFeatures } from "../class/api.feature.js";
-import {
-  APIFeaturesResultDto,
-  QueryStringDto,
-} from "../unity/core/query.dto.js";
-
+import { APIFeatures } from "@/class/api.feature";
+import { APIFeaturesResultDto, QueryStringDto } from "@/validation/rules/query.schema";
+ 
 /**
  * AbstractRepository — generic CRUD base for all Mongoose repositories.
  */

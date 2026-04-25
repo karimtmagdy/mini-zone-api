@@ -36,4 +36,6 @@ export const enviro = {
   vercelProjectId: process.env.VERCEL_PROJECTID,
   vercelTeamId: process.env.VERCEL_TEAM_ID,
   vercelApi: process.env.VERCEL_API,
+
+  sessionSecret: process.env.JWT_SESSION_SECRET as StringValue,
 };

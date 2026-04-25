@@ -1,0 +1,27 @@
+import { Router } from "express";
+
+const router = Router();
+
+router.route("/products").get((req, res) => {
+  res.json({ message: "Admin products" });
+});
+router.route("/overview").get((req, res) => {
+  res.json({ message: "Admin overview" });
+});
+router.route("/analysis").get((req, res) => {
+  res.json({ message: "Admin analysis" });
+});
+router.route("/settings").get((req, res) => {
+  res.json({ message: "Admin settings" });
+});
+router.route("/sales").get((req, res) => {
+  res.json({ message: "Admin sales" });
+});
+router.route("/users").get((req, res) => {
+  res.json({ message: "Admin users" });
+});
+
+export default {
+  path: "/dashboard",
+  router,
+};

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { AbstractController } from "./base.controller.js";
-import { IBrand } from "../unity/interface/brand.interface.js";
-import { BrandService, brandService } from "../services/brand.service.js";
-import { catchError } from "../lib/catch.error.js";
-import { STATUS_CODE } from "../lib/statuscode.js";
-import { ResponseDto } from "../unity/core/response.dto.js";
+import { AbstractController } from "@/controllers/base.controller";
+import { catchError } from "@/lib/catch.error";
+import { STATUS_CODE } from "@/lib/statuscode";
+import { IBrand } from "@/types/brand.dto";
+import { BrandService, brandService } from "@/services/brand.service";
+import { ResponseDto } from "@/validation/rules/response.schema";
 
 export class BrandController extends AbstractController<IBrand> {
   constructor(private readonly brandService: BrandService) {

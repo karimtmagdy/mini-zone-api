@@ -1,15 +1,13 @@
 import { z } from "zod/v4";
-import { EmailZod, phoneZod, slugy } from "./shard.schema.js";
+import { EmailZod, phoneZod, slugy } from "@/validation/rules/shard.schema";
 import {
   USER_GENDERS,
   USER_STATE,
   USER_STATUS,
-} from "../../unity/types/user.types.js";
-import {
   UserRoleEnum,
   UserStateEnum,
   UserStatusEnum,
-} from "../../unity/enums/user-enums.js";
+} from "@/types/user.types";
 
 /**
  * Core personal information shared by all "Person" entities.

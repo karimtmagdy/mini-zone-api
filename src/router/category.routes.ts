@@ -1,8 +1,11 @@
 import { Router } from "express";
-import { categoryCtrl } from "../controllers/category.controller.js";
-import { createCategoryZod, updateCategoryZod } from "../validation/category.schema.js";
-import { validate } from "../middlewares/validate.js";
-import { IdParamZod } from "../validation/rules/shard.schema.js";
+import { categoryCtrl } from "@/controllers/category.controller";
+import {
+  createCategoryZod,
+  updateCategoryZod,
+} from "@/validation/category.schema";
+import { validate } from "@/middlewares/validate";
+import { IdParamZod } from "@/validation/rules/shard.schema";
 const router = Router();
 
 router

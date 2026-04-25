@@ -1,13 +1,10 @@
 import { Request, Response } from "express";
-import { AbstractController } from "./base.controller.js";
-import { catchError } from "../lib/catch.error.js";
-import { STATUS_CODE } from "../lib/statuscode.js";
-import { ResponseDto } from "../unity/core/response.dto.js";
-import {
-  CategoryService,
-  categoryService,
-} from "../services/category.service.js";
-import { ICategory } from "../unity/interface/category.interface.js";
+import { AbstractController } from "./base.controller";
+import { catchError } from "@/lib/catch.error";
+import { STATUS_CODE } from "@/lib/statuscode";
+import { CategoryService, categoryService } from "@/services/category.service";
+import { ICategory } from "@/types/category.dto";
+import { ResponseDto } from "@/validation/rules/response.schema";
 
 export class CategoryController extends AbstractController<ICategory> {
   constructor(private readonly categoryService: CategoryService) {
