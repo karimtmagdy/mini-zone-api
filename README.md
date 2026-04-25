@@ -29,3 +29,21 @@ Then run the app at the root of the repository:
 ```bash
 vercel dev
 ```
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/index.ts"
+    }
+  ],
+  "crons": [{ "path": "/", "schedule": "0 10 * * *" }]
+}
+ "builds": [
+    {
+      "src": "api/index.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [      "src": "/(.*)",
+      "dest": "api/index.ts" ],

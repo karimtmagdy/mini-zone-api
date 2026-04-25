@@ -14,7 +14,7 @@
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
-    "build": "tsc && tsc-alias",
+    "build": "tsc",
     "start": "node dist/index.js",
     "kill": "kill-port 8000",
     "lint": "eslint . --ext .ts",
