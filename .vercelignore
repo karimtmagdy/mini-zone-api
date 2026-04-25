@@ -10,7 +10,7 @@
 !dist
 
 # TypeScript Configuration
-tsconfig.json
+# tsconfig.json is required for Vercel to build the project!
 tsconfig.*.json
 
 # Development Tools
