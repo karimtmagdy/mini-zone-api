@@ -1,4 +1,4 @@
-// import "module-alias/register"; // enable @alias imports at runtime
+ // enable @alias imports at runtime
 import mongoose from "mongoose";
 import "tsconfig-paths/register";
 import "dotenv/config";
