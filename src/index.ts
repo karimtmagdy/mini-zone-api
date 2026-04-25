@@ -1,12 +1,13 @@
-// import "tsconfig-paths/register"; // enable @alias imports at runtime
+// enable @alias imports at runtime
+import "tsconfig-paths/register";
 import "dotenv/config";
 import express from "express";
 import serverless from "serverless-http";
 
-import { configApp } from "./config/config-app";
-import { Database } from "./config/data/db";
-import { setupRoutes } from "./router/index";
-import { MissingRouteHandler } from "./middlewares/global.error";
+import { configApp } from "@/config/config-app";
+import { Database } from "@/config/data/db";
+import { setupRoutes } from "@/router/index";
+import { MissingRouteHandler } from "@/middlewares/global.error";
 
 const app = express();
 configApp(app);
