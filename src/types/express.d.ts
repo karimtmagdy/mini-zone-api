@@ -4,12 +4,7 @@ import { IRouter, Router } from "express";
 
 
 
-export interface TokenPayload {
-  id: string;
-  role: UserRole;
-  sessionId?: string;
-  [key: string]: any;
-}
+import { TokenPayload } from "./payload.types";
 
 declare global {
   namespace Express {
