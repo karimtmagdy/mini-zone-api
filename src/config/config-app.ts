@@ -9,12 +9,12 @@ import path from "path";
  import morgan from "morgan";
 
 // const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.resolve();
+const ROOT_DIR = path.resolve();
 
 export function configApp(app: Express) {
   // Use serve-favicon library
-  // You can point this to a real file if you have one, e.g., path.join(__dirname, "favicon.ico")
-  const faviconPath = path.join(__dirname, "favicon.ico");
+  // You can point this to a real file if you have one, e.g., path.join(ROOT_DIR, "favicon.ico")
+  const faviconPath = path.join(ROOT_DIR, "favicon.ico");
 
   // To avoid "file not found" errors if the file doesn't exist,
   // we check for it, or you can just ensure the file exists.
