@@ -8,6 +8,10 @@ export class CategoryService extends AbstractService<ICategory> {
     super(categoryRepo);
   }
 
+  async getAll(query: any): Promise<any> {
+    return this.repo.findAllWithFeatures(query, ["name", "slug"]);
+  }
+
   async create(data: Partial<ICategory>): Promise<ICategory> {
     if (data.name) {
       const isExist = await this.exists({ name: data.name });
