@@ -15,7 +15,7 @@
     "checkJs": false,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*", "./src/_R/*"]
     },
     "plugins": [
       { "transform": "typescript-transform-paths" },
