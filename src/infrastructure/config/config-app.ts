@@ -31,6 +31,13 @@ export function configApp(app: Express) {
 
   // Trust first proxy (e.g., AWS ELB, Nginx) to correctly identify client IP
   app.set("trust proxy", 1);
+  // Allow Chrome Private Network Access (HTTPS pages accessing localhost)
+  app.use((req, res, next) => {
+    if (req.headers["access-control-request-private-network"]) {
+      res.setHeader("Access-Control-Allow-Private-Network", "true");
+    }
+    next();
+  });
   // Enable Cross-Origin Resource Sharing (CORS)
   app.use(corsOption());
   // Parse JSON request bodies

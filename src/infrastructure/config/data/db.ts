@@ -1,6 +1,13 @@
 import mongoose from "mongoose";
 import { logger } from "@/shared/lib/logger";
 import { enviro } from "@/shared/lib/local.env";
+
+declare global {
+  var __mongoose_cache: {
+    conn: typeof mongoose | null;
+    promise: Promise<typeof mongoose> | null;
+  };
+}
 // import { attachDatabasePool } from "@vercel/functions";
 // import '../../scripts/sync-env-vercel'
 export class Database {

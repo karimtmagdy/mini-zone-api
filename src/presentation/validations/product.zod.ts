@@ -19,7 +19,6 @@ export const CoreProductZod = z
       }),
     price: z
       .number({ message: "Product price is required" })
-      .int()
       .min(0, { message: "Price must be at least 0" }),
     discount: z
       .number()
@@ -32,12 +31,11 @@ export const CoreProductZod = z
       .number({ message: "Product stock is required" })
       .int()
       .min(0, { message: "Stock must be at least 0" })
-      .nonnegative({ message: "the quantity must be zero or greater." })
-      .default(0),
+      .nonnegative({ message: "the quantity must be zero or greater." }),
     sold: z.number().nonnegative().default(0),
     brand: z.string({ message: "Product brand is required" }),
-    category: z.array(z.string()).min(1),
-    subcategory: z.array(z.string()).optional(),
+    category: z.union([z.string(), z.array(z.string())]),
+    subcategory: z.union([z.string(), z.array(z.string())]).optional(),
     status: z.enum(PRODUCT_STATUS).optional(),
     colors: z.array(z.string()).optional(),
     images: z
@@ -60,24 +58,7 @@ export const CoreProductZod = z
 
 export const createProductZod = CoreProductZod;
 
-export const updateProductZod = CoreProductZod.pick({
-  name: true,
-  description: true,
-  price: true,
-  stock: true,
-  brand: true,
-  category: true,
-  subcategory: true,
-  status: true,
-  colors: true,
-  images: true,
-  tags: true,
-  sku: true,
-})
-  .refine((data) => data.status, {
-    message: "select a valid status",
-  })
-  .strict();
+export const updateProductZod = CoreProductZod.partial().strict();
 
 export const updateStockZod = CoreProductZod.pick({
   stock: true,

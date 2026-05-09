@@ -3,12 +3,12 @@ import { Route } from "@/_R/types/global.dto";
 
 import productRouter from "./product.routes";
 import subcategoryRouter from "./subcategory.routes";
-// import dashboardRouter from "./dashboard.routes";
-// import authRouter from "./person/auth.routes";
-// import userRouter from "./person/user.routes";
-// import employeeRouter from "./person/employee.routes";
-// import couponRouter from "./coupon.routes";
-// import orderRouter from "./order.routes";
+import dashboardRouter from "@/_R/router/dashboard.routes";
+// import authRouter from "@/_R/router/person/auth.routes";
+// import userRouter from "@/_R/router/person/user.routes";
+// import employeeRouter from "@/_R/router/person/employee.routes";
+import couponRouter from "@/_R/router/coupon.routes";
+// import orderRouter from "@/_R/router/order.routes";
 import brandRouter from "./brand.routes";
 import categoryRouter from "./category.routes";
 
@@ -17,12 +17,12 @@ const publicRoutes: Route[] = [
   brandRouter,
   categoryRouter,
   subcategoryRouter,
-  //   dashboardRouter,
-  //   authRouter,
-  //   userRouter,
-  //   employeeRouter,
-  //   couponRouter,
-  //   orderRouter,
+  dashboardRouter,
+  // authRouter,
+  // userRouter,
+  // employeeRouter,
+  couponRouter,
+  // orderRouter,
 ];
 
 const RV1 = "/api/v1";

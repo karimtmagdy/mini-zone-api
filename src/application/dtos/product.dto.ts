@@ -4,7 +4,7 @@ export interface CreateProductDTO {
   name: string;
   description: string;
   price: number;
-  quantity: number;
+  stock: number;
   sku: string;
   discount: number;
   sold: number;
@@ -20,7 +20,7 @@ export interface UpdateProductDTO {
   name?: string;
   description?: string;
   price?: number;
-  quantity?: number;
+  stock?: number;
   sku?: string;
   discount?: number;
   sold?: number;

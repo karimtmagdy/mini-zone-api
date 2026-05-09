@@ -12,7 +12,7 @@ export const authenticated = catchError(
     if (!token) AppError.unauthorized("No authentication token provided");
     try {
       const decodedToken = jwtUitl.verification.access(token);
-      req.user = decodedToken;
+      (req as any).user = decodedToken;
       next();
     } catch (error) {
       AppError.jwtInvalid();
@@ -24,7 +24,7 @@ export const checkPermission = (
   roles: UserRole[] = ["super-admin", "admin", "manager", "hr", "viewer"],
 ) =>
   catchError(async (req: Request, _: Response, next: NextFunction) => {
-    const user = req.user;
+    const user = (req as any).user;
     const requiredRoles = Array.isArray(roles) ? roles : [roles];
 
     if (!user) AppError.unauthorized("No user found");

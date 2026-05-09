@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { catchError } from "@/shared/lib/catch.error";
+import { activityLogService } from "@/_R/services/activity-log.service";
 import { STATUS_CODE } from "@/shared/lib/statuscode";
 import { Product } from "@/domain/entities/Product";
 import {
@@ -87,6 +88,23 @@ export class ProductController {
     const { id } = req.params as { id: string };
     const body = req.body as UpdateProductDTO;
     const result = await this.updateProductUseCase.execute(id, body);
+    
+    // Record activity
+    const authReq = req as any;
+    if (authReq.user) {
+      await activityLogService.record({
+        user: {
+          name: authReq.user.username,
+          email: authReq.user.email,
+          avatar: authReq.user.avatar,
+        },
+        action: "Updated Product",
+        target: (result as any)?.name || id,
+        details: body,
+        status: "success",
+      });
+    }
+
     const response: ResponseDto<Product | null> = {
       status: "success",
       message: "product updated successfully",
@@ -98,6 +116,22 @@ export class ProductController {
   soft = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
     const result = await this.softDeleteProductUseCase.execute(id);
+    
+    // Record activity
+    const authReq = req as any;
+    if (authReq.user) {
+      await activityLogService.record({
+        user: {
+          name: authReq.user.username,
+          email: authReq.user.email,
+          avatar: authReq.user.avatar,
+        },
+        action: "Moved Product to Trash",
+        target: (result as any)?.name || id,
+        status: "warning",
+      });
+    }
+
     const response: ResponseDto<Product | null> = {
       status: "success",
       message: "product moved to trash",
@@ -109,6 +143,22 @@ export class ProductController {
   restore = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
     const result = await this.restoreProductUseCase.execute(id);
+    
+    // Record activity
+    const authReq = req as any;
+    if (authReq.user) {
+      await activityLogService.record({
+        user: {
+          name: authReq.user.username,
+          email: authReq.user.email,
+          avatar: authReq.user.avatar,
+        },
+        action: "Restored Product",
+        target: (result as any)?.name || id,
+        status: "success",
+      });
+    }
+
     const response: ResponseDto<Product | null> = {
       status: "success",
       message: "product restored successfully",
@@ -196,6 +246,23 @@ export class ProductController {
       req.params.id as string,
       req.body.stock,
     );
+
+    // Record activity
+    const authReq = req as any;
+    if (authReq.user) {
+      await activityLogService.record({
+        user: {
+          name: authReq.user.username,
+          email: authReq.user.email,
+          avatar: authReq.user.avatar,
+        },
+        action: "Updated Stock",
+        target: (data as any)?.name || (req.params.id as string),
+        details: { newStock: req.body.stock },
+        status: "success",
+      });
+    }
+
     const response: ResponseDto<Product | null> = {
       status: "success",
       message: "Stock updated successfully",

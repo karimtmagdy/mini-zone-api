@@ -9,13 +9,22 @@ import {
 import { IdParamZod } from "@/_R/validation/rules/shard.schema";
 import { uploadSingleImage } from "@/presentation/middlewares/multer.middleware";
 import { uploadToCloudinary } from "@/presentation/middlewares/image.middleware";
+import {
+  authenticated,
+  checkPermission,
+} from "@/presentation/middlewares/authroized";
 
 const router = Router();
 
 router
   .route("/")
   .get(productCtrl.getAll)
-  .post(validate(createProductZod), productCtrl.create);
+  .post(
+    authenticated,
+    checkPermission(["admin", "super-admin"]),
+    validate(createProductZod),
+    productCtrl.create,
+  );
 
 router.get("/trash", productCtrl.getDeleted);
 router.get("/latest", productCtrl.getLatest);
@@ -51,16 +60,25 @@ router
   .route("/:id")
   .get(validate(IdParamZod, "params"), productCtrl.getOne)
   .patch(
+    authenticated,
+    checkPermission(["admin", "super-admin"]),
     validate(IdParamZod, "params"),
     uploadSingleImage("image"),
     validate(updateProductZod),
     uploadToCloudinary("products"),
     productCtrl.update,
   )
-  .delete(validate(IdParamZod, "params"), productCtrl.soft);
+  .delete(
+    authenticated,
+    checkPermission(["admin", "super-admin"]),
+    validate(IdParamZod, "params"),
+    productCtrl.soft,
+  );
 
 router.patch(
   "/stock/:id",
+  authenticated,
+  checkPermission(["admin", "super-admin"]),
   validate(IdParamZod, "params"),
   validate(updateStockZod),
   productCtrl.updateStock,
@@ -68,6 +86,8 @@ router.patch(
 
 router.patch(
   "/restore/:id",
+  authenticated,
+  checkPermission(["admin", "super-admin"]),
   validate(IdParamZod, "params"),
   productCtrl.restore,
 );

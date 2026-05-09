@@ -19,7 +19,6 @@ export interface IProduct {
   slug: string;
   description: string;
   price: number;
-  quantity?: number; // Some parts use stock, some use quantity. I'll stick to stock if that's what the model uses.
   stock: number;
   sku: string;
   discount: number;

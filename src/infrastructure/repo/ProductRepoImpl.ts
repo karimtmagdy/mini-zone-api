@@ -16,7 +16,6 @@ export class ProductRepoImpl implements ProductRepoType {
       description: doc.description,
       price: doc.price,
       stock: doc.stock,
-      quantity: doc.quantity,
       sku: doc.sku,
       discount: doc.discount,
       sold: doc.sold,

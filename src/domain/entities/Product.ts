@@ -10,7 +10,6 @@ export class Product {
   public price!: number;
   public sku!: string;
   public stock!: number;
-  public quantity?: number;
   public discount!: number;
   public sold!: number;
   public colors?: string[];
