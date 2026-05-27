@@ -1,6 +1,6 @@
-import { DeviceInfo } from "@/types/session.dto";
+import { DeviceInfo } from "@/domain/types/session.types";
 import type { Request } from "express";
- 
+
 import { UAParser, type IResult } from "ua-parser-js";
 
 export const getClientIp = (req: Request) => {

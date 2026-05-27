@@ -1,0 +1,91 @@
+import fs from "fs";
+import path from "path";
+import dotenv from "dotenv";
+import { enviro } from "@/contract/lib/local.env";
+dotenv.config();
+
+const { vercelToken, vercelProjectId, vercelTeamId, vercelApi } = enviro;
+if (!vercelToken || !vercelProjectId) {
+  throw new Error("Missing VERCEL_TOKEN or VERCEL_PROJECTID in .env");
+}
+
+const TARGET = "production";
+
+// Helper: fetch + JSON + error handling
+async function fetchJson(url: string, options: RequestInit = {}) {
+  const res = await fetch(url, options);
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Fetch error ${res.status}: ${text}`);
+  }
+  return res.json();
+}
+
+// Read local .env
+const envPath = path.resolve(process.cwd(), ".env");
+const envFile = fs.readFileSync(envPath, "utf-8");
+const localEnv = dotenv.parse(envFile);
+
+// console.log("Local .env variables:", localEnv);
+
+// Sync environment variables to Vercel
+async function syncEnv() {
+  // const projectId = vercelProjectId;
+
+  // 1️⃣ Get remote envs
+  let remoteEnv: any[] = [];
+  try {
+    const url = new URL(`${vercelApi}/${vercelProjectId}/env`);
+    if (vercelTeamId) url.searchParams.append("teamId", vercelTeamId);
+
+    const data: any = await fetchJson(url.toString(), {
+      headers: { Authorization: `Bearer ${vercelToken}` },
+    });
+
+    remoteEnv = data.envs || [];
+  } catch (err) {
+    console.warn("Could not fetch remote envs, continuing...");
+  }
+
+  // 2️⃣ Loop through local env and sync
+  for (const [key, value] of Object.entries(localEnv)) {
+    // Delete existing
+    const existing = remoteEnv.find((e) => e.key === key);
+    if (existing) {
+      const delUrl = `${vercelApi}/${vercelProjectId}/env/${existing.id}${
+        vercelTeamId ? `?teamId=${vercelTeamId}` : ""
+      }`;
+      await fetch(delUrl, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${vercelToken}` },
+      });
+      console.log(`🗑️ Removed existing variable: ${key}`);
+    }
+
+    // Add new
+    const postUrl = `${vercelApi}/${vercelProjectId}/env${
+      vercelTeamId ? `?teamId=${vercelTeamId}` : ""
+    }`;
+
+    await fetch(postUrl, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${vercelToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        key,
+        value,
+        type: "encrypted",
+        target: [TARGET],
+      }),
+    });
+
+    console.log(`✅ Synced variable: ${key}`);
+  }
+}
+
+// Run
+syncEnv().catch((err) => {
+  console.error("Error syncing environment variables:", err);
+});

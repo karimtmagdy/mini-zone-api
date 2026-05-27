@@ -28,3 +28,4 @@ vercel-commands.md
 .DS_Store
 Thumbs.db
 src/_R/
+/data/src/_R

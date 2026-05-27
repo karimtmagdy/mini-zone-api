@@ -1,19 +1,41 @@
-import { CategoryRepoType } from "@/domain/interface/category.interface";
+import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
+import { IUser } from "@/domain/types/user.types";
+import { CategoryRepoType } from "@/domain/types/category.types";
 import { AppError } from "@/shared/utils/api.error";
 import { Category } from "@/domain/entities/Category";
-import { CreateCategoryDTO } from "@/application/dtos/category.dto";
+import { CreateCategoryDTO } from "@/presentation/validation/category.zod";
 
 export class CreateCategory {
-  constructor(private categoryRepo: CategoryRepoType) {}
+  constructor(
+    private categoryRepo: CategoryRepoType,
+    private recordActivity: RecordActivity,
+  ) {}
 
-  async execute(data: CreateCategoryDTO): Promise<Category> {
+  async execute(data: CreateCategoryDTO, performer: IUser): Promise<Category> {
     const isExist = await this.categoryRepo.findByName(data.name);
     if (isExist) {
-      AppError.conflict("category name already exists");
+      throw AppError.conflict("category name already exists");
     }
 
     const category = new Category(data);
-    return await this.categoryRepo.create(category);
+    const createdCategory = await this.categoryRepo.create(
+      category,
+      performer.id,
+    );
+
+    await this.recordActivity.execute({
+      user: {
+        username: performer.username,
+        email: performer.email,
+        role: performer.role!,
+      },
+      action: "Category created",
+      target: `Category: ${createdCategory.name}`,
+      details: { categoryId: createdCategory.id },
+      timestamp: new Date(),
+    });
+
+    return createdCategory;
   }
 }
 // .name, data.status, {

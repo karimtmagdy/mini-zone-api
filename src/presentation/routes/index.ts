@@ -1,28 +1,26 @@
 import { Express } from "express";
-import { Route } from "@/_R/types/global.dto";
+import { Route } from "@/_R/global.dto";
 
 import productRouter from "./product.routes";
 import subcategoryRouter from "./subcategory.routes";
-import dashboardRouter from "@/_R/router/dashboard.routes";
-// import authRouter from "@/_R/router/person/auth.routes";
-// import userRouter from "@/_R/router/person/user.routes";
-// import employeeRouter from "@/_R/router/person/employee.routes";
-import couponRouter from "@/_R/router/coupon.routes";
-// import orderRouter from "@/_R/router/order.routes";
+import dashboardRouter from "./dashboard.routes";
+import authRouter from "./auth.routes";
+import employeeRouter from "./employee.routes";
+import couponRouter from "./coupon.routes";
 import brandRouter from "./brand.routes";
 import categoryRouter from "./category.routes";
+import userRouter from "./user.routes";
 
 const publicRoutes: Route[] = [
+  userRouter,
   productRouter,
   brandRouter,
   categoryRouter,
   subcategoryRouter,
   dashboardRouter,
-  // authRouter,
-  // userRouter,
-  // employeeRouter,
+  authRouter,
+  employeeRouter,
   couponRouter,
-  // orderRouter,
 ];
 
 const RV1 = "/api/v1";

@@ -1,4 +1,4 @@
-import { BrandRepoType } from "@/domain/interface/brand.interface";
+import { BrandRepoType } from "@/domain/types/brand.types";
 
 export class GetDeletedBrands {
   constructor(private brandRepo: BrandRepoType) {}

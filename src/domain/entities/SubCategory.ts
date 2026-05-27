@@ -2,13 +2,13 @@ import { SubCategoryStatus } from "../types/subcategory.types";
 
 export class SubCategory {
   public name!: string;
-  public status!: SubCategoryStatus;
   public description?: string;
+  public status!: SubCategoryStatus;
   public image?: { url: string; publicId: string };
+  public category?: string[];
   public readonly id?: string;
   public slug?: string;
   public products?: number;
-  public category?: string[];
   public createdAt?: Date;
   public updatedAt?: Date;
   constructor(data: Partial<SubCategory>) {

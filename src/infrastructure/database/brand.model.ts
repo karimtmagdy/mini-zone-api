@@ -21,6 +21,7 @@ const BrandSchema = new Schema<IBrand>(
       required: true,
       trim: true,
       unique: true,
+      index: true,
       minlength: [2, "name must be at least 2 characters long"],
       maxlength: [30, "name must be at most 30 characters long"],
     },
@@ -28,10 +29,14 @@ const BrandSchema = new Schema<IBrand>(
       type: String,
       enum: BRAND_STATUS,
       default: BrandStatusEnum.ACTIVE,
+      index: true,
     },
   },
   getSchemaOptions("brands"),
 );
+
+BrandSchema.index({ name: "text" });
+
 applySlugify(BrandSchema, "name");
 applySoftDelete(BrandSchema);
 applyVirtual({

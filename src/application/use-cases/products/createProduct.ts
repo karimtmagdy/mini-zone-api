@@ -1,18 +1,36 @@
-import { ProductRepoType } from "@/domain/interface/product.interface";
+import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
+import { IUser } from "@/domain/types/user.types";
+import { ProductRepoType } from "@/domain/types/product.types";
 import { AppError } from "@/shared/utils/api.error";
 import { Product } from "@/domain/entities/Product";
-import { CreateProductDTO } from "@/application/dtos/product.dto";
-
+import { CreateProductDTO } from "@/presentation/validation/product.zod";
 export class CreateProduct {
-  constructor(private productRepo: ProductRepoType) {}
+  constructor(
+    private productRepo: ProductRepoType,
+    private recordActivity: RecordActivity,
+  ) {}
 
-  async execute(data: CreateProductDTO): Promise<Product> {
+  async execute(data: CreateProductDTO, performer: IUser): Promise<Product> {
     const isExist = await this.productRepo.findByName(data.name);
     if (isExist) {
-      AppError.conflict("product name already exists");
+      throw AppError.conflict("product name already exists");
     }
 
     const product = new Product(data);
-    return await this.productRepo.create(product);
+    const createdProduct = await this.productRepo.create(product, performer.id);
+
+    await this.recordActivity.execute({
+      user: {
+        username: performer.username,
+        email: performer.email,
+        role: performer.role!,
+      },
+      action: "Product created",
+      target: `Product: ${createdProduct.name}`,
+      details: { productId: createdProduct.id },
+      timestamp: new Date(),
+    });
+
+    return createdProduct;
   }
 }

@@ -19,6 +19,7 @@ const ProductSchema = new Schema<IProduct>(
       required: [true, "name is required"],
       trim: true,
       unique: true,
+      index: true,
       minlength: [2, "name must be at least 2 characters long"],
       maxlength: [100, "name must be at most 100 characters long"],
     },
@@ -26,8 +27,14 @@ const ProductSchema = new Schema<IProduct>(
       type: String,
       trim: true,
       required: [true, "Product description is required"],
-      minlength: [10, "Product description must be at least 10 characters long"],
-      maxlength: [1000, "Product description must be at most 1000 characters long"],
+      minlength: [
+        10,
+        "Product description must be at least 10 characters long",
+      ],
+      maxlength: [
+        1000,
+        "Product description must be at most 1000 characters long",
+      ],
     },
     price: {
       type: Number,
@@ -44,11 +51,13 @@ const ProductSchema = new Schema<IProduct>(
       type: Number,
       default: 0,
       required: [true, "Product stock is required"],
+      index: true,
       min: [0, "Stock must be at least 0"],
     },
     sold: {
       type: Number,
       default: 0,
+      index: true,
       min: [0, "Sold count cannot be negative"],
     },
     finalPrice: { type: Number, default: 0 },
@@ -94,22 +103,26 @@ const ProductSchema = new Schema<IProduct>(
       type: Types.ObjectId,
       ref: "Category",
       required: true,
+      index: true,
     },
     subcategory: [
       {
         type: Types.ObjectId,
         ref: "SubCategory",
+        index: true,
       },
     ],
     brand: {
       type: Types.ObjectId,
       ref: "Brand",
       required: true,
+      index: true,
     },
     status: {
       type: String,
       enum: PRODUCT_STATUS,
       default: ProductStatusEnum.ACTIVE,
+      index: true,
     },
   },
   getSchemaOptions("products"),
@@ -117,6 +130,9 @@ const ProductSchema = new Schema<IProduct>(
 
 applySlugify(ProductSchema, "name");
 applySoftDelete(ProductSchema);
+
+// Text index for optimized search
+ProductSchema.index({ name: "text", description: "text" });
 
 ProductSchema.virtual("isAvailable").get(function () {
   return this.stock > 0 && this.status === ProductStatusEnum.ACTIVE
@@ -212,7 +228,23 @@ ProductSchema.post("save", async function (doc) {
 });
 
 ProductSchema.pre("findOneAndUpdate", async function () {
-  (this as any).oldDoc = await this.model.findOne(this.getQuery());
+  const update = this.getUpdate() as any;
+  
+  // Only fetch the old document if one of the relationship fields is being changed.
+  // This saves a database call for 90% of updates (price, stock, etc.)
+  const needsOldDoc = 
+    update.category || 
+    update.brand || 
+    update.subcategory || 
+    update.status ||
+    update.$set?.category || 
+    update.$set?.brand || 
+    update.$set?.subcategory ||
+    update.$set?.status;
+
+  if (needsOldDoc) {
+    (this as any).oldDoc = await this.model.findOne(this.getQuery()).lean();
+  }
 });
 
 ProductSchema.post("findOneAndUpdate", async function (doc) {

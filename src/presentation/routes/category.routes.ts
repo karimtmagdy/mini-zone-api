@@ -4,8 +4,8 @@ import { validate } from "@/presentation/middlewares/validate";
 import {
   createCategoryZod,
   updateCategoryZod,
-} from "../validations/category.zod";
-import { IdParamZod } from "@/_R/validation/rules/shard.schema";
+} from "../validation/category.zod";
+import { IdParamZod } from "@/shared/schema/shard.schema";
 import { uploadSingleImage } from "@/presentation/middlewares/multer.middleware";
 import { uploadToCloudinary } from "@/presentation/middlewares/image.middleware";
 

@@ -5,7 +5,7 @@ import { SubCategory } from "@/domain/entities/SubCategory";
 import {
   ResponseDto,
   ResponseWithMetaDto,
-} from "@/_R/validation/rules/response.schema";
+} from "@/shared/schema/response.schema";
 import { CreateSubCategory } from "@/application/use-cases/subcategories/createSubCategory";
 import { GetAllSubCategories } from "@/application/use-cases/subcategories/getAllSubCategories";
 import { GetSubCategoryById } from "@/application/use-cases/subcategories/getSubCategoryById";
@@ -16,7 +16,7 @@ import { GetDeletedSubCategories } from "@/application/use-cases/subcategories/g
 import {
   CreateSubCategoryDTO,
   UpdateSubCategoryDTO,
-} from "@/application/dtos/subcategory.dto";
+} from "@/presentation/validation/subcategory.zod";
 
 export class SubCategoryController {
   constructor(
@@ -31,7 +31,7 @@ export class SubCategoryController {
 
   create = catchError(async (req: Request, res: Response) => {
     const body = req.body as CreateSubCategoryDTO;
-    const result = await this.createSubCategoryUseCase.execute(body);
+    const result = await this.createSubCategoryUseCase.execute(body, req.user);
     const response: ResponseDto<SubCategory> = {
       status: "success",
       message: "sub category created successfully",
@@ -63,7 +63,11 @@ export class SubCategoryController {
   update = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
     const body = req.body as UpdateSubCategoryDTO;
-    const result = await this.updateSubCategoryUseCase.execute(id, body);
+    const result = await this.updateSubCategoryUseCase.execute(
+      id,
+      body,
+      req.user,
+    );
     const response: ResponseDto<SubCategory | null> = {
       status: "success",
       message: "sub category updated successfully",
@@ -74,7 +78,10 @@ export class SubCategoryController {
 
   soft = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
-    const result = await this.softDeleteSubCategoryUseCase.execute(id);
+    const result = await this.softDeleteSubCategoryUseCase.execute(
+      id,
+      req.user,
+    );
     const response: ResponseDto<SubCategory | null> = {
       status: "success",
       message: "sub category moved to trash",
@@ -85,7 +92,7 @@ export class SubCategoryController {
 
   restore = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
-    const result = await this.restoreSubCategoryUseCase.execute(id);
+    const result = await this.restoreSubCategoryUseCase.execute(id, req.user);
     const response: ResponseDto<SubCategory | null> = {
       status: "success",
       message: "sub category restored successfully",

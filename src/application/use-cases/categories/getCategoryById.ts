@@ -1,4 +1,4 @@
-import { CategoryRepoType } from "@/domain/interface/category.interface";
+import { CategoryRepoType } from "@/domain/types/category.types";
 import { AppError } from "@/shared/utils/api.error";
 
 export class GetCategoryById {

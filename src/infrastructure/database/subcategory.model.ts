@@ -21,6 +21,7 @@ const SubCategorySchema = new Schema<ISubCategory>(
       trim: true,
       required: true,
       unique: true,
+      index: true,
       minlength: [2, "Name must be at least 2 characters"],
       maxlength: [32, "Name must be at most 32 characters"],
     },
@@ -30,15 +31,21 @@ const SubCategorySchema = new Schema<ISubCategory>(
       minlength: [10, "Description must be at least 10 characters"],
       maxlength: [500, "Description must be at most 500 characters"],
     },
-    category: [{ type: Types.ObjectId, ref: "Category", required: true }],
+    category: [
+      { type: Types.ObjectId, ref: "Category", required: true, index: true },
+    ],
     status: {
       type: String,
       enum: SUBCATEGORY_STATUS,
       default: SubCategoryEnum.ACTIVE,
+      index: true,
     },
   },
   getSchemaOptions("subcategories"),
 );
+
+SubCategorySchema.index({ name: "text", description: "text" });
+
 applySlugify(SubCategorySchema, "name");
 applySoftDelete(SubCategorySchema);
 applyVirtual({

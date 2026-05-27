@@ -9,6 +9,27 @@ void (async () => {
   try {
     // 1. ensure database is connected
     await Database.getInstance();
+
+    // Seeding test brands on startup in development
+    // if (process.env.NODE_ENV === "development") {
+    //   try {
+    //     const { brandModel } =
+    //       await import("@/infrastructure/database/brand.model");
+    //     await brandModel.deleteMany({ name: /^brand-/ });
+    //     await brandModel.insertMany(
+    //       Array.from({ length: 400 }, (_, i) => ({
+    //         name: `brand-${i}`,
+    //         slug: `brand-${i}`,
+    //         status: "onboarding",
+    //       })),
+    //       { ordered: false },
+    //     );
+    //     logger.log("✅ 400 test brands seeded successfully on startup!");
+    //   } catch (err) {
+    //     logger.error("⚠️ Error seeding test brands on startup:", err);
+    //   }
+    // }
+
     // 2. start the server after db is ready
     app.listen(process.env.PORT, () => {
       logger.log(`🚀 Server is running on port ${process.env.PORT}`);

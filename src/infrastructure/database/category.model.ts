@@ -21,6 +21,7 @@ const CategorySchema = new Schema<ICategory>(
       required: true,
       trim: true,
       unique: true,
+      index: true,
       minlength: [3, "category name must be at least 3 characters long"],
       maxlength: [30, "category name must be at most 30 characters long"],
     },
@@ -40,10 +41,14 @@ const CategorySchema = new Schema<ICategory>(
       type: String,
       enum: CATEGORY_STATUS,
       default: CategoryStatusEnum.ACTIVE,
+      index: true,
     },
   },
   getSchemaOptions("categories"),
 );
+
+CategorySchema.index({ name: "text", description: "text" });
+
 applySlugify(CategorySchema, "name");
 applySoftDelete(CategorySchema);
 applyVirtual({

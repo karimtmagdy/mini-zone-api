@@ -6,29 +6,36 @@ import { UpdateBrand } from "@/application/use-cases/brands/updateBrand";
 import { SoftDeleteBrand } from "@/application/use-cases/brands/softDeleteBrand";
 import { RestoreBrand } from "@/application/use-cases/brands/restoreBrand";
 import { GetDeletedBrands } from "@/application/use-cases/brands/getDeletedBrands";
+import { UpdateBrandStatus } from "@/application/use-cases/brands/updateBrandStatus";
 import { catchError } from "@/shared/lib/catch.error";
 import { STATUS_CODE } from "@/shared/lib/statuscode";
 import { Brand } from "@/domain/entities/Brand";
 import {
   ResponseDto,
   ResponseWithMetaDto,
-} from "@/_R/validation/rules/response.schema";
-import { CreateBrandDTO, UpdateBrandDTO } from "@/application/dtos/brand.dto";
+} from "@/shared/schema/response.schema";
+import {
+  CreateBrandDTO,
+  UpdateBrandDTO,
+  UpdateBrandStatusDTO,
+} from "@/presentation/validation/brand.zod";
 
 export class BrandController {
   constructor(
-    private createBrandUseCase: CreateBrand,
-    private getAllBrandsUseCase: GetAllBrands,
-    private getBrandByIdUseCase: GetBrandById,
-    private updateBrandUseCase: UpdateBrand,
-    private softDeleteBrandUseCase: SoftDeleteBrand,
-    private restoreBrandUseCase: RestoreBrand,
-    private getDeletedBrandsUseCase: GetDeletedBrands,
+    private createBrandUC: CreateBrand,
+    private getAllBrandsUC: GetAllBrands,
+    private getBrandByIdUC: GetBrandById,
+    private updateBrandUC: UpdateBrand,
+    private softDeleteBrandUC: SoftDeleteBrand,
+    private restoreBrandUC: RestoreBrand,
+    private getDeletedBrandsUC: GetDeletedBrands,
+    private updateBrandStatusUC: UpdateBrandStatus,
   ) {}
 
   create = catchError(async (req: Request, res: Response) => {
     const body = req.body as CreateBrandDTO;
-    const result = await this.createBrandUseCase.execute(body);
+    const result = await this.createBrandUC.execute(body);
+    // const result = await this.createBrandUC.execute(body, req.user);
     const response: ResponseDto<Brand> = {
       status: "success",
       message: "brand created successfully",
@@ -38,7 +45,7 @@ export class BrandController {
   });
 
   getAll = catchError(async (req: Request, res: Response) => {
-    const result = await this.getAllBrandsUseCase.execute(req.query);
+    const result = await this.getAllBrandsUC.execute(req.query);
     const response: ResponseWithMetaDto<Brand[]> = {
       status: "success",
       meta: result.meta,
@@ -49,7 +56,7 @@ export class BrandController {
 
   getOne = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
-    const result = await this.getBrandByIdUseCase.execute(id);
+    const result = await this.getBrandByIdUC.execute(id);
     const response: ResponseDto<Brand> = {
       status: "success",
       data: result,
@@ -60,7 +67,7 @@ export class BrandController {
   update = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
     const body = req.body as UpdateBrandDTO;
-    const result = await this.updateBrandUseCase.execute(id, body);
+    const result = await this.updateBrandUC.execute(id, body, req.user);
     const response: ResponseDto<Brand | null> = {
       status: "success",
       message: "brand updated successfully",
@@ -71,7 +78,7 @@ export class BrandController {
 
   soft = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
-    const result = await this.softDeleteBrandUseCase.execute(id);
+    const result = await this.softDeleteBrandUC.execute(id, req.user);
     const response: ResponseDto<Brand | null> = {
       status: "success",
       message: "brand moved to trash",
@@ -82,7 +89,7 @@ export class BrandController {
 
   restore = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
-    const result = await this.restoreBrandUseCase.execute(id);
+    const result = await this.restoreBrandUC.execute(id, req.user);
     const response: ResponseDto<Brand | null> = {
       status: "success",
       message: "brand restored successfully",
@@ -92,9 +99,21 @@ export class BrandController {
   });
 
   getDeleted = catchError(async (_req: Request, res: Response) => {
-    const result = await this.getDeletedBrandsUseCase.execute();
+    const result = await this.getDeletedBrandsUC.execute();
     const response: ResponseDto<Brand[]> = {
       status: "success",
+      data: result,
+    };
+    res.status(STATUS_CODE.OK).json(response);
+  });
+
+  updateStatus = catchError(async (req: Request, res: Response) => {
+    const { id } = req.params as { id: string };
+    const { status } = req.body as UpdateBrandStatusDTO;
+    const result = await this.updateBrandStatusUC.execute(id, status, req.user);
+    const response: ResponseDto<Brand | null> = {
+      status: "success",
+      message: "brand status updated successfully",
       data: result,
     };
     res.status(STATUS_CODE.OK).json(response);

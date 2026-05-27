@@ -20,23 +20,52 @@ import { GetProductsByCategory } from "@/application/use-cases/products/getProdu
 import { GetProductsByBrand } from "@/application/use-cases/products/getProductsByBrand";
 import { GetProductsBySubcategory } from "@/application/use-cases/products/getProductsBySubcategory";
 
+import { recordActivityUseCase } from "./activity-log.container";
+
 const productRepository = new ProductRepoImpl();
 
-export const createProductUseCase = new CreateProduct(productRepository);
+export const createProductUseCase = new CreateProduct(
+  productRepository,
+  recordActivityUseCase,
+);
 export const getAllProductsUseCase = new GetAllProducts(productRepository);
 export const getProductByIdUseCase = new GetProductById(productRepository);
-export const updateProductUseCase = new UpdateProduct(productRepository);
-export const softDeleteProductUseCase = new SoftDeleteProduct(productRepository);
-export const restoreProductUseCase = new RestoreProduct(productRepository);
-export const getDeletedProductsUseCase = new GetDeletedProducts(productRepository);
+export const updateProductUseCase = new UpdateProduct(
+  productRepository,
+  recordActivityUseCase,
+);
+export const softDeleteProductUseCase = new SoftDeleteProduct(
+  productRepository,
+  recordActivityUseCase,
+);
+export const restoreProductUseCase = new RestoreProduct(
+  productRepository,
+  recordActivityUseCase,
+);
+export const getDeletedProductsUseCase = new GetDeletedProducts(
+  productRepository,
+);
 export const getTopTenProductsUseCase = new GetTopTenProducts(productRepository);
-export const getRelatedProductsUseCase = new GetRelatedProducts(productRepository);
-export const getTopRatedProductsUseCase = new GetTopRatedProducts(productRepository);
+export const getRelatedProductsUseCase = new GetRelatedProducts(
+  productRepository,
+);
+export const getTopRatedProductsUseCase = new GetTopRatedProducts(
+  productRepository,
+);
 export const getLatestProductsUseCase = new GetLatestProducts(productRepository);
-export const getLowStockProductsUseCase = new GetLowStockProducts(productRepository);
-export const getHighStockProductsUseCase = new GetHighStockProducts(productRepository);
-export const getOutOfStockProductsUseCase = new GetOutOfStockProducts(productRepository);
-export const updateProductStockUseCase = new UpdateProductStock(productRepository);
+export const getLowStockProductsUseCase = new GetLowStockProducts(
+  productRepository,
+);
+export const getHighStockProductsUseCase = new GetHighStockProducts(
+  productRepository,
+);
+export const getOutOfStockProductsUseCase = new GetOutOfStockProducts(
+  productRepository,
+);
+export const updateProductStockUseCase = new UpdateProductStock(
+  productRepository,
+  recordActivityUseCase,
+);
 export const getProductsByCategoryUseCase = new GetProductsByCategory(productRepository);
 export const getProductsByBrandUseCase = new GetProductsByBrand(productRepository);
 export const getProductsBySubcategoryUseCase = new GetProductsBySubcategory(productRepository);

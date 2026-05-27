@@ -8,11 +8,14 @@ declare global {
     promise: Promise<typeof mongoose> | null;
   };
 }
-// import { attachDatabasePool } from "@vercel/functions";
 // import '../../scripts/sync-env-vercel'
 export class Database {
   private static instance: Database;
-  private constructor() {}
+  private constructor() {
+    // if (process.env.NODE_ENV === "development") {
+    //   mongoose.set("debug", true);
+    // }
+  }
   public static async getInstance(): Promise<Database> {
     const { mongoURL, dbLocal, nodeEnv } = enviro;
 

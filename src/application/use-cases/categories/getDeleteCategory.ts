@@ -1,4 +1,4 @@
-import { CategoryRepoType } from "@/domain/interface/category.interface";
+import { CategoryRepoType } from "@/domain/types/category.types";
 
 export class GetDeletedCategories {
   constructor(private categoryRepo: CategoryRepoType) {}

@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { catchError } from "@/shared/lib/catch.error";
-import { activityLogService } from "@/_R/services/activity-log.service";
+import { activityLogService } from "@/infrastructure/container/activity-log.container";
 import { STATUS_CODE } from "@/shared/lib/statuscode";
 import { Product } from "@/domain/entities/Product";
 import {
   ResponseDto,
   ResponseWithMetaDto,
-} from "@/_R/validation/rules/response.schema";
+} from "@/shared/schema/response.schema";
 import { CreateProduct } from "@/application/use-cases/products/createProduct";
 import { GetAllProducts } from "@/application/use-cases/products/getAllProducts";
 import { GetProductById } from "@/application/use-cases/products/getProductById";
@@ -17,8 +17,8 @@ import { GetDeletedProducts } from "@/application/use-cases/products/getDeletePr
 import {
   CreateProductDTO,
   UpdateProductDTO,
-} from "@/application/dtos/product.dto";
- 
+} from "@/presentation/validation/product.zod";
+
 import { GetTopTenProducts } from "@/application/use-cases/products/getTopTenProducts";
 import { GetRelatedProducts } from "@/application/use-cases/products/getRelatedProducts";
 import { GetTopRatedProducts } from "@/application/use-cases/products/getTopRatedProducts";
@@ -55,7 +55,7 @@ export class ProductController {
 
   create = catchError(async (req: Request, res: Response) => {
     const body = req.body as CreateProductDTO;
-    const result = await this.createProductUseCase.execute(body);
+    const result = await this.createProductUseCase.execute(body, req.user);
     const response: ResponseDto<Product> = {
       status: "success",
       message: "product created successfully",
@@ -87,23 +87,7 @@ export class ProductController {
   update = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
     const body = req.body as UpdateProductDTO;
-    const result = await this.updateProductUseCase.execute(id, body);
-    
-    // Record activity
-    const authReq = req as any;
-    if (authReq.user) {
-      await activityLogService.record({
-        user: {
-          name: authReq.user.username,
-          email: authReq.user.email,
-          avatar: authReq.user.avatar,
-        },
-        action: "Updated Product",
-        target: (result as any)?.name || id,
-        details: body,
-        status: "success",
-      });
-    }
+    const result = await this.updateProductUseCase.execute(id, body, req.user);
 
     const response: ResponseDto<Product | null> = {
       status: "success",
@@ -115,22 +99,7 @@ export class ProductController {
 
   soft = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
-    const result = await this.softDeleteProductUseCase.execute(id);
-    
-    // Record activity
-    const authReq = req as any;
-    if (authReq.user) {
-      await activityLogService.record({
-        user: {
-          name: authReq.user.username,
-          email: authReq.user.email,
-          avatar: authReq.user.avatar,
-        },
-        action: "Moved Product to Trash",
-        target: (result as any)?.name || id,
-        status: "warning",
-      });
-    }
+    const result = await this.softDeleteProductUseCase.execute(id, req.user);
 
     const response: ResponseDto<Product | null> = {
       status: "success",
@@ -142,22 +111,7 @@ export class ProductController {
 
   restore = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
-    const result = await this.restoreProductUseCase.execute(id);
-    
-    // Record activity
-    const authReq = req as any;
-    if (authReq.user) {
-      await activityLogService.record({
-        user: {
-          name: authReq.user.username,
-          email: authReq.user.email,
-          avatar: authReq.user.avatar,
-        },
-        action: "Restored Product",
-        target: (result as any)?.name || id,
-        status: "success",
-      });
-    }
+    const result = await this.restoreProductUseCase.execute(id, req.user);
 
     const response: ResponseDto<Product | null> = {
       status: "success",
@@ -245,23 +199,8 @@ export class ProductController {
     const data = await this.updateProductStockUseCase.execute(
       req.params.id as string,
       req.body.stock,
+      req.user,
     );
-
-    // Record activity
-    const authReq = req as any;
-    if (authReq.user) {
-      await activityLogService.record({
-        user: {
-          name: authReq.user.username,
-          email: authReq.user.email,
-          avatar: authReq.user.avatar,
-        },
-        action: "Updated Stock",
-        target: (data as any)?.name || (req.params.id as string),
-        details: { newStock: req.body.stock },
-        status: "success",
-      });
-    }
 
     const response: ResponseDto<Product | null> = {
       status: "success",

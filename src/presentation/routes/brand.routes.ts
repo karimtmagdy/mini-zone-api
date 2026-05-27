@@ -1,10 +1,14 @@
 import { Router } from "express";
 import { brandCtrl } from "@/infrastructure/container/brand.container";
-import { createBrandZod, updateBrandZod } from "../validations/brand.validator";
+import {
+  createBrandZod,
+  updateBrandZod,
+  updateBrandStatusZod,
+} from "../validation/brand.zod";
 import { validate } from "@/presentation/middlewares/validate";
 import { uploadSingleImage } from "@/presentation/middlewares/multer.middleware";
 import { uploadToCloudinary } from "@/presentation/middlewares/image.middleware";
-import { IdParamZod } from "@/_R/validation/rules/shard.schema";
+import { IdParamZod } from "@/shared/schema/shard.schema";
 
 const router = Router();
 
@@ -31,6 +35,13 @@ router
     brandCtrl.update,
   )
   .delete(validate(IdParamZod, "params"), brandCtrl.soft);
+
+router.patch(
+  "/status/:id",
+  validate(IdParamZod, "params"),
+  validate(updateBrandStatusZod),
+  brandCtrl.updateStatus,
+);
 
 router.patch("/restore/:id", validate(IdParamZod, "params"), brandCtrl.restore);
 

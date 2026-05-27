@@ -1,4 +1,4 @@
-import { ProductRepoType } from "@/domain/interface/product.interface";
+import { ProductRepoType } from "@/domain/types/product.types";
 
 export class GetDeletedProducts {
   constructor(private productRepo: ProductRepoType) {}

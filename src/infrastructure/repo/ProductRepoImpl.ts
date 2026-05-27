@@ -1,9 +1,12 @@
-import { ProductRepoType } from "@/domain/interface/product.interface";
+import {
+  ProductRepoType,
+  IProduct,
+  ProductStatusEnum,
+} from "@/domain/types/product.types";
 import { Product } from "@/domain/entities/Product";
 import { productModel } from "@/infrastructure/database/product.model";
 import { APIFeatures } from "@/shared/utils/api.feature";
-import { ProductStatusEnum, IProduct } from "@/domain/types/product.types";
-import { PaginatedResult } from "@/_R/types/global.dto";
+import { PaginatedResult } from "@/_R/global.dto";
 
 export class ProductRepoImpl implements ProductRepoType {
   private toEntity(doc: IProduct): Product {
@@ -32,18 +35,20 @@ export class ProductRepoImpl implements ProductRepoType {
     });
   }
 
-  async create(product: Product): Promise<Product> {
-    const doc = await productModel.create(product);
+  async create(product: Product, performerId?: string): Promise<Product> {
+    const data = { ...product };
+    if (performerId) data.createdBy = performerId;
+    const doc = await productModel.create(data);
     return this.toEntity(doc);
   }
 
   async findByName(name: string): Promise<Product | null> {
-    const doc = await productModel.findOne({ name });
+    const doc = await productModel.findOne({ name }).lean();
     return doc ? this.toEntity(doc) : null;
   }
 
   async findById(id: string): Promise<Product | null> {
-    const doc = await productModel.findById(id);
+    const doc = await productModel.findById(id).lean();
     return doc ? this.toEntity(doc) : null;
   }
 
@@ -69,32 +74,42 @@ export class ProductRepoImpl implements ProductRepoType {
     };
   }
 
-  async update(id: string, product: Partial<Product>): Promise<Product | null> {
-    const doc = await productModel.findByIdAndUpdate(id, product, {
+  async update(
+    id: string,
+    product: Partial<Product>,
+    performerId?: string,
+  ): Promise<Product | null> {
+    const data = { ...product };
+    if (performerId) (data as any).updatedBy = performerId;
+    const doc = await productModel.findByIdAndUpdate(id, data, {
       new: true,
       runValidators: true,
     });
     return doc ? this.toEntity(doc) : null;
   }
 
-  async softDelete(id: string): Promise<Product | null> {
+  async softDelete(id: string, performerId?: string): Promise<Product | null> {
+    const updateData: any = {
+      deletedAt: new Date(),
+      status: ProductStatusEnum.ARCHIVED,
+    };
+    if (performerId) updateData.deletedBy = performerId;
+
     const doc = await productModel
-      .findByIdAndUpdate(
-        id,
-        { deletedAt: new Date(), status: ProductStatusEnum.ARCHIVED },
-        { new: true },
-      )
+      .findByIdAndUpdate(id, updateData, { new: true })
       .setOptions({ withDeleted: true });
     return doc ? this.toEntity(doc) : null;
   }
 
-  async restore(id: string): Promise<Product | null> {
+  async restore(id: string, performerId?: string): Promise<Product | null> {
+    const updateData: any = {
+      deletedAt: null,
+      status: ProductStatusEnum.ACTIVE,
+    };
+    if (performerId) updateData.updatedBy = performerId;
+
     const doc = await productModel
-      .findByIdAndUpdate(
-        id,
-        { deletedAt: null, status: ProductStatusEnum.ACTIVE },
-        { new: true },
-      )
+      .findByIdAndUpdate(id, updateData, { new: true })
       .setOptions({ withDeleted: true });
     return doc ? this.toEntity(doc) : null;
   }
@@ -102,7 +117,8 @@ export class ProductRepoImpl implements ProductRepoType {
   async findDeleted(): Promise<Product[]> {
     const docs = await productModel
       .find({ deletedAt: { $ne: null } })
-      .setOptions({ withDeleted: true });
+      .setOptions({ withDeleted: true })
+      .lean();
     return docs.map((doc: any) => this.toEntity(doc));
   }
 
@@ -112,12 +128,17 @@ export class ProductRepoImpl implements ProductRepoType {
   }
 
   async findTopTen(): Promise<Product[]> {
-    const docs = await productModel.find().sort({ sold: -1 }).limit(10).exec();
+    const docs = await productModel
+      .find()
+      .sort({ sold: -1 })
+      .limit(10)
+      .lean()
+      .exec();
     return docs.map((doc: any) => this.toEntity(doc));
   }
 
   async findRelated(id: string): Promise<Product[]> {
-    const product = await productModel.findById(id);
+    const product = await productModel.findById(id).lean();
     if (!product) return [];
     const docs = await productModel
       .find({
@@ -125,6 +146,7 @@ export class ProductRepoImpl implements ProductRepoType {
         _id: { $ne: id },
       })
       .limit(10)
+      .lean()
       .exec();
     return docs.map((doc: any) => this.toEntity(doc));
   }
@@ -134,6 +156,7 @@ export class ProductRepoImpl implements ProductRepoType {
       .find()
       .sort({ "ratings.average": -1 })
       .limit(10)
+      .lean()
       .exec();
     return docs.map((doc: any) => this.toEntity(doc));
   }
@@ -143,6 +166,7 @@ export class ProductRepoImpl implements ProductRepoType {
       .find()
       .sort({ createdAt: -1 })
       .limit(10)
+      .lean()
       .exec();
     return docs.map((doc: any) => this.toEntity(doc));
   }
@@ -150,39 +174,55 @@ export class ProductRepoImpl implements ProductRepoType {
   async findLowStock(): Promise<Product[]> {
     const docs = await productModel
       .find({ stock: { $lte: 10, $gt: 0 } })
+      .lean()
       .exec();
     return docs.map((doc: any) => this.toEntity(doc));
   }
 
   async findHighStock(): Promise<Product[]> {
-    const docs = await productModel.find({ stock: { $gte: 100 } }).exec();
+    const docs = await productModel
+      .find({ stock: { $gte: 100 } })
+      .lean()
+      .exec();
     return docs.map((doc: any) => this.toEntity(doc));
   }
 
   async findOutOfStock(): Promise<Product[]> {
-    const docs = await productModel.find({ stock: 0 }).exec();
+    const docs = await productModel.find({ stock: 0 }).lean().exec();
     return docs.map((doc: any) => this.toEntity(doc));
   }
 
-  async updateStock(id: string, stock: number): Promise<Product | null> {
+  async updateStock(
+    id: string,
+    stock: number,
+    performerId?: string,
+  ): Promise<Product | null> {
+    const updateData: any = { stock };
+    if (performerId) updateData.updatedBy = performerId;
     const doc = await productModel
-      .findByIdAndUpdate(id, { stock }, { new: true, runValidators: true })
+      .findByIdAndUpdate(id, updateData, { new: true, runValidators: true })
       .exec();
     return doc ? this.toEntity(doc) : null;
   }
 
   async findByCategory(categoryId: string): Promise<Product[]> {
-    const docs = await productModel.find({ category: categoryId }).exec();
+    const docs = await productModel
+      .find({ category: categoryId })
+      .lean()
+      .exec();
     return docs.map((doc: any) => this.toEntity(doc));
   }
 
   async findByBrand(brandId: string): Promise<Product[]> {
-    const docs = await productModel.find({ brand: brandId }).exec();
+    const docs = await productModel.find({ brand: brandId }).lean().exec();
     return docs.map((doc: any) => this.toEntity(doc));
   }
 
   async findBySubcategory(subcategoryId: string): Promise<Product[]> {
-    const docs = await productModel.find({ subcategory: subcategoryId }).exec();
+    const docs = await productModel
+      .find({ subcategory: subcategoryId })
+      .lean()
+      .exec();
     return docs.map((doc: any) => this.toEntity(doc));
   }
 }

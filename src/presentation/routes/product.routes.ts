@@ -5,8 +5,8 @@ import {
   createProductZod,
   updateProductZod,
   updateStockZod,
-} from "../validations/product.zod";
-import { IdParamZod } from "@/_R/validation/rules/shard.schema";
+} from "../validation/product.zod";
+import { IdParamZod } from "@/shared/schema/shard.schema";
 import { uploadSingleImage } from "@/presentation/middlewares/multer.middleware";
 import { uploadToCloudinary } from "@/presentation/middlewares/image.middleware";
 import {
@@ -26,7 +26,7 @@ router
     productCtrl.create,
   );
 
-router.get("/trash", productCtrl.getDeleted);
+router.get("/archived", productCtrl.getDeleted);
 router.get("/latest", productCtrl.getLatest);
 router.get("/top-rated", productCtrl.getTopRated);
 router.get("/top-ten", productCtrl.getTopTen);

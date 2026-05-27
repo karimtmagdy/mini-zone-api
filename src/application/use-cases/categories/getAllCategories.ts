@@ -1,5 +1,5 @@
-import { PaginatedResult } from "@/_R/types/global.dto";
-import { CategoryRepoType } from "@/domain/interface/category.interface";
+import { PaginatedResult } from "@/_R/global.dto";
+import { CategoryRepoType } from "@/domain/types/category.types";
 import { Category } from "@/domain/entities/Category";
 
 export class GetAllCategories {

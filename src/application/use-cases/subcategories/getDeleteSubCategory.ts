@@ -1,4 +1,4 @@
-import { SubCategoryRepoType } from "@/domain/interface/subcategory.interface";
+import { SubCategoryRepoType } from "@/domain/types/subcategory.types";
 
 export class GetDeletedSubCategories {
   constructor(private subCategoryRepo: SubCategoryRepoType) {}

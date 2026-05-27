@@ -1,4 +1,4 @@
-import { SubCategoryRepoType } from "@/domain/interface/subcategory.interface";
+import { SubCategoryRepoType } from "@/domain/types/subcategory.types";
 import { SubCategory } from "@/domain/entities/SubCategory";
 import { subCategoryModel } from "@/infrastructure/database/subcategory.model";
 import { APIFeatures } from "@/shared/utils/api.feature";
@@ -6,7 +6,7 @@ import {
   SubCategoryEnum,
   ISubCategory,
 } from "@/domain/types/subcategory.types";
-import { PaginatedResult } from "@/_R/types/global.dto";
+import { PaginatedResult } from "@/_R/global.dto";
 
 export class SubCategoryRepoImpl implements SubCategoryRepoType {
   private toEntity(doc: ISubCategory): SubCategory {
@@ -15,7 +15,7 @@ export class SubCategoryRepoImpl implements SubCategoryRepoType {
       status: doc.status,
       description: doc.description,
       image: doc.image,
-      id: doc.id?.toString(),
+      id: (doc.id || (doc as any)._id)?.toString(),
       slug: doc.slug,
       products: doc.products,
       category: doc.category?.map((id) => id.toString()),
@@ -24,19 +24,18 @@ export class SubCategoryRepoImpl implements SubCategoryRepoType {
     });
   }
 
-  async create(subCategory: SubCategory): Promise<SubCategory> {
-    const doc = await subCategoryModel.create({
-      name: subCategory.name,
-      description: subCategory.description,
-      status: subCategory.status,
-      image: subCategory.image,
-      category: subCategory.category,
-    });
+  async create(
+    subCategory: SubCategory,
+    performerId?: string,
+  ): Promise<SubCategory> {
+    const data = { ...subCategory };
+    if (performerId) (data as any).createdBy = performerId;
+    const doc = await subCategoryModel.create(data);
     return this.toEntity(doc);
   }
 
   async findByName(name: string): Promise<SubCategory | null> {
-    const doc = await subCategoryModel.findOne({ name });
+    const doc = await subCategoryModel.findOne({ name }).lean();
     return doc ? this.toEntity(doc) : null;
   }
 
@@ -44,7 +43,8 @@ export class SubCategoryRepoImpl implements SubCategoryRepoType {
     const doc = await subCategoryModel
       .findById(id)
       .populate({ path: "category", select: "name" })
-      .populate("products");
+      .populate("products")
+      .lean();
     return doc ? this.toEntity(doc) : null;
   }
 
@@ -69,32 +69,42 @@ export class SubCategoryRepoImpl implements SubCategoryRepoType {
   async update(
     id: string,
     subCategory: Partial<SubCategory>,
+    performerId?: string,
   ): Promise<SubCategory | null> {
-    const doc = await subCategoryModel.findByIdAndUpdate(id, subCategory, {
+    const data = { ...subCategory };
+    if (performerId) (data as any).updatedBy = performerId;
+    const doc = await subCategoryModel.findByIdAndUpdate(id, data, {
       new: true,
       runValidators: true,
     });
     return doc ? this.toEntity(doc) : null;
   }
 
-  async softDelete(id: string): Promise<SubCategory | null> {
+  async softDelete(
+    id: string,
+    performerId?: string,
+  ): Promise<SubCategory | null> {
+    const updateData: any = {
+      deletedAt: new Date(),
+      status: SubCategoryEnum.ARCHIVED,
+    };
+    if (performerId) updateData.deletedBy = performerId;
+
     const doc = await subCategoryModel
-      .findByIdAndUpdate(
-        id,
-        { deletedAt: new Date(), status: SubCategoryEnum.ARCHIVED },
-        { new: true },
-      )
+      .findByIdAndUpdate(id, updateData, { new: true })
       .setOptions({ withDeleted: true });
     return doc ? this.toEntity(doc) : null;
   }
 
-  async restore(id: string): Promise<SubCategory | null> {
+  async restore(id: string, performerId?: string): Promise<SubCategory | null> {
+    const updateData: any = {
+      deletedAt: null,
+      status: SubCategoryEnum.ACTIVE,
+    };
+    if (performerId) updateData.updatedBy = performerId;
+
     const doc = await subCategoryModel
-      .findByIdAndUpdate(
-        id,
-        { deletedAt: null, status: SubCategoryEnum.ACTIVE },
-        { new: true },
-      )
+      .findByIdAndUpdate(id, updateData, { new: true })
       .setOptions({ withDeleted: true });
     return doc ? this.toEntity(doc) : null;
   }
@@ -102,7 +112,8 @@ export class SubCategoryRepoImpl implements SubCategoryRepoType {
   async findDeleted(): Promise<SubCategory[]> {
     const docs = await subCategoryModel
       .find({ deletedAt: { $ne: null } })
-      .setOptions({ withDeleted: true });
+      .setOptions({ withDeleted: true })
+      .lean();
     return docs.map((doc: any) => this.toEntity(doc));
   }
 

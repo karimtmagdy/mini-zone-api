@@ -5,7 +5,7 @@ import { Category } from "@/domain/entities/Category";
 import {
   ResponseDto,
   ResponseWithMetaDto,
-} from "@/_R/validation/rules/response.schema";
+} from "@/shared/schema/response.schema";
 import { CreateCategory } from "@/application/use-cases/categories/createCategory";
 import { GetAllCategories } from "@/application/use-cases/categories/getAllCategories";
 import { GetCategoryById } from "@/application/use-cases/categories/getCategoryById";
@@ -16,7 +16,7 @@ import { GetDeletedCategories } from "@/application/use-cases/categories/getDele
 import {
   CreateCategoryDTO,
   UpdateCategoryDTO,
-} from "@/application/dtos/category.dto";
+} from "@/presentation/validation/category.zod";
 
 export class CategoryController {
   constructor(
@@ -31,7 +31,7 @@ export class CategoryController {
 
   create = catchError(async (req: Request, res: Response) => {
     const body = req.body as CreateCategoryDTO;
-    const result = await this.createCategoryUseCase.execute(body);
+    const result = await this.createCategoryUseCase.execute(body, req.user);
     const response: ResponseDto<Category> = {
       status: "success",
       message: "category created successfully",
@@ -63,7 +63,7 @@ export class CategoryController {
   update = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
     const body = req.body as UpdateCategoryDTO;
-    const result = await this.updateCategoryUseCase.execute(id, body);
+    const result = await this.updateCategoryUseCase.execute(id, body, req.user);
     const response: ResponseDto<Category | null> = {
       status: "success",
       message: "category updated successfully",
@@ -74,7 +74,7 @@ export class CategoryController {
 
   soft = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
-    const result = await this.softDeleteCategoryUseCase.execute(id);
+    const result = await this.softDeleteCategoryUseCase.execute(id, req.user);
     const response: ResponseDto<Category | null> = {
       status: "success",
       message: "category moved to trash",
@@ -85,7 +85,7 @@ export class CategoryController {
 
   restore = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
-    const result = await this.restoreCategoryUseCase.execute(id);
+    const result = await this.restoreCategoryUseCase.execute(id, req.user);
     const response: ResponseDto<Category | null> = {
       status: "success",
       message: "category restored successfully",

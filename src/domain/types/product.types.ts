@@ -1,4 +1,6 @@
 import { Types } from "mongoose";
+import { Product } from "../entities/Product";
+import { PaginatedResult } from "@/_R/global.dto";
 
 export const PRODUCT_STATUS = [
   "active",
@@ -39,6 +41,39 @@ export interface IProduct {
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date | null;
+  createdBy?: string;
+  updatedBy?: string;
+  deletedBy?: string;
   isAvailable?: string;
   hasEnoughStock?: (quantity: number) => boolean;
+}
+export interface ProductRepoType {
+  create(product: Product, performerId?: string): Promise<Product>;
+  findByName(name: string): Promise<Product | null>;
+  findById(id: string): Promise<Product | null>;
+  findAll(query: any): Promise<PaginatedResult<Product>>;
+  update(
+    id: string,
+    product: Partial<Product>,
+    performerId?: string,
+  ): Promise<Product | null>;
+  softDelete(id: string, performerId?: string): Promise<Product | null>;
+  restore(id: string, performerId?: string): Promise<Product | null>;
+  findDeleted(): Promise<Product[]>;
+  exists(filter: any): Promise<boolean>;
+  findTopTen(): Promise<Product[]>;
+  findRelated(id: string): Promise<Product[]>;
+  findTopRated(): Promise<Product[]>;
+  findLatest(): Promise<Product[]>;
+  findLowStock(): Promise<Product[]>;
+  findHighStock(): Promise<Product[]>;
+  findOutOfStock(): Promise<Product[]>;
+  updateStock(
+    id: string,
+    stock: number,
+    performerId?: string,
+  ): Promise<Product | null>;
+  findByCategory(categoryId: string): Promise<Product[]>;
+  findByBrand(brandId: string): Promise<Product[]>;
+  findBySubcategory(subcategoryId: string): Promise<Product[]>;
 }

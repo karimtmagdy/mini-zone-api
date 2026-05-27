@@ -1,12 +1,30 @@
-import { BrandRepoType } from "@/domain/interface/brand.interface";
+import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
+import { IUser } from "@/domain/types/user.types";
+import { BrandRepoType } from "@/domain/types/brand.types";
 import { AppError } from "@/shared/utils/api.error";
 
 export class RestoreBrand {
-  constructor(private brandRepo: BrandRepoType) {}
+  constructor(
+    private brandRepo: BrandRepoType,
+    private recordActivity: RecordActivity,
+  ) {}
 
-  async execute(id: string) {
-    const brand = await this.brandRepo.restore(id);
-    if (!brand) AppError.notFound("brand not found in trash");
+  async execute(id: string, performer: IUser) {
+    const brand = await this.brandRepo.restore(id, performer.id);
+    if (!brand) throw AppError.notFound("brand not found in trash");
+
+    await this.recordActivity.execute({
+      user: {
+        username: performer.username,
+        email: performer.email,
+        role: performer.role!,
+      },
+      action: "Brand restored",
+      target: `Brand: ${brand.name}`,
+      details: { brandId: id },
+      timestamp: new Date(),
+    });
+
     return brand;
   }
 }

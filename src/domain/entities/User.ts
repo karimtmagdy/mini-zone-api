@@ -1,12 +1,16 @@
-export class User {
-  constructor(
-    public username: string,
-    public email: string,
-    public password: string
-  ) {}
+import { Person } from "./Person";
 
-  isValidEmail(): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(this.email);
+// export class User extends Person {
+//   // public employeeId?: string;
+//   // constructor(data: Partial<User>) {
+//   //   // super(data);
+//   //    Object.assign(this, data);
+//   //   // if (data.employeeId) this.employeeId = data.employeeId;
+//   // }
+// }
+export class User extends Person {
+  constructor(data: Partial<User>) {
+    super(data)
+    Object.assign(this, data);
   }
 }

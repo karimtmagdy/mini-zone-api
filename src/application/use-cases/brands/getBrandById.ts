@@ -1,4 +1,4 @@
-import { BrandRepoType } from "@/domain/interface/brand.interface";
+import { BrandRepoType } from "@/domain/types/brand.types";
 import { AppError } from "@/shared/utils/api.error";
 
 export class GetBrandById {

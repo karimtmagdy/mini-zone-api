@@ -5,7 +5,7 @@ import { configApp } from "@/infrastructure/config/config-app";
 import { Database } from "@/infrastructure/config/data/db";
 import { MissingRouteHandler } from "@/presentation/middlewares/global.error";
 import { setupRoutes } from "@/presentation/routes";
-import { setupRouters } from "./_R/router";
+// import { setupRouters } from "./_R/router";
 
 const app = express();
 configApp(app);
@@ -36,7 +36,7 @@ app.use(async (_req, _res, next) => {
 });
 
 setupRoutes(app);
-setupRouters(app);
+// setupRouters(app);
 MissingRouteHandler(app);
 export { app };
 export const handler = serverless(app);

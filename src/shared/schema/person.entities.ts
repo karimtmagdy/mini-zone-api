@@ -1,14 +1,13 @@
 import { SchemaDefinition } from "mongoose";
+import { USER_ROLES, UserRoleEnum } from "@/domain/types/user.types";
 import {
-  USER_GENDERS,
-  USER_ROLES,
-  USER_STATE,
-  USER_STATUS,
-  UserRoleEnum,
-  UserStateEnum,
-  UserStatusEnum,
-} from "@/types/user.types";
-import { DEFAULT_USER_IMAGE } from "@/types/global.dto";
+  PERSON_GENDERS,
+  PERSON_STATE,
+  PERSON_STATUS,
+  PErsonStateEnum,
+  PersonStatusEnum,
+} from "@/domain/types/person.types";
+import { DEFAULT_USER_IMAGE } from "@/_R/global.dto";
 
 export const PersonSchemaFields: SchemaDefinition = {
   username: {
@@ -60,11 +59,15 @@ export const PersonSchemaFields: SchemaDefinition = {
     publicId: { type: String, trim: true, default: null },
   },
   age: { type: Number, min: [18, "Age must be at least 18"] },
-  gender: { type: String, enum: USER_GENDERS },
-  status: { type: String, enum: USER_STATUS, default: UserStatusEnum.ACTIVE },
+  gender: { type: String, enum: PERSON_GENDERS },
+  status: {
+    type: String,
+    enum: PERSON_STATUS,
+    default: PersonStatusEnum.ACTIVE,
+  },
   role: { type: String, enum: USER_ROLES, default: UserRoleEnum.USER },
   // Account State & Security
-  state: { type: String, enum: USER_STATE, default: UserStateEnum.OFFLINE },
+  state: { type: String, enum: PERSON_STATE, default: PErsonStateEnum.OFFLINE },
   lastLoginAt: { type: Date },
   passwordChangedAt: { type: Date },
 

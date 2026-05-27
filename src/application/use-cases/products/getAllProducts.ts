@@ -1,5 +1,5 @@
-import { PaginatedResult } from "@/_R/types/global.dto";
-import { ProductRepoType } from "@/domain/interface/product.interface";
+import { PaginatedResult } from "@/_R/global.dto";
+import { ProductRepoType } from "@/domain/types/product.types";
 import { Product } from "@/domain/entities/Product";
 
 export class GetAllProducts {
