@@ -29,7 +29,7 @@ export class Database {
 
     if (!mongoURI) {
       const envVar =
-        nodeEnv === "development" ? "DB_LOCAL" : "MONGODB_URI";
+        nodeEnv === "development" ? "DB_LOCAL" : "mack_MONGODB_URI";
       throw new Error(`Please add your ${envVar} to .env`);
     }
 
