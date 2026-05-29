@@ -22,8 +22,7 @@
     "random": "node -e \"console.log(crypto.randomBytes(32).toString('hex'))\"",
     "dev": "nodemon",
     "test:cleanup": "npx tsx src/scripts/test-cleanup.ts",
-    "clean": "npx tsx src/scripts/clean-fields.ts",
-    "postinstall": "ts-patch install"
+    "clean": "npx tsx src/scripts/clean-fields.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
