@@ -29,6 +29,10 @@ function getMongoURI(): string {
     URI: process.env.mack_MONGODB_URI,
     LOCAL: process.env.DB_LOCAL,
   });
+  logger.log({
+    NODE_ENV: process.env.NODE_ENV,
+    URI: process.env.mack_MONGODB_URI ? "EXISTS" : "MISSING",
+  });
   return uri;
 }
 
