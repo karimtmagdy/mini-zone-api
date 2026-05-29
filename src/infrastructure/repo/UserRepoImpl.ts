@@ -2,7 +2,7 @@ import { UserRepoType, IUser } from "@/domain/types/user.types";
 import { User } from "@/domain/entities/User";
 import { userModel } from "@/infrastructure/database/user.model";
 import { APIFeatures } from "@/shared/utils/api.feature";
-import { DEFAULT_USER_IMAGE } from "@/_R/global.dto";
+import { DEFAULT_USER_IMAGE } from "@/types/global.dto";
 import { PersonStatusEnum } from "@/domain/types/person.types";
 
 export class UserRepoImpl implements UserRepoType {

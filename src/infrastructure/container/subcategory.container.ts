@@ -8,13 +8,12 @@ import { CreateSubCategory } from "@/application/use-cases/subcategories/createS
 import { SubCategoryRepoImpl } from "@/infrastructure/repo/SubCategoryImpl";
 import { SubCategoryController } from "@/presentation/controllers/subcategory.controller";
 
-import { recordActivityUseCase } from "./activity-log.container";
+// import { recordActivityUseCase } from "./activity-log.container";
 
 const SubCategoryRepository = new SubCategoryRepoImpl();
 
 export const createSubCategoryUseCase = new CreateSubCategory(
   SubCategoryRepository,
-  recordActivityUseCase,
 );
 export const getAllSubCategoriesUseCase = new GetAllSubCategories(
   SubCategoryRepository,
@@ -24,15 +23,12 @@ export const getSubCategoryByIdUseCase = new GetSubCategoryById(
 );
 export const updateSubCategoryUseCase = new UpdateSubCategory(
   SubCategoryRepository,
-  recordActivityUseCase,
 );
 export const softDeleteSubCategoryUseCase = new SoftDeleteSubCategory(
   SubCategoryRepository,
-  recordActivityUseCase,
 );
 export const restoreSubCategoryUseCase = new RestoreSubCategory(
   SubCategoryRepository,
-  recordActivityUseCase,
 );
 export const getDeletedSubCategoriesUseCase = new GetDeletedSubCategories(
   SubCategoryRepository,

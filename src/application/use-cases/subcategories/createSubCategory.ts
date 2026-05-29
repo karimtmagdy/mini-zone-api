@@ -1,4 +1,4 @@
-import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
+// import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
 import { IUser } from "@/domain/types/user.types";
 import { SubCategoryRepoType } from "@/domain/types/subcategory.types";
 import { AppError } from "@/shared/utils/api.error";
@@ -7,7 +7,7 @@ import { CreateSubCategoryDTO } from "@/presentation/validation/subcategory.zod"
 export class CreateSubCategory {
   constructor(
     private subCategoryRepo: SubCategoryRepoType,
-    private recordActivity: RecordActivity,
+    // private recordActivity: RecordActivity,
   ) {}
 
   async execute(
@@ -25,17 +25,17 @@ export class CreateSubCategory {
       performer.id,
     );
 
-    await this.recordActivity.execute({
-      user: {
-        username: performer.username,
-        email: performer.email,
-        role: performer.role!,
-      },
-      action: "Subcategory created",
-      target: `Subcategory: ${createdSubCategory.name}`,
-      details: { subCategoryId: createdSubCategory.id },
-      timestamp: new Date(),
-    });
+    // await this.recordActivity.execute({
+    //  user: {
+    //    username: performer.username,
+    //    email: performer.email,
+    //    role: performer.role!,
+    //  },
+    //  action: "Subcategory created",
+    //  target: `Subcategory: ${createdSubCategory.name}`,
+    //  details: { subCategoryId: createdSubCategory.id },
+    //  timestamp: new Date(),
+    // });
 
     return createdSubCategory;
   }

@@ -1,4 +1,4 @@
-import { PaginatedResult } from "@/_R/global.dto";
+import { PaginatedResult } from "@/types/global.dto";
 import { User } from "@/domain/entities/User";
 import { UserRepoType } from "@/domain/types/user.types";
 

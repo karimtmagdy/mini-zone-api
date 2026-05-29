@@ -1,6 +1,6 @@
 import { IPerson } from "@/domain/types/person.types";
 import { Employee } from "../entities/Employee";
-import { PaginatedResult } from "@/_R/global.dto";
+import { PaginatedResult } from "@/types/global.dto";
 
 export const EMPLOYEE_DEPARTMENTS = [
   "HR",

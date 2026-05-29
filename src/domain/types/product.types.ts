@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 import { Product } from "../entities/Product";
-import { PaginatedResult } from "@/_R/global.dto";
+import { PaginatedResult } from "@/types/global.dto";
 
 export const PRODUCT_STATUS = [
   "active",

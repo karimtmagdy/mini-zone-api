@@ -6,7 +6,7 @@ import {
 import { Product } from "@/domain/entities/Product";
 import { productModel } from "@/infrastructure/database/product.model";
 import { APIFeatures } from "@/shared/utils/api.feature";
-import { PaginatedResult } from "@/_R/global.dto";
+import { PaginatedResult } from "@/types/global.dto";
 
 export class ProductRepoImpl implements ProductRepoType {
   private toEntity(doc: IProduct): Product {
@@ -37,7 +37,7 @@ export class ProductRepoImpl implements ProductRepoType {
 
   async create(product: Product, performerId?: string): Promise<Product> {
     const data = { ...product };
-    if (performerId) data.createdBy = performerId;
+    if (performerId) (data as any).createdBy = performerId;
     const doc = await productModel.create(data);
     return this.toEntity(doc);
   }

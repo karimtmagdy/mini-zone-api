@@ -8,28 +8,18 @@ import { CreateCategory } from "@/application/use-cases/categories/createCategor
 import { CategoryRepoImpl } from "@/infrastructure/repo/CategoryRepoImpl";
 import { CategoryController } from "@/presentation/controllers/category.controller";
 
-import { recordActivityUseCase } from "./activity-log.container";
+// import { recordActivityUseCase } from "./activity-log.container";
 
 const categoryRepository = new CategoryRepoImpl();
 
-export const createCategoryUseCase = new CreateCategory(
-  categoryRepository,
-  recordActivityUseCase,
-);
+export const createCategoryUseCase = new CreateCategory(categoryRepository);
 export const getAllCategoriesUseCase = new GetAllCategories(categoryRepository);
 export const getCategoryByIdUseCase = new GetCategoryById(categoryRepository);
-export const updateCategoryUseCase = new UpdateCategory(
-  categoryRepository,
-  recordActivityUseCase,
-);
+export const updateCategoryUseCase = new UpdateCategory(categoryRepository);
 export const softDeleteCategoryUseCase = new SoftDeleteCategory(
   categoryRepository,
-  recordActivityUseCase,
 );
-export const restoreCategoryUseCase = new RestoreCategory(
-  categoryRepository,
-  recordActivityUseCase,
-);
+export const restoreCategoryUseCase = new RestoreCategory(categoryRepository);
 export const getDeletedCategoriesUseCase = new GetDeletedCategories(
   categoryRepository,
 );

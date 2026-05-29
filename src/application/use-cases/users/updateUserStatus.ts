@@ -2,13 +2,13 @@ import { User } from "@/domain/entities/User";
 import { UserRepoType } from "@/domain/types/user.types";
 import { AppError } from "@/shared/utils/api.error";
 import { PersonStatus } from "@/domain/types/person.types";
-import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
+// import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
 import { IUser } from "@/domain/types/user.types";
 
 export class UpdateUserStatus {
   constructor(
     private userRepo: UserRepoType,
-    private recordActivity: RecordActivity,
+    // private recordActivity: RecordActivity,
   ) {}
 
   async execute(
@@ -25,17 +25,17 @@ export class UpdateUserStatus {
     if (!user) throw AppError.notFound("User not found");
 
     if (performer) {
-      await this.recordActivity.execute({
-        user: {
-          username: performer.username,
-          email: performer.email,
-          role: performer.role!,
-        },
-        action: `Updated status to ${status}`,
-        target: `User: ${user.username}`,
-        details: { userId: id, ...additionalData },
-        timestamp: new Date(),
-      });
+      // await this.recordActivity.execute({
+    //    user: {
+    //      username: performer.username,
+    //      email: performer.email,
+    //      role: performer.role!,
+    //    },
+    //    action: `Updated status to ${status}`,
+    //    target: `User: ${user.username}`,
+    //    details: { userId: id, ...additionalData },
+    //    timestamp: new Date(),
+    //   });
     }
 
     return user;

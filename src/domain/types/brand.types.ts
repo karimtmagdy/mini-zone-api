@@ -1,4 +1,4 @@
-import { PaginatedResult } from "@/_R/global.dto";
+import { PaginatedResult } from "@/types/global.dto";
 import { Brand } from "../entities/Brand";
 import { isValidTransition as genericIsValidTransition } from "@/shared/utils/state-machine";
 

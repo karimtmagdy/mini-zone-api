@@ -1,5 +1,5 @@
 import { Express } from "express";
-import { Route } from "@/_R/global.dto";
+import { Route } from "@/types/global.dto";
 
 import productRouter from "./product.routes";
 import subcategoryRouter from "./subcategory.routes";

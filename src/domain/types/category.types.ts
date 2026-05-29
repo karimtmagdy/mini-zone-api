@@ -1,4 +1,4 @@
-import { PaginatedResult } from "@/_R/global.dto";
+import { PaginatedResult } from "@/types/global.dto";
 import { Category } from "../entities/Category";
 
 export const CATEGORY_STATUS = ["active", "inactive", "archived"] as const;

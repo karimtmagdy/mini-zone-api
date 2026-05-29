@@ -31,7 +31,7 @@ export class SubCategoryController {
 
   create = catchError(async (req: Request, res: Response) => {
     const body = req.body as CreateSubCategoryDTO;
-    const result = await this.createSubCategoryUseCase.execute(body, req.user);
+    const result = await this.createSubCategoryUseCase.execute(body, req.user!);
     const response: ResponseDto<SubCategory> = {
       status: "success",
       message: "sub category created successfully",
@@ -66,7 +66,7 @@ export class SubCategoryController {
     const result = await this.updateSubCategoryUseCase.execute(
       id,
       body,
-      req.user,
+      req.user!,
     );
     const response: ResponseDto<SubCategory | null> = {
       status: "success",
@@ -80,7 +80,7 @@ export class SubCategoryController {
     const { id } = req.params as { id: string };
     const result = await this.softDeleteSubCategoryUseCase.execute(
       id,
-      req.user,
+      req.user!,
     );
     const response: ResponseDto<SubCategory | null> = {
       status: "success",
@@ -92,7 +92,7 @@ export class SubCategoryController {
 
   restore = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
-    const result = await this.restoreSubCategoryUseCase.execute(id, req.user);
+    const result = await this.restoreSubCategoryUseCase.execute(id, req.user!);
     const response: ResponseDto<SubCategory | null> = {
       status: "success",
       message: "sub category restored successfully",

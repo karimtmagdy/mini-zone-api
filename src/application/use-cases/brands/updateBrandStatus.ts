@@ -1,4 +1,4 @@
-import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
+// import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
 import { IUser } from "@/domain/types/user.types";
 import { StatusService } from "@/application/services/status.service";
 import { BrandStatus, BrandRepoType, brandTransitions } from "@/domain/types/brand.types";
@@ -12,7 +12,7 @@ export class UpdateBrandStatus {
 
   constructor(
     private readonly brandRepo: BrandRepoType,
-    private readonly recordActivity: RecordActivity,
+    // private readonly recordActivity: RecordActivity,
   ) {
     this.statusService = new StatusService<Brand, BrandStatus>(
       this.brandRepo,
@@ -32,17 +32,17 @@ export class UpdateBrandStatus {
     );
 
     if (performer) {
-      await this.recordActivity.execute({
-        user: {
-          username: performer.username,
-          email: performer.email,
-          role: performer.role!,
-        },
-        action: `Brand status updated to ${newStatus}`,
-        target: `Brand: ${updated?.name || id}`,
-        details: { brandId: id, newStatus },
-        timestamp: new Date(),
-      });
+      // await this.recordActivity.execute({
+    //    user: {
+    //      username: performer.username,
+    //      email: performer.email,
+    //      role: performer.role!,
+    //    },
+    //    action: `Brand status updated to ${newStatus}`,
+    //    target: `Brand: ${updated?.name || id}`,
+    //    details: { brandId: id, newStatus },
+    //    timestamp: new Date(),
+    //   });
     }
 
     return updated;

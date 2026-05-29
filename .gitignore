@@ -29,3 +29,6 @@ vercel-commands.md
 Thumbs.db
 src/_R/
 /data/src/_R
+# Activity log - excluded from repo
+src/application/use-cases/activity-log/recordActivity.ts
+src/application/use-cases/activity-log/recordActivity.ts

@@ -1,6 +1,6 @@
 import { Employee } from "@/domain/entities/Employee";
 import { EmployeeRepoType } from "@/domain/types/employee.types";
-import { PaginatedResult } from "@/_R/global.dto";
+import { PaginatedResult } from "@/types/global.dto";
 
 export class GetAllEmployees {
   constructor(private employeeRepo: EmployeeRepoType) {}

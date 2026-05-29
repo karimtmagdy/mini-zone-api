@@ -6,7 +6,7 @@ import {
 import { Category } from "@/domain/entities/Category";
 import { categoryModel } from "@/infrastructure/database/category.model";
 import { APIFeatures } from "@/shared/utils/api.feature";
-import { PaginatedResult } from "@/_R/global.dto";
+import { PaginatedResult } from "@/types/global.dto";
 
 export class CategoryRepoImpl implements CategoryRepoType {
   private toEntity(doc: ICategory): Category {

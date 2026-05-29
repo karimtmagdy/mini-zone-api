@@ -1,4 +1,4 @@
-import { PaginatedResult } from "@/_R/global.dto";
+import { PaginatedResult } from "@/types/global.dto";
 import { SubCategoryRepoType } from "@/domain/types/subcategory.types";
 import { SubCategory } from "@/domain/entities/SubCategory";
 

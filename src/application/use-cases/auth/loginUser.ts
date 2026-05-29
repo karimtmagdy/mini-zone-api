@@ -11,7 +11,7 @@ import {
   PErsonStateEnum,
   PersonStatusEnum,
 } from "@/domain/types/person.types";
-import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
+// import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
 
 export type LoginResponse =
   | { status: "2FA_REQUIRED"; loginToken: string }
@@ -31,7 +31,7 @@ export class LoginUser {
   constructor(
     private userRepo: UserRepoType,
     private sessionRepo: SessionRepoType,
-    private recordActivity: RecordActivity,
+    // private recordActivity: RecordActivity,
   ) {}
 
   async execute(
@@ -82,23 +82,17 @@ export class LoginUser {
       expiresAt,
     });
 
-    await this.recordActivity.execute({
-      user: {
-        username: user.username,
-        email: user.email,
-        role: user.role || UserRoleEnum.USER,
-        image: user.image
-          ? {
-              url: user.image.url || "",
-              publicId: user.image.publicId || "",
-            }
-          : undefined,
-      },
-      action: "User logged in",
-      target: "System",
-      details: { deviceInfo },
-      timestamp: new Date(),
-    });
+    // await this.recordActivity.execute({
+    //   user: {
+    //     username: user.username,
+    //     email: user.email,
+    //     role: user.role || UserRoleEnum.USER,
+    //   },
+    //   action: "User logged in",
+    //   target: "System",
+    //   details: { deviceInfo },
+    //   timestamp: new Date(),
+    // });
 
     return {
       user: payload,
@@ -127,6 +121,7 @@ export class LoginUser {
         }
     }
   }
+
   private async handleSuccessfulLogin(user: IPerson) {
     await this.userRepo.update(user.id!, {
       state: PErsonStateEnum.ONLINE,
@@ -149,9 +144,6 @@ export class LoginUser {
       );
     }
 
-    await this.userRepo.update(user.id!, updates);
+    await this.userRepo.update(user.id!, updates as any);
   }
 }
-// Please contact support.
-// "Your account is pending verification. Please check your email.",
-// "Account not found."

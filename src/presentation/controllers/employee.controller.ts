@@ -18,7 +18,7 @@ import {
 import {
   CreateEmployeeDTO,
   UpdateEmployeeDTO,
-} from "@/application/dtos/employee.dto";
+} from "@/presentation/validation/employee.zod";
 
 export class EmployeeController {
   constructor(

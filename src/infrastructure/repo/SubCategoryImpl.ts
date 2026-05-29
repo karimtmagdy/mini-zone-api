@@ -6,7 +6,7 @@ import {
   SubCategoryEnum,
   ISubCategory,
 } from "@/domain/types/subcategory.types";
-import { PaginatedResult } from "@/_R/global.dto";
+import { PaginatedResult } from "@/types/global.dto";
 
 export class SubCategoryRepoImpl implements SubCategoryRepoType {
   private toEntity(doc: ISubCategory): SubCategory {

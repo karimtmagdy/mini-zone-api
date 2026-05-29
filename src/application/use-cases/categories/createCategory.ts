@@ -1,4 +1,4 @@
-import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
+// import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
 import { IUser } from "@/domain/types/user.types";
 import { CategoryRepoType } from "@/domain/types/category.types";
 import { AppError } from "@/shared/utils/api.error";
@@ -8,7 +8,7 @@ import { CreateCategoryDTO } from "@/presentation/validation/category.zod";
 export class CreateCategory {
   constructor(
     private categoryRepo: CategoryRepoType,
-    private recordActivity: RecordActivity,
+    // private recordActivity: RecordActivity,
   ) {}
 
   async execute(data: CreateCategoryDTO, performer: IUser): Promise<Category> {
@@ -23,17 +23,17 @@ export class CreateCategory {
       performer.id,
     );
 
-    await this.recordActivity.execute({
-      user: {
-        username: performer.username,
-        email: performer.email,
-        role: performer.role!,
-      },
-      action: "Category created",
-      target: `Category: ${createdCategory.name}`,
-      details: { categoryId: createdCategory.id },
-      timestamp: new Date(),
-    });
+    // await this.recordActivity.execute({
+    //  user: {
+    //    username: performer.username,
+    //    email: performer.email,
+    //    role: performer.role!,
+    //  },
+    //  action: "Category created",
+    //  target: `Category: ${createdCategory.name}`,
+    //  details: { categoryId: createdCategory.id },
+    //  timestamp: new Date(),
+    // });
 
     return createdCategory;
   }

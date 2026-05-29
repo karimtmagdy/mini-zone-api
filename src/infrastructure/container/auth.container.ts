@@ -5,7 +5,7 @@ import { LoginUser } from "@/application/use-cases/auth/loginUser";
 import { AuthController } from "@/presentation/controllers/auth/auth.controller";
 
 import { notifyService } from "@/application/services/notify.service";
-import { recordActivityUseCase } from "./activity-log.container";
+// import { recordActivityUseCase } from "./activity-log.container";
 
 // Infrastructure
 const userRepository = new UserRepoImpl();
@@ -15,12 +15,10 @@ const sessionRepository = new SessionRepoImpl();
 export const registerUserUseCase = new RegisterUser(
   userRepository,
   notifyService,
-  recordActivityUseCase,
 );
 export const loginUserUseCase = new LoginUser(
   userRepository,
   sessionRepository,
-  recordActivityUseCase,
 );
 
 // Presentation

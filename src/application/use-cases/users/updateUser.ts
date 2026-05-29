@@ -3,14 +3,14 @@ import { UserRepoType } from "@/domain/types/user.types";
 import { EmployeeRepoType } from "@/domain/types/employee.types";
 import { AppError } from "@/shared/utils/api.error";
 import { UpdateUserDTO } from "@/presentation/validation/user.zod";
-import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
+// import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
 import { IUser } from "@/domain/types/user.types";
 
 export class UpdateUser {
   constructor(
     private userRepo: UserRepoType,
     private employeeRepo: EmployeeRepoType,
-    private recordActivity: RecordActivity,
+    // private recordActivity: RecordActivity,
   ) {}
 
   async execute(
@@ -41,17 +41,17 @@ export class UpdateUser {
     if (!user) throw AppError.notFound("User not found");
 
     if (performer) {
-      await this.recordActivity.execute({
-        user: {
-          username: performer.username,
-          email: performer.email,
-          role: performer.role!,
-        },
-        action: "Updated user profile",
-        target: `User: ${user.username}`,
-        details: { userId: id, updatedFields: Object.keys(data) },
-        timestamp: new Date(),
-      });
+      // await this.recordActivity.execute({
+    //    user: {
+    //      username: performer.username,
+    //      email: performer.email,
+    //      role: performer.role!,
+    //    },
+    //    action: "Updated user profile",
+    //    target: `User: ${user.username}`,
+    //    details: { userId: id, updatedFields: Object.keys(data) },
+    //    timestamp: new Date(),
+    //   });
     }
 
     return user;

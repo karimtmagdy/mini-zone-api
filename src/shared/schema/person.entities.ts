@@ -7,7 +7,7 @@ import {
   PErsonStateEnum,
   PersonStatusEnum,
 } from "@/domain/types/person.types";
-import { DEFAULT_USER_IMAGE } from "@/_R/global.dto";
+import { DEFAULT_USER_IMAGE } from "@/types/global.dto";
 
 export const PersonSchemaFields: SchemaDefinition = {
   username: {

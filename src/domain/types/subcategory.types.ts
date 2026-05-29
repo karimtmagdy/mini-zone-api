@@ -1,4 +1,4 @@
-import { PaginatedResult } from "@/_R/global.dto";
+import { PaginatedResult } from "@/types/global.dto";
 import { SubCategory } from "../entities/SubCategory";
 
 export const SUBCATEGORY_STATUS = ["active", "inactive", "archived"] as const;

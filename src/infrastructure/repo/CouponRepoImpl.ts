@@ -2,7 +2,7 @@ import { CouponRepoType, ICoupon } from "@/domain/types/coupon.types";
 import { Coupon } from "@/domain/entities/Coupon";
 import { couponModel } from "../database/coupon.model";
 import { APIFeatures } from "@/shared/utils/api.feature";
-import { PaginatedResult } from "@/_R/global.dto";
+import { PaginatedResult } from "@/types/global.dto";
 
 export class CouponRepoImpl implements CouponRepoType {
   private toEntity(doc: ICoupon): Coupon {

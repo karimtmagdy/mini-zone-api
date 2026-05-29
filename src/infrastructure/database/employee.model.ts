@@ -2,7 +2,7 @@ import { Schema } from "mongoose";
 import {
   applySlugify,
   applySoftDelete,
-  getSchemaOptions,
+ // getSchemaOptions,
 } from "@/shared/schema/fields";
 import {
   EMPLOYEE_DEPARTMENTS,

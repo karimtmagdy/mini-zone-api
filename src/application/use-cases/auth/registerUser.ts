@@ -3,13 +3,13 @@ import { UserRepoType } from "@/domain/types/user.types";
 import { AppError } from "@/shared/utils/api.error";
 import { UserRoleEnum } from "@/domain/types/user.types";
 import { NotifyService } from "@/application/services/notify.service";
-import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
+// import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
 
 export class RegisterUser {
   constructor(
     private userRepo: UserRepoType,
     private notifyService: NotifyService,
-    private recordActivity: RecordActivity,
+    // private recordActivity: RecordActivity,
   ) {}
 
   async execute(
@@ -32,23 +32,23 @@ export class RegisterUser {
     delete createdUser.password;
 
     // Log Activity
-    await this.recordActivity.execute({
-      user: {
-        username: createdUser.username,
-        email: createdUser.email,
-        role: createdUser.role || UserRoleEnum.USER,
-        image: createdUser.image
-          ? {
-              url: createdUser.image.url || "",
-              publicId: createdUser.image.publicId || "",
-            }
-          : undefined,
-      },
-      action: "User registered",
-      target: "System",
-      details: { userId: createdUser.id },
-      timestamp: new Date(),
-    });
+    // await this.recordActivity.execute({
+    //  user: {
+    //    username: createdUser.username,
+    //    email: createdUser.email,
+    //    role: createdUser.role || UserRoleEnum.USER,
+    //    image: createdUser.image
+    //      ? {
+    //          url: createdUser.image.url || "",
+    //          publicId: createdUser.image.publicId || "",
+    //        }
+    //      : undefined,
+    //  },
+    //  action: "User registered",
+    //  target: "System",
+    //  details: { userId: createdUser.id },
+    //  timestamp: new Date(),
+    // });
 
     // Notify user
     await this.notifyService.sendWelcomeEmail(

@@ -46,7 +46,7 @@ export class AuthController {
 
     const response: ResponseDto<any> = {
       status: "success",
-      message: `welcome ${result.user?.username}`,
+      message: `welcome ${(result as any).user?.username}`,
       data: result,
     };
 

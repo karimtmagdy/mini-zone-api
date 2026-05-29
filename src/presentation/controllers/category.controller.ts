@@ -31,7 +31,7 @@ export class CategoryController {
 
   create = catchError(async (req: Request, res: Response) => {
     const body = req.body as CreateCategoryDTO;
-    const result = await this.createCategoryUseCase.execute(body, req.user);
+    const result = await this.createCategoryUseCase.execute(body, req.user!);
     const response: ResponseDto<Category> = {
       status: "success",
       message: "category created successfully",
@@ -63,7 +63,7 @@ export class CategoryController {
   update = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
     const body = req.body as UpdateCategoryDTO;
-    const result = await this.updateCategoryUseCase.execute(id, body, req.user);
+    const result = await this.updateCategoryUseCase.execute(id, body, req.user!);
     const response: ResponseDto<Category | null> = {
       status: "success",
       message: "category updated successfully",
@@ -74,7 +74,7 @@ export class CategoryController {
 
   soft = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
-    const result = await this.softDeleteCategoryUseCase.execute(id, req.user);
+    const result = await this.softDeleteCategoryUseCase.execute(id, req.user!);
     const response: ResponseDto<Category | null> = {
       status: "success",
       message: "category moved to trash",
@@ -85,7 +85,7 @@ export class CategoryController {
 
   restore = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
-    const result = await this.restoreCategoryUseCase.execute(id, req.user);
+    const result = await this.restoreCategoryUseCase.execute(id, req.user!);
     const response: ResponseDto<Category | null> = {
       status: "success",
       message: "category restored successfully",

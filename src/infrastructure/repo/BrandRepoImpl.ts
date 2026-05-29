@@ -6,7 +6,7 @@ import {
 import { Brand } from "@/domain/entities/Brand";
 import { brandModel } from "@/infrastructure/database/brand.model";
 import { APIFeatures } from "@/shared/utils/api.feature";
-import { PaginatedResult } from "@/_R/global.dto";
+import { PaginatedResult } from "@/types/global.dto";
 
 export class BrandRepoImpl implements BrandRepoType {
   private toEntity(doc: IBrand): Brand {

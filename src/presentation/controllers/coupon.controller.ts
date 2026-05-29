@@ -28,7 +28,7 @@ export class CouponController {
   ) {}
 
   create = catchError(async (req: Request, res: Response) => {
-    const result = await this.createCouponUseCase.execute(req.body, req.user);
+    const result = await this.createCouponUseCase.execute(req.body, req.user!);
 
     const response: ResponseDto<Coupon> = {
       status: "success",
@@ -63,7 +63,7 @@ export class CouponController {
     const result = await this.updateCouponUseCase.execute(
       id,
       req.body,
-      req.user,
+      req.user!,
     );
     const response: ResponseDto<Coupon | null> = {
       status: "success",
@@ -75,7 +75,7 @@ export class CouponController {
 
   delete = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
-    await this.deleteCouponUseCase.execute(id, req.user);
+    await this.deleteCouponUseCase.execute(id, req.user!);
 
     const response: ResponseDto<void> = {
       status: "success",
@@ -86,7 +86,7 @@ export class CouponController {
 
   deleteBulk = catchError(async (req: Request, res: Response) => {
     const { ids } = req.body;
-    await this.deleteBulkCouponsUseCase.execute(ids, req.user);
+    await this.deleteBulkCouponsUseCase.execute(ids, req.user!);
 
     const response: ResponseDto<void> = {
       status: "success",
@@ -110,19 +110,19 @@ export class CouponController {
   generateBulk = catchError(async (req: Request, res: Response) => {
     const result = await this.generateBulkCouponsUseCase.execute(req.body);
 
-    if ((req as any).user) {
-      await activityLogService.record({
-        user: {
-          name: (req as any).user.username,
-          email: (req as any).user.email,
-          avatar: (req as any).user.avatar,
-        },
-        action: "Generated Bulk Coupons",
-        target: `${result.length} coupons`,
-        details: { prefix: req.body.prefix, discount: req.body.discount },
-        status: "info",
-      });
-    }
+    // if ((req as any).user) {
+    //   await activityLogService.record({
+    //     user: {
+    //       name: (req as any).user.username,
+    //       email: (req as any).user.email,
+    //       avatar: (req as any).user.avatar,
+    //     },
+    //     action: "Generated Bulk Coupons",
+    //     target: `${result.length} coupons`,
+    //     details: { prefix: req.body.prefix, discount: req.body.discount },
+    //     status: "info",
+    //   });
+    // }
 
     const response: ResponseDto<any> = {
       status: "success",

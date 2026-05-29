@@ -1,4 +1,4 @@
-import { PaginatedResult } from "@/_R/global.dto";
+import { PaginatedResult } from "@/types/global.dto";
 import { Coupon } from "../entities/Coupon";
 
 export enum CouponDiscountEnum {

@@ -17,7 +17,7 @@ export const getSchemaOptions = (collectionName: string): any => ({
   toObject: { virtuals: true },
 });
 
-export const applySlugify = <T extends { slug: string }>(
+export const applySlugify = <T extends { slug?: string }>(
   schema: Schema<T>,
   sourceField: keyof T,
 ) => {

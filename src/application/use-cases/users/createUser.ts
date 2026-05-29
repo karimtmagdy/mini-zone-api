@@ -4,7 +4,7 @@ import { EmployeeRepoType } from "@/domain/types/employee.types";
 import { AppError } from "@/shared/utils/api.error";
 import { CreateUserDTO } from "@/presentation/validation/user.zod";
 import { NotifyService } from "@/application/services/notify.service";
-import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
+// import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
 import { IUser } from "@/domain/types/user.types";
 
 export class CreateUser {
@@ -12,7 +12,7 @@ export class CreateUser {
     private userRepo: UserRepoType,
     private employeeRepo: EmployeeRepoType,
     private notifyService: NotifyService,
-    private recordActivity: RecordActivity,
+    // private recordActivity: RecordActivity,
   ) {}
 
   async execute(data: CreateUserDTO, performer?: IUser): Promise<User> {
@@ -39,17 +39,17 @@ export class CreateUser {
     delete createdUser.password;
 
     const loggingUser = performer || createdUser;
-    await this.recordActivity.execute({
-      user: {
-        username: loggingUser.username,
-        email: loggingUser.email,
-        role: loggingUser.role!,
-      },
-      action: performer ? "Admin created user" : "User registered",
-      target: `User: ${createdUser.username}`,
-      details: { userId: createdUser.id },
-      timestamp: new Date(),
-    });
+    // await this.recordActivity.execute({
+    //  user: {
+    //    username: loggingUser.username,
+    //    email: loggingUser.email,
+    //    role: loggingUser.role!,
+    //  },
+    //  action: performer ? "Admin created user" : "User registered",
+    //  target: `User: ${createdUser.username}`,
+    //  details: { userId: createdUser.id },
+    //  timestamp: new Date(),
+    // });
 
     // Notify user
     await this.notifyService.sendWelcomeEmail(

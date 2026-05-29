@@ -1,6 +1,6 @@
 import { BrandRepoType } from "@/domain/types/brand.types";
 import { Brand } from "@/domain/entities/Brand";
-import { PaginatedResult } from "@/_R/global.dto";
+import { PaginatedResult } from "@/types/global.dto";
 
 export class GetAllBrands {
   constructor(private brandRepo: BrandRepoType) {}

@@ -55,7 +55,7 @@ export class ProductController {
 
   create = catchError(async (req: Request, res: Response) => {
     const body = req.body as CreateProductDTO;
-    const result = await this.createProductUseCase.execute(body, req.user);
+    const result = await this.createProductUseCase.execute(body, req.user!);
     const response: ResponseDto<Product> = {
       status: "success",
       message: "product created successfully",
@@ -87,7 +87,7 @@ export class ProductController {
   update = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
     const body = req.body as UpdateProductDTO;
-    const result = await this.updateProductUseCase.execute(id, body, req.user);
+    const result = await this.updateProductUseCase.execute(id, body, req.user!);
 
     const response: ResponseDto<Product | null> = {
       status: "success",
@@ -99,7 +99,7 @@ export class ProductController {
 
   soft = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
-    const result = await this.softDeleteProductUseCase.execute(id, req.user);
+    const result = await this.softDeleteProductUseCase.execute(id, req.user!);
 
     const response: ResponseDto<Product | null> = {
       status: "success",
@@ -111,7 +111,7 @@ export class ProductController {
 
   restore = catchError(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
-    const result = await this.restoreProductUseCase.execute(id, req.user);
+    const result = await this.restoreProductUseCase.execute(id, req.user!);
 
     const response: ResponseDto<Product | null> = {
       status: "success",
@@ -199,7 +199,7 @@ export class ProductController {
     const data = await this.updateProductStockUseCase.execute(
       req.params.id as string,
       req.body.stock,
-      req.user,
+      req.user!,
     );
 
     const response: ResponseDto<Product | null> = {

@@ -2,7 +2,7 @@ import { EmployeeRepoType, IEmployee } from "@/domain/types/employee.types";
 import { Employee } from "@/domain/entities/Employee";
 import { employeeModel } from "@/infrastructure/database/employee.model";
 import { APIFeatures } from "@/shared/utils/api.feature";
-import { PaginatedResult } from "@/_R/global.dto";
+import { PaginatedResult } from "@/types/global.dto";
 import { PersonStatusEnum } from "@/domain/types/person.types";
 
 export class EmployeeRepoImpl implements EmployeeRepoType {

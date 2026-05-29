@@ -9,7 +9,7 @@ import { BrandRepoImpl } from "@/infrastructure/repo/BrandRepoImpl";
 import { BrandController } from "@/presentation/controllers/brand.controller";
 import { UpdateBrandStatus } from "@/application/use-cases/brands/updateBrandStatus";
 
-import { recordActivityUseCase } from "./activity-log.container";
+// import { recordActivityUseCase } from "./activity-log.container";
 
 // Infrastructure
 const brandRepository = new BrandRepoImpl();
@@ -17,30 +17,15 @@ const brandRepository = new BrandRepoImpl();
 // Application
 
 // Brands Use Cases
-export const createBrandUseCase = new CreateBrand(
-  brandRepository,
-  recordActivityUseCase,
-);
+export const createBrandUseCase = new CreateBrand(brandRepository);
 export const getAllBrandsUseCase = new GetAllBrands(brandRepository);
 export const getBrandByIdUseCase = new GetBrandById(brandRepository);
-export const updateBrandUseCase = new UpdateBrand(
-  brandRepository,
-  recordActivityUseCase,
-);
-export const softDeleteBrandUseCase = new SoftDeleteBrand(
-  brandRepository,
-  recordActivityUseCase,
-);
-export const restoreBrandUseCase = new RestoreBrand(
-  brandRepository,
-  recordActivityUseCase,
-);
+export const updateBrandUseCase = new UpdateBrand(brandRepository);
+export const softDeleteBrandUseCase = new SoftDeleteBrand(brandRepository);
+export const restoreBrandUseCase = new RestoreBrand(brandRepository);
 export const getDeletedBrandsUseCase = new GetDeletedBrands(brandRepository);
 
-export const updateBrandStatusUseCase = new UpdateBrandStatus(
-  brandRepository,
-  recordActivityUseCase,
-);
+export const updateBrandStatusUseCase = new UpdateBrandStatus(brandRepository);
 
 // Presentation
 

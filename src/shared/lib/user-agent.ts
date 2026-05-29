@@ -1,4 +1,4 @@
-import { DeviceInfo } from "@/domain/types/session.types";
+import { IDeviceInfo } from "@/domain/types/session.types";
 import type { Request } from "express";
 
 import { UAParser, type IResult } from "ua-parser-js";
@@ -12,7 +12,7 @@ export const getClientIp = (req: Request) => {
   return ip || "unknown";
 };
 
-export const getUserAgent = (req: Request): DeviceInfo => {
+export const getUserAgent = (req: Request): IDeviceInfo => {
   const parser = new UAParser(req.headers["user-agent"]);
   const result: IResult = parser.getResult();
   return {

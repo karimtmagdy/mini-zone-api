@@ -14,22 +14,31 @@ import { BulkDeleteUsers } from "@/application/use-cases/users/bulkDeleteUsers";
 import { UserController } from "@/presentation/controllers/user.controller";
 
 import { notifyService } from "@/application/services/notify.service";
-import { recordActivityUseCase } from "./activity-log.container";
+// import { recordActivityUseCase } from "./activity-log.container";
 
 const userRepository = new UserRepoImpl();
 const employeeRepository = new EmployeeRepoImpl();
 
-export const createUserUseCase = new CreateUser(userRepository, employeeRepository, notifyService, recordActivityUseCase);
+export const createUserUseCase = new CreateUser(
+  userRepository,
+  employeeRepository,
+  notifyService,
+);
 export const getAllUsersUseCase = new GetAllUsers(userRepository);
 export const getUserByIdUseCase = new GetUserById(userRepository);
-export const updateUserUseCase = new UpdateUser(userRepository, employeeRepository, recordActivityUseCase);
-export const softDeleteUserUseCase = new SoftDeleteUser(userRepository, recordActivityUseCase);
-export const restoreUserUseCase = new RestoreUser(userRepository, recordActivityUseCase);
-export const changeUserRoleUseCase = new ChangeUserRole(userRepository, recordActivityUseCase);
-export const updateUserStatusUseCase = new UpdateUserStatus(userRepository, recordActivityUseCase);
-export const bulkDeactivateUsersUseCase = new BulkDeactivateUsers(userRepository, recordActivityUseCase);
-export const bulkArchiveUsersUseCase = new BulkArchiveUsers(userRepository, recordActivityUseCase);
-export const bulkDeleteUsersUseCase = new BulkDeleteUsers(userRepository, recordActivityUseCase);
+export const updateUserUseCase = new UpdateUser(
+  userRepository,
+  employeeRepository,
+);
+export const softDeleteUserUseCase = new SoftDeleteUser(userRepository);
+export const restoreUserUseCase = new RestoreUser(userRepository);
+export const changeUserRoleUseCase = new ChangeUserRole(userRepository);
+export const updateUserStatusUseCase = new UpdateUserStatus(userRepository);
+export const bulkDeactivateUsersUseCase = new BulkDeactivateUsers(
+  userRepository,
+);
+export const bulkArchiveUsersUseCase = new BulkArchiveUsers(userRepository);
+export const bulkDeleteUsersUseCase = new BulkDeleteUsers(userRepository);
 
 export const userCtrl = new UserController(
   createUserUseCase,
@@ -43,5 +52,5 @@ export const userCtrl = new UserController(
   bulkDeactivateUsersUseCase,
   bulkArchiveUsersUseCase,
   bulkDeleteUsersUseCase,
-  userRepository
+  userRepository,
 );
