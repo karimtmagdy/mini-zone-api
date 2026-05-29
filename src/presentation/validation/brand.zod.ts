@@ -35,7 +35,7 @@ export const updateBrandZod = CoreBrandZod.pick({
 export const updateBrandStatusZod = z.object({
   status: z.nativeEnum(BrandStatusEnum, {
      error: "Invalid status value",
-     message: "status is required",
+    //  message: "status is required",
   }),
 });
 

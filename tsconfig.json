@@ -24,7 +24,7 @@
     "typeRoots": ["./src/types"]
   },
   "include": ["src/**/*", "api/**/*"],
-  "exclude": ["node_modules", "dist", ".vercel"]
+  "exclude": ["node_modules", "dist", ".vercel", "data/**/*", "data"]
 }
 // "exec": "tsx ./src/server.ts"
 

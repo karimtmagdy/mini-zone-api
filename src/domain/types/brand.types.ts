@@ -10,9 +10,7 @@ export const brandTransitions = {
 } as const;
 
 export type BrandStatus = keyof typeof brandTransitions;
-
 export const BRAND_STATUS = Object.keys(brandTransitions) as BrandStatus[];
-
 export enum BrandStatusEnum {
   ACTIVE = "active",
   INACTIVE = "inactive",

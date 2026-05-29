@@ -3,7 +3,7 @@ import { userCtrl } from "@/infrastructure/container/user.container";
 import {
   authenticated,
   checkPermission,
-} from "@/presentation/middlewares/authroized";
+} from "@/presentation/middlewares/authorized";
 import { validate } from "@/presentation/middlewares/validate";
 import {
   createUserZod,

@@ -12,7 +12,7 @@ import { uploadToCloudinary } from "@/presentation/middlewares/image.middleware"
 import {
   authenticated,
   checkPermission,
-} from "@/presentation/middlewares/authroized";
+} from "@/presentation/middlewares/authorized";
 
 const router = Router();
 

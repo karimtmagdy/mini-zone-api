@@ -6,7 +6,7 @@ import {
 } from "@/presentation/validation/employee.zod";
 import { employeeCtrl } from "@/infrastructure/container/employee.container";
 import { IdParamZod } from "@/shared/schema/shard.schema";
-import { authenticated } from "../middlewares/authroized";
+import { authenticated } from "@/presentation/middlewares/authorized";
 
 const router = Router();
 

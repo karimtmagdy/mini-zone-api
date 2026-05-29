@@ -1,7 +1,7 @@
 import jwt, { type Secret, type SignOptions } from "jsonwebtoken";
 import type { StringValue } from "ms";
 import { enviro } from "@/shared/lib/local.env";
-import { CartPayload, IdPayload, TokenPayload } from "@/_R/payload.types";
+import { CartPayload, IdPayload, TokenPayload } from "@/types/payload.types";
 
 class JwtService {
   private signToken(
@@ -35,19 +35,11 @@ class JwtService {
     },
 
     resetToken: (payload: IdPayload): string => {
-      return this.signToken(
-        payload,
-        enviro.jwtResetSecret,
-        enviro.jwtResetTTL,
-      );
+      return this.signToken(payload, enviro.jwtResetSecret, enviro.jwtResetTTL);
     },
 
     cartToken: (payload: CartPayload): string => {
-      return this.signToken(
-        payload,
-        enviro.jwtSecretCart,
-        enviro.jwtCartTTL,
-      );
+      return this.signToken(payload, enviro.jwtSecretCart, enviro.jwtCartTTL);
     },
 
     verificationToken: (payload: IdPayload): string => {
@@ -61,38 +53,23 @@ class JwtService {
 
   decode = {
     accessToken: (token: string): TokenPayload => {
-      return this.verifyToken<TokenPayload>(
-        token,
-        enviro.jwtAccessToken,
-      );
+      return this.verifyToken<TokenPayload>(token, enviro.jwtAccessToken);
     },
 
     refreshToken: (token: string): IdPayload => {
-      return this.verifyToken<IdPayload>(
-        token,
-        enviro.jwtRefreshToken,
-      );
+      return this.verifyToken<IdPayload>(token, enviro.jwtRefreshToken);
     },
 
     verificationToken: (token: string): IdPayload => {
-      return this.verifyToken<IdPayload>(
-        token,
-        enviro.jwtAccessToken,
-      );
+      return this.verifyToken<IdPayload>(token, enviro.jwtAccessToken);
     },
 
     resetToken: (token: string): IdPayload => {
-      return this.verifyToken<IdPayload>(
-        token,
-        enviro.jwtResetSecret,
-      );
+      return this.verifyToken<IdPayload>(token, enviro.jwtResetSecret);
     },
 
     cartToken: (token: string): CartPayload => {
-      return this.verifyToken<CartPayload>(
-        token,
-        enviro.jwtSecretCart,
-      );
+      return this.verifyToken<CartPayload>(token, enviro.jwtSecretCart);
     },
   };
 }

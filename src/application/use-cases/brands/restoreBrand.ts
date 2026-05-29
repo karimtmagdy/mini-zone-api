@@ -9,21 +9,23 @@ export class RestoreBrand {
     private recordActivity: RecordActivity,
   ) {}
 
-  async execute(id: string, performer: IUser) {
-    const brand = await this.brandRepo.restore(id, performer.id);
-    if (!brand) throw AppError.notFound("brand not found in trash");
+  async execute(id: string, performer?: IUser) {
+    const brand = await this.brandRepo.restore(id, performer?.id);
+    if (!brand) throw AppError.notFound("brand not found in archive");
 
-    await this.recordActivity.execute({
-      user: {
-        username: performer.username,
-        email: performer.email,
-        role: performer.role!,
-      },
-      action: "Brand restored",
-      target: `Brand: ${brand.name}`,
-      details: { brandId: id },
-      timestamp: new Date(),
-    });
+    if (performer) {
+      await this.recordActivity.execute({
+        user: {
+          username: performer.username,
+          email: performer.email,
+          role: performer.role!,
+        },
+        action: "Brand restored",
+        target: `Brand: ${brand.name}`,
+        details: { brandId: id },
+        timestamp: new Date(),
+      });
+    }
 
     return brand;
   }

@@ -23,25 +23,27 @@ export class UpdateBrandStatus {
   async execute(
     id: string,
     newStatus: BrandStatus,
-    performer: IUser,
+    performer?: IUser,
   ): Promise<Brand> {
     const updated = await this.statusService.changeStatus(
       id,
       newStatus,
-      performer.id,
+      performer?.id,
     );
 
-    await this.recordActivity.execute({
-      user: {
-        username: performer.username,
-        email: performer.email,
-        role: performer.role!,
-      },
-      action: `Brand status updated to ${newStatus}`,
-      target: `Brand: ${updated?.name || id}`,
-      details: { brandId: id, newStatus },
-      timestamp: new Date(),
-    });
+    if (performer) {
+      await this.recordActivity.execute({
+        user: {
+          username: performer.username,
+          email: performer.email,
+          role: performer.role!,
+        },
+        action: `Brand status updated to ${newStatus}`,
+        target: `Brand: ${updated?.name || id}`,
+        details: { brandId: id, newStatus },
+        timestamp: new Date(),
+      });
+    }
 
     return updated;
   }

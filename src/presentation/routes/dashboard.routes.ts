@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { dashboardCtrl } from "@/infrastructure/container/dashboard.container";
 import { activityLogCtrl } from "@/infrastructure/container/activity-log.container";
-import { authenticated } from "@/presentation/middlewares/authroized";
+import { authenticated } from "@/presentation/middlewares/authorized";
 
 const router = Router();
 router.use(authenticated);

@@ -11,7 +11,7 @@ export class UpdateBrand {
     private recordActivity: RecordActivity,
   ) {}
 
-  async execute(id: string, data: UpdateBrandDTO, performer: IUser) {
+  async execute(id: string, data: UpdateBrandDTO, performer?: IUser) {
     const brand = await this.brandRepo.findById(id);
     if (!brand) throw AppError.notFound("brand not found");
 
@@ -22,19 +22,21 @@ export class UpdateBrand {
       }
     }
 
-    const updated = await this.brandRepo.update(id, data, performer.id);
+    const updated = await this.brandRepo.update(id, data, performer?.id);
 
-    await this.recordActivity.execute({
-      user: {
-        username: performer.username,
-        email: performer.email,
-        role: performer.role!,
-      },
-      action: "Brand updated",
-      target: `Brand: ${updated?.name || id}`,
-      details: { brandId: id, updates: data },
-      timestamp: new Date(),
-    });
+    if (performer) {
+      await this.recordActivity.execute({
+        user: {
+          username: performer.username,
+          email: performer.email,
+          role: performer.role!,
+        },
+        action: "Brand updated",
+        target: `Brand: ${updated?.name || id}`,
+        details: { brandId: id, updates: data },
+        timestamp: new Date(),
+      });
+    }
 
     return updated;
   }

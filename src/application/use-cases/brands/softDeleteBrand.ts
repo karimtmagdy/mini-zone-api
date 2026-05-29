@@ -8,23 +8,25 @@ export class SoftDeleteBrand {
     private recordActivity: RecordActivity,
   ) {}
 
-  async execute(id: string, performer: IUser) {
+  async execute(id: string, performer?: IUser) {
     const brand = await this.brandRepo.findById(id);
     if (!brand) throw AppError.notFound("brand not found");
 
-    const result = await this.brandRepo.softDelete(id, performer.id);
+    const result = await this.brandRepo.softDelete(id, performer?.id);
 
-    await this.recordActivity.execute({
-      user: {
-        username: performer.username,
-        email: performer.email,
-        role: performer.role!,
-      },
-      action: "Brand archived",
-      target: `Brand: ${brand.name}`,
-      details: { brandId: id },
-      timestamp: new Date(),
-    });
+    if (performer) {
+      await this.recordActivity.execute({
+        user: {
+          username: performer.username,
+          email: performer.email,
+          role: performer.role!,
+        },
+        action: "Brand archived",
+        target: `Brand: ${brand.name}`,
+        details: { brandId: id },
+        timestamp: new Date(),
+      });
+    }
 
     return result;
   }

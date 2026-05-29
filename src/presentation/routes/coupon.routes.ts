@@ -11,7 +11,7 @@ import { couponCtrl } from "@/infrastructure/container/coupon.container";
 import {
   authenticated,
   checkPermission,
-} from "@/presentation/middlewares/authroized";
+} from "@/presentation/middlewares/authorized";
 
 const router = Router();
 
