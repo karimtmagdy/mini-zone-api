@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 import { logger } from "@/shared/lib/logger";
 import type { MongooseCache } from "@/types/global.dto";
 
+declare global {
+  // eslint-disable-next-line no-var
+  var __mongoose_cache: MongooseCache | undefined;
+}
 function getMongoURI(): string {
   const isProduction = process.env.VERCEL === "1";
   const uri = isProduction
