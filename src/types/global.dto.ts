@@ -9,14 +9,6 @@ export type Route = {
   router: Router;
 };
 
-export interface StandardTypes {
-  image: ImageDto;
-  slug: string;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt?: Date | null;
-}
-
 export interface PaginationMeta {
   total: number;
   results: number;
@@ -29,3 +21,39 @@ export interface PaginatedResult<T> {
   data: T[];
   meta: PaginationMeta;
 }
+export interface IBaseMetadata {
+  createdAt: Date;
+  updatedAt: Date;
+  createdBy: string;
+  updatedBy: string;
+  deletedAt: Date;
+  deletedBy: string;
+}
+export interface IBaseImage {
+  image: {
+    url: string;
+    publicId: string;
+  };
+}
+export interface IBaseImageArray extends IBaseMetadata {
+  images: {
+    image: IBaseImage;
+  }[];
+}
+// export type IPerson = {
+
+//
+
+// verifyOtp?: {
+//   code: string;
+//   expiresAt: Date;
+// } | null;
+// resetOtp?: {
+//   code: string;
+//   expiresAt: Date;
+// } | null;
+
+// twoFactorSecret?: string;
+// comparePassword(candidatePassword: string): Promise<boolean>;
+
+// };

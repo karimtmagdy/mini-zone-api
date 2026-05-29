@@ -28,30 +28,6 @@ export const EMPLOYEE_JOB_TITLES = [
 ] as const;
 export type EmployeeDepartment = (typeof EMPLOYEE_DEPARTMENTS)[number];
 export type EmployeeJobTitle = (typeof EMPLOYEE_JOB_TITLES)[number];
-export enum EmployeeDepartmentEnum {
-  HR = "HR",
-  ENGINEERING = "Engineering",
-  SALES = "Sales",
-  MARKETING = "Marketing",
-  FINANCE = "Finance",
-  SUPPORT = "Support",
-  MANAGEMENT = "Management",
-  OPERATIONS = "Operations",
-  IT = "IT",
-}
-
-export enum EmployeeJobTitleEnum {
-  MANAGER = "Manager",
-  DEVELOPER = "Developer",
-  DESIGNER = "Designer",
-  ANALYST = "Analyst",
-  SPECIALIST = "Specialist",
-  COORDINATOR = "Coordinator",
-  DIRECTOR = "Director",
-  LEAD = "Lead",
-  ASSOCIATE = "Associate",
-  CONSULTANT = "Consultant",
-}
 
 export interface IEmployee extends IPerson {
   code: string;
@@ -61,6 +37,7 @@ export interface IEmployee extends IPerson {
   hiredAt: Date;
   managerId?: any;
 }
+
 export interface EmployeeRepoType {
   create(employee: Employee): Promise<Employee>;
   findByEmail(email: string): Promise<Employee | null>;

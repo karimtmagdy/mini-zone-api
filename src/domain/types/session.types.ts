@@ -16,6 +16,7 @@ export type IDeviceInfo = {
   city: string;
   country: string;
 };
+
 export type ISession = {
   refreshToken: string;
   userId: string | ObjectId;
@@ -23,6 +24,7 @@ export type ISession = {
   // createdAt: Date;
   expiresAt: Date;
 };
+
 export interface SessionRepoType {
   create(session: ISession): Promise<void>;
   findByToken(token: string): Promise<ISession | null>;

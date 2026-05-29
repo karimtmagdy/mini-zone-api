@@ -1,33 +1,27 @@
-import { PaginatedResult } from "@/types/global.dto";
+import { IBaseImage, IBaseMetadata, PaginatedResult } from "@/types/global.dto";
 import { Category } from "../entities/Category";
 
-export const CATEGORY_STATUS = ["active", "inactive", "archived"] as const;
+export const BRAND_TRANSITIONS = {
+  onboarding: ["active", "archived"],
+  active: ["inactive", "archived"],
+  inactive: ["active", "archived"],
+  archived: ["active"],
+} as const;
 
-export type CategoryStatus = (typeof CATEGORY_STATUS)[number];
+export type CategoryStatus = keyof typeof BRAND_TRANSITIONS;
+export const CATEGORY_STATUS = Object.keys(
+  BRAND_TRANSITIONS,
+) as CategoryStatus[];
 
-export enum CategoryStatusEnum {
-  ACTIVE = "active",
-  INACTIVE = "inactive",
-  ARCHIVED = "archived",
-}
-export interface ICategory {
+export interface ICategory extends IBaseMetadata, IBaseImage {
   id: string;
   name: string;
   description: string;
   status: CategoryStatus;
   products: number;
-  image: {
-    url: string;
-    publicId: string;
-  };
   slug: string;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt?: Date | null;
-  createdBy?: string;
-  updatedBy?: string;
-  deletedBy?: string;
 }
+
 export interface CategoryRepoType {
   create(category: Category, performerId?: string): Promise<Category>;
   findByName(name: string): Promise<Category | null>;

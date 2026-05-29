@@ -1,24 +1,22 @@
-import { PaginatedResult } from "@/types/global.dto";
+import { IBaseMetadata, PaginatedResult } from "@/types/global.dto";
 import { Coupon } from "../entities/Coupon";
 
-export enum CouponDiscountEnum {
-  PERCENTAGE = "percentage",
-  FIXED = "fixed",
-}
-export const COUPON_STATUS = ["active", "inactive"] as const;
-export type CouponDiscountStatus = (typeof COUPON_STATUS)[number];
+export const COUPON_TRANSITIONS = {
+  active: ["inactive"],
+  inactive: ["active"],
+} as const;
+// EXPIRED = "expired",
+export type CouponDiscountStatus = "fixed" | "percentage";
+export type CouponStatus = keyof typeof COUPON_TRANSITIONS;
+export const COUPON_STATUS = Object.keys(COUPON_TRANSITIONS) as CouponStatus[];
 
-export enum CouponEnum {
-  ACTIVE = "active",
-  INACTIVE = "inactive",
-}
 export interface IDiscount {
-  type: CouponDiscountEnum;
+  type: CouponDiscountStatus;
   value: number;
   max?: number;
 }
 
-export interface ICoupon {
+export interface ICoupon extends IBaseMetadata {
   id: string;
   code: string;
   discount: IDiscount;
@@ -29,13 +27,8 @@ export interface ICoupon {
   expiresAt: Date;
   isActive: boolean;
   campaignId?: string;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt?: Date | null;
-  createdBy?: string;
-  updatedBy?: string;
-  deletedBy?: string;
 }
+
 export interface CouponRepoType {
   create(coupon: Partial<Coupon>, performerId?: string): Promise<Coupon>;
   findById(id: string): Promise<Coupon | null>;

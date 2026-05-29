@@ -1,33 +1,28 @@
-import { PaginatedResult } from "@/types/global.dto";
+import { IBaseImage, IBaseMetadata, PaginatedResult } from "@/types/global.dto";
 import { SubCategory } from "../entities/SubCategory";
 
-export const SUBCATEGORY_STATUS = ["active", "inactive", "archived"] as const;
-export type SubCategoryStatus = (typeof SUBCATEGORY_STATUS)[number];
-export enum SubCategoryEnum {
-  ACTIVE = "active",
-  INACTIVE = "inactive",
-  ARCHIVED = "archived",
-}
+export const SUBCATEGORY_TRANSITIONS = {
+  onboarding: ["active", "archived"],
+  active: ["inactive", "archived"],
+  inactive: ["active", "archived"],
+  archived: ["active"],
+} as const;
 
-export interface ISubCategory {
+export type SubCategoryStatus = keyof typeof SUBCATEGORY_TRANSITIONS;
+export const SUBCATEGORY_STATUS = Object.keys(
+  SUBCATEGORY_TRANSITIONS,
+) as SubCategoryStatus[];
+
+export interface ISubCategory extends IBaseMetadata, IBaseImage {
+  id?: string;
   name: string;
   slug: string;
   description?: string;
   category: string[];
   products: number;
   status: SubCategoryStatus;
-  deletedAt: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  image: {
-    url: string;
-    publicId: string;
-  };
-  id?: string;
-  createdBy?: string;
-  updatedBy?: string;
-  deletedBy?: string;
 }
+
 export interface SubCategoryRepoType {
   create(category: SubCategory, performerId?: string): Promise<SubCategory>;
   findByName(name: string): Promise<SubCategory | null>;

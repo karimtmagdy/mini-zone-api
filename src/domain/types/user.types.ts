@@ -18,20 +18,6 @@ export const USER_ROLES = [
 
 export type UserRole = (typeof USER_ROLES)[number];
 
-export enum UserRoleEnum {
-  USER = "user",
-  SUPER_ADMIN = "super-admin",
-  ADMIN = "admin",
-  MANAGER = "manager",
-  VIEWER = "viewer",
-  SELLER = "seller",
-  DELIVERY_BOY = "delivery-boy",
-  STAFF = "staff",
-  CUSTOMER_SUPPORT = "customer-support",
-  VENDOR = "vendor",
-  HR = "hr",
-}
-
 export interface IUser extends IPerson {
   // employeeId?: any;
 }
