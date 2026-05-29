@@ -18,9 +18,9 @@ export const corsOption = () => {
     allowedHeaders: [
       "Content-Type",
       "Authorization",
-      "X-Requested-With",
-      "Accept",
-      "Access-Control-Request-Private-Network",
+      // "X-Requested-With",
+      // "Accept",
+      // "Access-Control-Request-Private-Network",
     ],
     exposedHeaders: ["Access-Control-Allow-Private-Network"],
     credentials: true,
