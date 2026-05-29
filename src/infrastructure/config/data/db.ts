@@ -11,7 +11,8 @@ declare global {
   var __mongoose_cache: MongooseCache | undefined;
 }
 function getMongoURI(): string {
-  const isProduction = process.env.VERCEL === "1";
+  const isProduction = process.env.NODE_ENV === "production";
+  // const isProduction = process.env.VERCEL === "1";
   const uri = isProduction
     ? process.env.mack_MONGODB_URI
     : process.env.DB_LOCAL;
