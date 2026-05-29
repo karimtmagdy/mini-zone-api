@@ -2,10 +2,7 @@ import mongoose from "mongoose";
 import { Router } from "express";
 import { IUser } from "@/domain/types/user.types";
 
-// Correct type: Mongoose instance, not the full module namespace.
-export interface MongooseCache {
-  promise: Promise<typeof mongoose> | null;
-}
+
 
 declare global {
   // eslint-disable-next-line no-var

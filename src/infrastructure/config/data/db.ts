@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { logger } from "@/shared/lib/logger";
-import { MongooseCache } from "@/types/express";
+import type { MongooseCache } from "@/types/global.dto";
 
 function getMongoURI(): string {
   const isProduction = process.env.VERCEL === "1";
