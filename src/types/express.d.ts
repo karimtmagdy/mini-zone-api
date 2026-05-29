@@ -2,8 +2,6 @@ import mongoose from "mongoose";
 import { Router } from "express";
 import { IUser } from "@/domain/types/user.types";
 
-
-
 declare global {
   // eslint-disable-next-line no-var
   var __mongoose_cache: MongooseCache | undefined;
