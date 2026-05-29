@@ -22,7 +22,12 @@ function getMongoURI(): string {
       } environment`,
     );
   }
-
+  console.log({
+    VERCEL: process.env.VERCEL,
+    NODE_ENV: process.env.NODE_ENV,
+    URI: process.env.mack_MONGODB_URI,
+    LOCAL: process.env.DB_LOCAL,
+  });
   return uri;
 }
 
