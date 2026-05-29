@@ -4,8 +4,10 @@ import { AppError } from "@/shared/utils/api.error";
 export const corsOption = () => {
   return cors({
     origin: (origin, callback) => {
-      const { CLIENT_URL, DOMIN_URL } = process.env;
-      const allowedOrigins = [CLIENT_URL, DOMIN_URL];
+      const allowedOrigins = [
+        "https://mini-zone.vercel.app",
+        "http://localhost:3000",
+      ];
       if (!origin || allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
