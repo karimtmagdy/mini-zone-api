@@ -14,10 +14,10 @@ declare global {
 
 function getMongoURI(): string {
   const { mongoURL, dbLocal, nodeEnv } = enviro;
-  const uri = nodeEnv === "development" ? dbLocal : mongoURL;
+  const uri = nodeEnv !== "production" ? dbLocal : mongoURL;
 
   if (!uri) {
-    const envVar = nodeEnv === "development" ? "DB_LOCAL" : "mack_MONGODB_URI";
+    const envVar = nodeEnv !== "production" ? "DB_LOCAL" : "mack_MONGODB_URI";
     throw new Error(`Missing required environment variable: ${envVar}`);
   }
 
