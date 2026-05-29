@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import { logger } from "@/shared/lib/logger";
-import { enviro } from "@/shared/lib/local.env";
 
 // Correct type: Mongoose instance, not the full module namespace.
 interface MongooseCache {
@@ -13,12 +12,16 @@ declare global {
 }
 
 function getMongoURI(): string {
-  const { mongoURL, dbLocal, nodeEnv } = enviro;
-  const uri = nodeEnv !== "production" ? dbLocal : mongoURL;
-
+  const isProduction = process.env.VERCEL === "1";
+  const uri = isProduction
+    ? process.env.mack_MONGODB_URI
+    : process.env.DB_LOCAL;
   if (!uri) {
-    const envVar = nodeEnv !== "production" ? "DB_LOCAL" : "mack_MONGODB_URI";
-    throw new Error(`Missing required environment variable: ${envVar}`);
+    throw new Error(
+      `Missing MongoDB URI for ${
+        isProduction ? "production" : "development"
+      } environment`,
+    );
   }
 
   return uri;
@@ -42,9 +45,9 @@ export async function connectDB(): Promise<void> {
   if (!cache.promise) {
     const uri = getMongoURI();
 
-    // if (enviro.nodeEnv === "development") {
-    //   mongoose.set("debug", true);
-    // }
+    //  if (process.env.NODE_ENV === "development") {
+    //     mongoose.set("debug", true);
+    //   }
 
     logger.log("🔌 Initiating MongoDB connection...");
 
