@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 import { logger } from "@/shared/lib/logger";
-import type { MongooseCache } from "@/types/global.dto";
+
+// Correct type: Mongoose instance, not the full module namespace.
+interface MongooseCache {
+  promise: Promise<typeof mongoose> | null;
+}
 
 declare global {
   // eslint-disable-next-line no-var

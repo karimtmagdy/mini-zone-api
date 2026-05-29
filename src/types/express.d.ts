@@ -1,8 +1,5 @@
-import mongoose from "mongoose";
 import { Router } from "express";
 import { IUser } from "@/domain/types/user.types";
-
-
 
 declare global {
   namespace Router {
