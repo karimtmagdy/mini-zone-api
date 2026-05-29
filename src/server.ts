@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 import "dotenv/config";
 import "@/infrastructure/database/models";
-import { Database } from "@/infrastructure/config/data/db";
+import { connectDB } from "@/infrastructure/config/data/db";
 import { logger } from "@/shared/lib/logger";
 import { app } from "@/index";
 // import { injectSpeedInsights } from "@vercel/speed-insights";
 void (async () => {
   try {
     // 1. ensure database is connected
-    await Database.getInstance();
+    await connectDB();
 
     // Seeding test brands on startup in development
     // if (process.env.NODE_ENV === "development") {

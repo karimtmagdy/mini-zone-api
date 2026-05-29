@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import serverless from "serverless-http";
 import { configApp } from "@/infrastructure/config/config-app";
-import { Database } from "@/infrastructure/config/data/db";
+import { connectDB } from "@/infrastructure/config/data/db";
 import { MissingRouteHandler } from "@/presentation/middlewares/global.error";
 import { setupRoutes } from "@/presentation/routes";
 // import { setupRouters } from "./_R/router";
@@ -28,7 +28,7 @@ app.get(["/"], (_req, res) => {
 // API Routes
 app.use(async (_req, _res, next) => {
   try {
-    await Database.getInstance();
+    await connectDB();
     next();
   } catch (error) {
     next(error);

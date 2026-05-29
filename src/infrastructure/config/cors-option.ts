@@ -17,7 +17,7 @@ export const corsOption = () => {
     methods: ["GET", "PUT", "PATCH", "POST", "DELETE"],
     allowedHeaders: [
       "Content-Type",
-      "Authorization",
+      // "Authorization",
       // "X-Requested-With",
       // "Accept",
       // "Access-Control-Request-Private-Network",

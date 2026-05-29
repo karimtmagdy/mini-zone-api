@@ -9,7 +9,7 @@ export const enviro = {
   dbUser: process.env.DB_USER,
   dbLocal: process.env.DB_LOCAL,
   dbPass: process.env.DB_PASS,
-  mongoURL: process.env.NODE_ENV === "production" ? process.env.MONGODB_URI : process.env.MONGODB_URI_DEV,
+  mongoURL: process.env.mack_MONGODB_URI, //process.env.NODE_ENV === "production" ? process.env.MONGODB_URI : process.env.MONGODB_URI_DEV,
   jwtAccessToken: process.env.JWT_ACCESS_TOKEN as Secret,
   jwtAccessTTL: process.env.JWT_ACCESS_TTL as StringValue,
   jwtRefreshToken: process.env.JWT_REFRESH_TOKEN as Secret,
