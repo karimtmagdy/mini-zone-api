@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "ignoreDeprecations": "6.0",
     "target": "ES6",
     "module": "commonjs",
     "outDir": "./dist",
@@ -18,6 +17,10 @@
     "paths": {
       "@/*": ["./src/*"]
     },
+    "plugins": [
+      { "transform": "typescript-transform-paths" },
+      { "transform": "typescript-transform-paths", "afterDeclarations": true }
+    ],
     "typeRoots": ["./src/types"]
   },
   "include": ["src/**/*", "api/**/*", "data/_R"],
