@@ -20,7 +20,7 @@ export class GenerateBulkCoupons {
     for (let i = 0; i < count; i++) {
       const couponData: Partial<Coupon> = {
         code: generateCouponCode(prefix),
-        discount,
+        discount: discount as any,
         expiresAt,
         isActive: true,
         usedCount: 0,

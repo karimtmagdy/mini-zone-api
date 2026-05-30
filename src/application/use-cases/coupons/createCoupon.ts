@@ -17,7 +17,7 @@ export class CreateCoupon {
         throw AppError.conflict("Coupon code already exists");
       }
     }
-    const coupon = await this.couponRepo.create(data, performer.id);
+    const coupon = await this.couponRepo.create(data as unknown as Partial<Coupon>, performer.id);
 
     // await this.recordActivity.execute({
     //  user: {

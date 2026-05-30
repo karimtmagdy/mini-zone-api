@@ -27,8 +27,7 @@ const PersonSchema = new Schema<IPerson>(
     twoFactorEnabled: { type: Boolean, default: false },
     // twoFactorSecret: { type: String, select: false },
     remember: { type: Boolean, default: false },
-    deletedBy: { ref: "Person", type: Schema.Types.ObjectId, select: false },
-    updatedBy: { ref: "Person", type: Schema.Types.ObjectId, select: false },
+  
   },
   {
     ...getSchemaOptions("persons"),

@@ -1,12 +1,12 @@
  import { SessionRepoType, IDeviceInfo } from "@/domain/types/session.types";
- import { AppError } from "@/shared/utils/api.error";
+import { AppError } from "@/shared/utils/api.error";
 import { jwtUtil } from "@/application/services/jwt.service";
 import { enviro } from "@/shared/lib/local.env";
 import ms from "ms";
 import bcrypt from "bcryptjs";
 import {
   IPerson,
- 
+
   UserRepoType
 } from "@/domain/types/person.types";
 import { LoginDTO } from "@/shared/schema/person.zod";
@@ -44,14 +44,14 @@ export class LoginUser {
 
     const isMatch = await bcrypt.compare(dto.password, user.password!);
     if (!isMatch) {
-      await this.handleFailedLogin(user);
+      await this.handleFailedLogin(user as any);
       throw AppError.unauthorized("Invalid credentials");
     }
 
     // Status checks
-    this.handleStatus(user);
+    this.handleStatus(user as any);
     // Handle successful login (resets attempts, updates status/state)
-    await this.handleSuccessfulLogin(user);
+    await this.handleSuccessfulLogin(user  as any);
     // 2FA Check
     if (user.twoFactorEnabled) {
       const loginToken = jwtUtil.create.resetToken({ id: user.id! });

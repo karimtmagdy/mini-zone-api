@@ -28,7 +28,7 @@ export class UpdateCoupon {
       }
     }
 
-    const updated = await this.couponRepo.update(id, data, performer.id);
+    const updated = await this.couponRepo.update(id, data as any, performer.id);
 
     // await this.recordActivity.execute({
     //  user: {

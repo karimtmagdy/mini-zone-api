@@ -26,7 +26,7 @@ export class CouponRepoImpl implements CouponRepoType {
   async create(coupon: Partial<Coupon>, performerId?: string): Promise<Coupon> {
     const data = { ...coupon };
     if (performerId) (data as any).createdBy = performerId;
-    const doc = await couponModel.create(data);
+    const doc = await couponModel.create(data as any);
     return this.toEntity(doc);
   }
 

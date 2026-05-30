@@ -6,14 +6,14 @@ import {
 import { Product } from "@/domain/entities/Product";
 import { productModel } from "@/infrastructure/database/product.model";
 import { APIFeatures } from "@/shared/utils/api.feature";
-import { PaginatedResult } from "@/types/global.dto";
+import {   PaginatedResult } from "@/types/global.dto";
 
 export class ProductRepoImpl implements ProductRepoType {
   private toEntity(doc: IProduct): Product {
     return new Product({
       name: doc.name,
       status: doc.status,
-      images: doc.images,
+      // images: doc.images , 
       id: doc.id?.toString(),
       slug: doc.slug,
       description: doc.description,
@@ -38,7 +38,12 @@ export class ProductRepoImpl implements ProductRepoType {
   async create(product: Product, performerId?: string): Promise<Product> {
     const data = { ...product };
     if (performerId) (data as any).createdBy = performerId;
-    const doc = await productModel.create(data);
+    // implement image upload 
+    // if (product.images && product.images.length > 0) {
+    //   const uploadedImages = await this.uploadImages(product.images);
+    //   data.images = uploadedImages;
+    // }
+    const doc = await productModel.create(data  as any);
     return this.toEntity(doc);
   }
 
