@@ -1,7 +1,7 @@
 // import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
-import { IUser } from "@/domain/types/user.types";
+import { IUser } from "@/domain/types/person.types";
 import { StatusService } from "@/application/services/status.service";
-import { BrandStatus, BrandRepoType, brandTransitions } from "@/domain/types/brand.types";
+import { BrandStatus, BrandRepoType, BRAND_TRANSITIONS } from "@/domain/types/brand.types";
 import { Brand } from "@/domain/entities/Brand";
 
 /**
@@ -16,7 +16,7 @@ export class UpdateBrandStatus {
   ) {
     this.statusService = new StatusService<Brand, BrandStatus>(
       this.brandRepo,
-      brandTransitions,
+      BRAND_TRANSITIONS,
     );
   }
 
