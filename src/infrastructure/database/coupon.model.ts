@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import crypto from "crypto";
 import { applySoftDelete, getSchemaOptions } from "@/shared/schema/fields";
-import { CouponDiscountEnum, ICoupon } from "@/domain/types/coupon.types";
+import { COUPON_STATUS, ICoupon } from "@/domain/types/coupon.types";
 
 export function generateCouponCode(prefix = "SALE") {
   const random = crypto.randomBytes(4).toString("hex").toUpperCase();
@@ -21,7 +21,7 @@ const CouponSchema = new Schema<ICoupon>(
     discount: {
       type: {
         type: String,
-        enum: Object.values(CouponDiscountEnum),
+        enum: COUPON_STATUS,
         required: true,
       },
       value: {
@@ -72,6 +72,7 @@ CouponSchema.pre("save", async function (this: any) {
 });
 
 // Index for performance
-CouponSchema.index({ code: "text", expiresAt: "text" });
+// CouponSchema.index({ code: "text", expiresAt: "text" });
+CouponSchema.index({ code: 1, expiresAt: 1 });
 
 export const couponModel = model<ICoupon>("Coupon", CouponSchema);

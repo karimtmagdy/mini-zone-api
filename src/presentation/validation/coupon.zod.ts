@@ -1,12 +1,12 @@
 import { z } from "zod/v4";
 import { ObjectIdZod } from "@/shared/schema/shard.schema";
 import { queryZod } from "@/shared/schema/query.schema";
-import { CouponDiscountEnum } from "@/domain/types/coupon.types";
+import { COUPON_STATUS } from "@/domain/types/coupon.types";
 
 export const CoreCouponZod = z.object({
   code: z.string().optional(),
   discount: z.object({
-    type: z.nativeEnum(CouponDiscountEnum),
+    type: z.enum(COUPON_STATUS),
     value: z.number().positive(),
     max: z.number().positive().optional(),
   }),

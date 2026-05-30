@@ -1,11 +1,9 @@
 import { SchemaDefinition } from "mongoose";
-import { USER_ROLES, UserRoleEnum } from "@/domain/types/user.types";
-import {
+ import {
   PERSON_GENDERS,
+  PERSON_ROLES,
   PERSON_STATE,
   PERSON_STATUS,
-  PErsonStateEnum,
-  PersonStatusEnum,
 } from "@/domain/types/person.types";
 import { DEFAULT_USER_IMAGE } from "@/types/global.dto";
 
@@ -63,11 +61,11 @@ export const PersonSchemaFields: SchemaDefinition = {
   status: {
     type: String,
     enum: PERSON_STATUS,
-    default: PersonStatusEnum.ACTIVE,
+    default: "active",
   },
-  role: { type: String, enum: USER_ROLES, default: UserRoleEnum.USER },
+  role: { type: String, enum: PERSON_ROLES, default: "user" },
   // Account State & Security
-  state: { type: String, enum: PERSON_STATE, default: PErsonStateEnum.OFFLINE },
+  state: { type: String, enum: PERSON_STATE, default: "offline" },
   lastLoginAt: { type: Date },
   passwordChangedAt: { type: Date },
 

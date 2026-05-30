@@ -8,7 +8,7 @@ import {
   EMPLOYEE_DEPARTMENTS,
   EMPLOYEE_JOB_TITLES,
   IEmployee,
-} from "@/domain/types/employee.types";
+} from "@/domain/types/person.types";
 
 import { personModel } from "./person.model";
 

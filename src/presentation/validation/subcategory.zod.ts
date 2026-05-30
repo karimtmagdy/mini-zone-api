@@ -1,8 +1,5 @@
 import { z } from "zod";
-import {
-  SUBCATEGORY_STATUS,
-  SubCategoryEnum,
-} from "@/domain/types/subcategory.types";
+import { SUBCATEGORY_STATUS } from "@/domain/types/subcategory.types";
 import { imageZod } from "@/shared/schema/shard.schema";
 
 const CoreSubCategory = z.object({
@@ -16,7 +13,7 @@ const CoreSubCategory = z.object({
     .max(500, { message: "description must be at most 500 characters" })
     .optional(),
   category: z.array(z.string()).min(1, "At least one category is required"),
-  status: z.enum(SUBCATEGORY_STATUS).default(SubCategoryEnum.ACTIVE),
+  status: z.enum(SUBCATEGORY_STATUS).default("onboarding"),
   image: imageZod,
 });
 

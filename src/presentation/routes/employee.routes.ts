@@ -3,7 +3,7 @@ import { validate } from "@/presentation/middlewares/validate";
 import {
   createEmployeeZod,
   updateEmployeeZod,
-} from "@/presentation/validation/employee.zod";
+} from "@/shared/schema/person.zod";
 import { employeeCtrl } from "@/infrastructure/container/employee.container";
 import { IdParamZod } from "@/shared/schema/shard.schema";
 import { authenticated } from "@/presentation/middlewares/authorized";

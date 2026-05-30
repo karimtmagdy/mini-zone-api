@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { validate } from "@/presentation/middlewares/validate";
-import { registerUserZod, LoginZod } from "@/presentation/validation/auth.zod";
-import { authCtrl } from "@/infrastructure/container/auth.container";
+ import { authCtrl } from "@/infrastructure/container/auth.container";
+import { LoginZod, registerUserZod } from "@/shared/schema/person.zod";
 
 const router = Router();
 

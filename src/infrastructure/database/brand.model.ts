@@ -1,9 +1,5 @@
 import { Schema, model } from "mongoose";
-import {
-  BRAND_STATUS,
-  BrandStatusEnum,
-  IBrand,
-} from "@/domain/types/brand.types";
+import { BRAND_STATUS, IBrand } from "@/domain/types/brand.types";
 import { SchemaFields, SchemaImageFields } from "@/shared/schema/definition";
 import {
   getSchemaOptions,
@@ -28,7 +24,7 @@ const BrandSchema = new Schema<IBrand>(
     status: {
       type: String,
       enum: BRAND_STATUS,
-      default: BrandStatusEnum.ACTIVE,
+      default: 'onboarding',
       index: true,
     },
   },

@@ -1,10 +1,9 @@
-import { EmployeeRepoType, IEmployee } from "@/domain/types/employee.types";
-import { Employee } from "@/domain/entities/Employee";
+ import { Employee } from "@/domain/entities/Employee";
+import { EmployeeRepoType, IEmployee } from "@/domain/types/person.types";
 import { employeeModel } from "@/infrastructure/database/employee.model";
 import { APIFeatures } from "@/shared/utils/api.feature";
 import { PaginatedResult } from "@/types/global.dto";
-import { PersonStatusEnum } from "@/domain/types/person.types";
-
+ 
 export class EmployeeRepoImpl implements EmployeeRepoType {
   private toEntity(doc: IEmployee): Employee {
     return new Employee({
@@ -73,7 +72,7 @@ export class EmployeeRepoImpl implements EmployeeRepoType {
     const doc = await employeeModel
       .findByIdAndUpdate(
         id,
-        { deletedAt: new Date(), status: PersonStatusEnum.ARCHIVED },
+        { deletedAt: new Date(), status: "archived" },
         { new: true },
       )
       .setOptions({ withDeleted: true });
@@ -84,7 +83,7 @@ export class EmployeeRepoImpl implements EmployeeRepoType {
     const doc = await employeeModel
       .findByIdAndUpdate(
         id,
-        { deletedAt: null, status: PersonStatusEnum.ACTIVE },
+        { deletedAt: null, status: 'active' },
         { new: true },
       )
       .setOptions({ withDeleted: true });

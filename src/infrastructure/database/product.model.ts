@@ -1,9 +1,5 @@
 import { Schema, Types, model } from "mongoose";
-import {
-  IProduct,
-  PRODUCT_STATUS,
-  ProductStatusEnum,
-} from "@/domain/types/product.types";
+import { IProduct, PRODUCT_STATUS } from "@/domain/types/product.types";
 import { SchemaFields, SchemaImageFields } from "@/shared/schema/definition";
 import {
   getSchemaOptions,
@@ -121,7 +117,7 @@ const ProductSchema = new Schema<IProduct>(
     status: {
       type: String,
       enum: PRODUCT_STATUS,
-      default: ProductStatusEnum.ACTIVE,
+      default: "onboarding",
       index: true,
     },
   },
@@ -135,7 +131,7 @@ applySoftDelete(ProductSchema);
 ProductSchema.index({ name: "text", description: "text" });
 
 ProductSchema.virtual("isAvailable").get(function () {
-  return this.stock > 0 && this.status === ProductStatusEnum.ACTIVE
+  return this.stock > 0 && this.status === 'active'
     ? "in stock"
     : "out of stock";
 });
@@ -146,7 +142,7 @@ ProductSchema.methods.hasEnoughStock = function (quantity: number): boolean {
 
 ProductSchema.statics.findActiveProducts = function () {
   return this.find({
-    status: ProductStatusEnum.ACTIVE,
+    status: 'active',
     stock: { $gt: 0 },
     deletedAt: null,
   });
@@ -229,16 +225,16 @@ ProductSchema.post("save", async function (doc) {
 
 ProductSchema.pre("findOneAndUpdate", async function () {
   const update = this.getUpdate() as any;
-  
+
   // Only fetch the old document if one of the relationship fields is being changed.
   // This saves a database call for 90% of updates (price, stock, etc.)
-  const needsOldDoc = 
-    update.category || 
-    update.brand || 
-    update.subcategory || 
+  const needsOldDoc =
+    update.category ||
+    update.brand ||
+    update.subcategory ||
     update.status ||
-    update.$set?.category || 
-    update.$set?.brand || 
+    update.$set?.category ||
+    update.$set?.brand ||
     update.$set?.subcategory ||
     update.$set?.status;
 

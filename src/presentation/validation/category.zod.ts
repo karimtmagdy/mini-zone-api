@@ -1,9 +1,6 @@
 import { z } from "zod/v4";
 import { imageZod } from "@/shared/schema/shard.schema";
-import {
-  CATEGORY_STATUS,
-  CategoryStatusEnum,
-} from "@/domain/types/category.types";
+import { CATEGORY_STATUS } from "@/domain/types/category.types";
 
 export const CoreCategoryZod = z
   .object({
@@ -21,7 +18,7 @@ export const CoreCategoryZod = z
       .max(100, {
         message: "category description must be at most 100 characters long",
       }),
-    status: z.enum(CATEGORY_STATUS).default(CategoryStatusEnum.ACTIVE),
+    status: z.enum(CATEGORY_STATUS).default("onboarding"),
     image: imageZod.optional(),
   })
   .strict();

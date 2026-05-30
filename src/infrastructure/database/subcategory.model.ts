@@ -8,7 +8,6 @@ import { SchemaFields, SchemaImageFields } from "@/shared/schema/definition";
 import {
   ISubCategory,
   SUBCATEGORY_STATUS,
-  SubCategoryEnum,
 } from "@/domain/types/subcategory.types";
 import { model, Schema, Types } from "mongoose";
 
@@ -37,7 +36,7 @@ const SubCategorySchema = new Schema<ISubCategory>(
     status: {
       type: String,
       enum: SUBCATEGORY_STATUS,
-      default: SubCategoryEnum.ACTIVE,
+      default: "onboarding",
       index: true,
     },
   },

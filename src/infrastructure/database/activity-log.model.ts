@@ -1,5 +1,4 @@
 import {
-  ActivityLogStatusEnum,
   ACTIVITY_LOG_STATUS,
   IActivityLog,
 } from "@/domain/types/activity-log.types";
@@ -19,7 +18,7 @@ const ActivityLogSchema = new Schema<IActivityLog>(
     status: {
       type: String,
       enum: ACTIVITY_LOG_STATUS,
-      default: ActivityLogStatusEnum.INFO,
+      default: "info",
     },
     timestamp: { type: Date, default: Date.now },
   },

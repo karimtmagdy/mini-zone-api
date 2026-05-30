@@ -5,11 +5,7 @@ import {
   applyVirtual,
   getSchemaOptions,
 } from "@/shared/schema/fields";
-import {
-  CATEGORY_STATUS,
-  CategoryStatusEnum,
-  ICategory,
-} from "@/domain/types/category.types";
+import { CATEGORY_STATUS, ICategory } from "@/domain/types/category.types";
 import { SchemaFields, SchemaImageFields } from "@/shared/schema/definition";
 
 const CategorySchema = new Schema<ICategory>(
@@ -40,7 +36,7 @@ const CategorySchema = new Schema<ICategory>(
     status: {
       type: String,
       enum: CATEGORY_STATUS,
-      default: CategoryStatusEnum.ACTIVE,
+      default: "onboarding",
       index: true,
     },
   },

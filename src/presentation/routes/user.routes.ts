@@ -12,7 +12,7 @@ import {
   changeRoleZod,
   updateStatusZod,
   bulkIdsZod,
-} from "@/presentation/validation/user.zod";
+} from "@/shared/schema/person.zod";
 import { IdParamZod } from "@/shared/schema/shard.schema";
 
 const router = Router();

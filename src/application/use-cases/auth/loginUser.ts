@@ -1,16 +1,17 @@
-import { UserRepoType, UserRoleEnum } from "@/domain/types/user.types";
-import { SessionRepoType, IDeviceInfo } from "@/domain/types/session.types";
-import { LoginDTO } from "@/presentation/validation/auth.zod";
-import { AppError } from "@/shared/utils/api.error";
+ import { SessionRepoType, IDeviceInfo } from "@/domain/types/session.types";
+ import { AppError } from "@/shared/utils/api.error";
 import { jwtUtil } from "@/application/services/jwt.service";
 import { enviro } from "@/shared/lib/local.env";
 import ms from "ms";
 import bcrypt from "bcryptjs";
 import {
   IPerson,
-  PErsonStateEnum,
-  PersonStatusEnum,
+  PERSON_STATE,
+  PERSON_STATUS,
+  PERSON_ROLES,
+  UserRepoType
 } from "@/domain/types/person.types";
+import { LoginDTO } from "@/shared/schema/person.zod";
 // import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
 
 export type LoginResponse =
@@ -63,7 +64,7 @@ export class LoginUser {
       id: user.id!,
       email: user.email,
       username: user.username,
-      role: user.role || UserRoleEnum.USER,
+      role: user.role || 'user',
       kind: (user as any).kind,
     };
     const token = jwtUtil.create.accessToken(payload);
@@ -104,13 +105,13 @@ export class LoginUser {
   private handleStatus(user: IPerson) {
     const now = new Date();
     switch (user.status) {
-      case PersonStatusEnum.BANNED:
+      case 'banned':
         throw AppError.forbidden("Your account has been banned.");
-      case PersonStatusEnum.DEACTIVATED:
+      case 'deactivated':
         throw AppError.forbidden("Your account has been deactivated.");
-      case PersonStatusEnum.INACTIVE:
+      case 'inactive':
         throw AppError.forbidden("Your account is not active.");
-      case PersonStatusEnum.LOCKED:
+      case 'locked':
         if (user.lockedUntil && user.lockedUntil > now) {
           const remainingMinutes = Math.ceil(
             (user.lockedUntil.getTime() - now.getTime()) / (1000 * 60),
@@ -124,7 +125,7 @@ export class LoginUser {
 
   private async handleSuccessfulLogin(user: IPerson) {
     await this.userRepo.update(user.id!, {
-      state: PErsonStateEnum.ONLINE,
+      state: 'online',
       lastLoginAt: new Date(),
       failedLoginAttempts: 0,
     });
@@ -138,7 +139,7 @@ export class LoginUser {
     const updates: Partial<IPerson> = { failedLoginAttempts };
 
     if (failedLoginAttempts >= maxFailedAttempts) {
-      updates.status = PersonStatusEnum.LOCKED;
+      updates.status = 'locked';
       updates.lockedUntil = new Date(
         Date.now() + lockDurationMinutes * 60 * 1000,
       );

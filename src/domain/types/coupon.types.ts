@@ -5,6 +5,7 @@ export const COUPON_TRANSITIONS = {
   active: ["inactive"],
   inactive: ["active"],
 } as const;
+
 // EXPIRED = "expired",
 export type CouponDiscountStatus = "fixed" | "percentage";
 export type CouponStatus = keyof typeof COUPON_TRANSITIONS;

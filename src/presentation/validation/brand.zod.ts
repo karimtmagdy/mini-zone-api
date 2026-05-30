@@ -1,5 +1,5 @@
 import { z } from "zod/v4";
-import { BrandStatusEnum } from "@/domain/types/brand.types";
+import { BRAND_STATUS } from "@/domain/types/brand.types";
 import { imageZod } from "@/shared/schema/shard.schema";
 
 export const CoreBrandZod = z.object({
@@ -8,7 +8,7 @@ export const CoreBrandZod = z.object({
     .string({ message: "brand name is required" })
     .min(2, { message: "brand name must be at least 2 characters long" })
     .max(30, { message: "brand name must be at most 30 characters long" }),
-  status: z.nativeEnum(BrandStatusEnum).default(BrandStatusEnum.ACTIVE),
+  status: z.enum(BRAND_STATUS).default("active"),
   image: imageZod,
   products: z.number(),
   slug: z.string(),
@@ -33,9 +33,8 @@ export const updateBrandZod = CoreBrandZod.pick({
 }).partial();
 
 export const updateBrandStatusZod = z.object({
-  status: z.nativeEnum(BrandStatusEnum, {
-     error: "Invalid status value",
-    //  message: "status is required",
+  status: z.enum(BRAND_STATUS, {
+    message: "Invalid status value",
   }),
 });
 
