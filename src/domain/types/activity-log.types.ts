@@ -1,5 +1,5 @@
 import { ActivityLog } from "../entities/ActivityLog";
-import { IUser } from "./user.types";
+import { IUser } from "./person.types";
 
 export const ACTIVITY_LOG_STATUS = [
   "success",

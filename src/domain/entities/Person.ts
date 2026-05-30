@@ -4,7 +4,7 @@ import {
   PersonGender,
 } from "@/domain/types/person.types";
 import { ImageDto } from "@/shared/schema/shard.schema";
-import { UserRole } from "../types/user.types";
+import { RolePerson } from "../types/person.types";
 
 export abstract class Person {
   public id?: string;
@@ -12,7 +12,7 @@ export abstract class Person {
   public email!: string;
   public slug?: string;
   public password?: string;
-  public role?: UserRole;
+  public role?: RolePerson;
   public status?: PersonStatus;
   public state?: PersonState;
   public gender?: PersonGender;
