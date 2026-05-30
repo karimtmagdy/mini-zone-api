@@ -1,9 +1,7 @@
-import { UserRepoType } from "@/domain/types/user.types";
-import { PersonStatusEnum } from "@/domain/types/person.types";
+ import { UserRepoType ,IUser} from "@/domain/types/person.types";
 
 // import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
-import { IUser } from "@/domain/types/user.types";
-
+ 
 export class BulkDeactivateUsers {
   constructor(
     private userRepo: UserRepoType,
@@ -13,7 +11,7 @@ export class BulkDeactivateUsers {
   async execute(ids: string[], performer?: IUser): Promise<number> {
     const count = await this.userRepo.bulkUpdate(
       ids,
-      { status: PersonStatusEnum.DEACTIVATED },
+      { status: 'deactivated' },
       performer?.id,
     );
 

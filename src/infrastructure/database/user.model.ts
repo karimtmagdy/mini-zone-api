@@ -1,6 +1,7 @@
 import { Schema } from "mongoose";
 import { personModel } from "./person.model";
-import { IUser } from "@/domain/types/user.types";
+import { IUser } from "@/domain/types/person.types";
+ 
 
 const UserSchema = new Schema<IUser>({
   // employeeId: { type: Schema.Types.ObjectId, ref: "Employee", default: null },

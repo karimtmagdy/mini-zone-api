@@ -1,5 +1,5 @@
 // import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
-import { IUser } from "@/domain/types/user.types";
+import { IUser } from "@/domain/types/person.types";
 import { ProductRepoType } from "@/domain/types/product.types";
 import { Product } from "@/domain/entities/Product";
 

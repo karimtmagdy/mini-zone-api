@@ -6,9 +6,7 @@ import ms from "ms";
 import bcrypt from "bcryptjs";
 import {
   IPerson,
-  PERSON_STATE,
-  PERSON_STATUS,
-  PERSON_ROLES,
+ 
   UserRepoType
 } from "@/domain/types/person.types";
 import { LoginDTO } from "@/shared/schema/person.zod";

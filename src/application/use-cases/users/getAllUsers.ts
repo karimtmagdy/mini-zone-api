@@ -1,6 +1,6 @@
 import { PaginatedResult } from "@/types/global.dto";
 import { User } from "@/domain/entities/User";
-import { UserRepoType } from "@/domain/types/user.types";
+import { UserRepoType } from "@/domain/types/person.types";
 
 export class GetAllUsers {
   constructor(private userRepo: UserRepoType) {}

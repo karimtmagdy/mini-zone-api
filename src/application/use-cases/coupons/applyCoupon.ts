@@ -1,7 +1,6 @@
-import { CouponRepoType } from "@/domain/types/coupon.types";
+import { CouponRepoType ,CouponDiscountStatusEnum} from "@/domain/types/coupon.types";
 import { AppError } from "@/shared/utils/api.error";
-import { CouponDiscountEnum } from "@/domain/types/coupon.types";
-
+ 
 export class ApplyCoupon {
   constructor(private couponRepo: CouponRepoType) {}
 
@@ -31,7 +30,7 @@ export class ApplyCoupon {
     }
 
     let discountAmount = 0;
-    if (coupon.discount.type === CouponDiscountEnum.PERCENTAGE) {
+    if (coupon.discount.type === CouponDiscountStatusEnum.PERCENTAGE) {
       discountAmount = orderAmount * (coupon.discount.value / 100);
       if (coupon.discount.max) {
         discountAmount = Math.min(discountAmount, coupon.discount.max);

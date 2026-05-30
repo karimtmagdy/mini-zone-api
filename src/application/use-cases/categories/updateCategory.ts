@@ -1,5 +1,5 @@
 // import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
-import { IUser } from "@/domain/types/user.types";
+import { IUser } from "@/domain/types/person.types";
 import { CategoryRepoType } from "@/domain/types/category.types";
 import { AppError } from "@/shared/utils/api.error";
 import { UpdateCategoryDTO } from "@/presentation/validation/category.zod";

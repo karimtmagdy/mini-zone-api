@@ -1,6 +1,6 @@
 import {
   BrandRepoType,
-  BrandStatusEnum,
+  
   IBrand,
 } from "@/domain/types/brand.types";
 import { Brand } from "@/domain/entities/Brand";
@@ -74,7 +74,7 @@ export class BrandRepoImpl implements BrandRepoType {
   async softDelete(id: string, performerId?: string): Promise<Brand | null> {
     const updateData: any = {
       deletedAt: new Date(),
-      status: BrandStatusEnum.ARCHIVED,
+      status: 'archived',
     };
     if (performerId) updateData.deletedBy = performerId;
 
@@ -85,7 +85,7 @@ export class BrandRepoImpl implements BrandRepoType {
   }
 
   async restore(id: string, performerId?: string): Promise<Brand | null> {
-    const updateData: any = { deletedAt: null, status: BrandStatusEnum.ACTIVE };
+    const updateData: any = { deletedAt: null, status: 'active' };
     if (performerId) updateData.updatedBy = performerId;
 
     const doc = await brandModel

@@ -1,5 +1,5 @@
-import { IUser } from "@/domain/types/user.types";
-import { type JwtPayload } from "jsonwebtoken";
+ import { type JwtPayload } from "jsonwebtoken";
+import { IUser } from "@/domain/types/person.types";
 
 export type TokenPayload = Pick<IUser, "id" | "email" | "username" | "role"> &
   JwtPayload;

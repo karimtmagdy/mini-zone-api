@@ -1,9 +1,8 @@
 import { User } from "@/domain/entities/User";
-import { UserRepoType } from "@/domain/types/user.types";
-import { AppError } from "@/shared/utils/api.error";
+ import { AppError } from "@/shared/utils/api.error";
 
 // import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
-import { IUser } from "@/domain/types/user.types";
+import { IUser,UserRepoType } from "@/domain/types/person.types";
 
 export class SoftDeleteUser {
   constructor(

@@ -1,9 +1,7 @@
 import { User } from "@/domain/entities/User";
-import { UserRepoType } from "@/domain/types/user.types";
-import { AppError } from "@/shared/utils/api.error";
-import { PersonStatus } from "@/domain/types/person.types";
-// import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
-import { IUser } from "@/domain/types/user.types";
+ import { AppError } from "@/shared/utils/api.error";
+ // import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
+import { IUser, UserRepoType,PersonStatus } from "@/domain/types/person.types";
 
 export class UpdateUserStatus {
   constructor(

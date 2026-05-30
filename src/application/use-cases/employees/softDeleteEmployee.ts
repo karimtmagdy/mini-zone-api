@@ -1,6 +1,6 @@
 import { Employee } from "@/domain/entities/Employee";
-import { EmployeeRepoType } from "@/domain/types/employee.types";
-import { AppError } from "@/shared/utils/api.error";
+import { EmployeeRepoType } from "@/domain/types/person.types";
+ import { AppError } from "@/shared/utils/api.error";
 
 export class SoftDeleteEmployee {
   constructor(private employeeRepo: EmployeeRepoType) {}

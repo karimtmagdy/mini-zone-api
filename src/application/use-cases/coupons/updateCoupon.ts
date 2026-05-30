@@ -1,5 +1,5 @@
 // import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
-import { IUser } from "@/domain/types/user.types";
+import { IUser } from "@/domain/types/person.types";
 import { CouponRepoType } from "@/domain/types/coupon.types";
 import { Coupon } from "@/domain/entities/Coupon";
 import { UpdateCouponDTO } from "@/presentation/validation/coupon.zod";

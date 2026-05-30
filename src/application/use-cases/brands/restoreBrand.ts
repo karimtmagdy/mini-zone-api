@@ -1,6 +1,6 @@
 // import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
-import { IUser } from "@/domain/types/user.types";
-import { BrandRepoType } from "@/domain/types/brand.types";
+ import { BrandRepoType } from "@/domain/types/brand.types";
+import { IUser } from "@/domain/types/person.types";
 import { AppError } from "@/shared/utils/api.error";
 
 export class RestoreBrand {

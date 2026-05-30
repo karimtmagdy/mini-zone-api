@@ -1,6 +1,6 @@
 import {
   CategoryRepoType,
-  CategoryStatusEnum,
+  
   ICategory,
 } from "@/domain/types/category.types";
 import { Category } from "@/domain/entities/Category";
@@ -73,7 +73,7 @@ export class CategoryRepoImpl implements CategoryRepoType {
   async softDelete(id: string, performerId?: string): Promise<Category | null> {
     const updateData: any = {
       deletedAt: new Date(),
-      status: CategoryStatusEnum.ARCHIVED,
+      status: 'archived',
     };
     if (performerId) updateData.deletedBy = performerId;
 
@@ -86,7 +86,7 @@ export class CategoryRepoImpl implements CategoryRepoType {
   async restore(id: string, performerId?: string): Promise<Category | null> {
     const updateData: any = {
       deletedAt: null,
-      status: CategoryStatusEnum.ACTIVE,
+      status: 'active',
     };
     if (performerId) updateData.updatedBy = performerId;
 

@@ -1,7 +1,7 @@
-import { UserRepoType } from "@/domain/types/user.types";
+import { IUser ,UserRepoType} from "@/domain/types/person.types";
 
 // import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
-import { IUser } from "@/domain/types/user.types";
+ 
 
 export class BulkDeleteUsers {
   constructor(

@@ -1,5 +1,5 @@
 import { User } from '@/domain/entities/User';
-import { UserRepoType } from '@/domain/types/user.types';
+import { UserRepoType } from '@/domain/types/person.types';
 import { AppError } from '@/shared/utils/api.error';
 
 export class GetUserById {

@@ -1,9 +1,9 @@
 // import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
-import { IUser } from "@/domain/types/user.types";
-import { BrandRepoType } from "@/domain/types/brand.types";
+ import { BrandRepoType } from "@/domain/types/brand.types";
 import { AppError } from "@/shared/utils/api.error";
 // import { Brand } from "@/domain/entities/Brand";
 import { UpdateBrandDTO } from "@/presentation/validation/brand.zod";
+import { IUser } from "@/domain/types/person.types";
 
 export class UpdateBrand {
   constructor(

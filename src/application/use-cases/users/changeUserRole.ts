@@ -1,16 +1,15 @@
 import { User } from "@/domain/entities/User";
-import { UserRepoType, UserRole } from "@/domain/types/user.types";
+import { UserRepoType, RolePerson ,IUser} from "@/domain/types/person.types";
 import { AppError } from "@/shared/utils/api.error";
 // import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
-import { IUser } from "@/domain/types/user.types";
-
+ 
 export class ChangeUserRole {
   constructor(
     private userRepo: UserRepoType,
     // private recordActivity: RecordActivity,
   ) {}
 
-  async execute(id: string, role: UserRole, performer?: IUser): Promise<User> {
+  async execute(id: string, role: RolePerson, performer?: IUser): Promise<User> {
     const user = await this.userRepo.update(id, { role }, performer?.id);
     if (!user) throw AppError.notFound("User not found");
 

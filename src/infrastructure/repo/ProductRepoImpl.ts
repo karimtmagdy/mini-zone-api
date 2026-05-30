@@ -1,7 +1,7 @@
 import {
   ProductRepoType,
   IProduct,
-  ProductStatusEnum,
+   
 } from "@/domain/types/product.types";
 import { Product } from "@/domain/entities/Product";
 import { productModel } from "@/infrastructure/database/product.model";
@@ -91,7 +91,7 @@ export class ProductRepoImpl implements ProductRepoType {
   async softDelete(id: string, performerId?: string): Promise<Product | null> {
     const updateData: any = {
       deletedAt: new Date(),
-      status: ProductStatusEnum.ARCHIVED,
+      status: 'archived',
     };
     if (performerId) updateData.deletedBy = performerId;
 
@@ -104,7 +104,7 @@ export class ProductRepoImpl implements ProductRepoType {
   async restore(id: string, performerId?: string): Promise<Product | null> {
     const updateData: any = {
       deletedAt: null,
-      status: ProductStatusEnum.ACTIVE,
+      status: 'active',
     };
     if (performerId) updateData.updatedBy = performerId;
 

@@ -1,5 +1,6 @@
-import { LoginDTO, RegisterDTO } from "@/presentation/validation/auth.zod";
+import { LoginDTO, RegisterDTO } from "@/shared/schema/person.zod";
 
+ 
  
 
 export interface AuthRepoType {

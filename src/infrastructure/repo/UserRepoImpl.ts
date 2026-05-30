@@ -1,10 +1,9 @@
-import { UserRepoType, IUser } from "@/domain/types/user.types";
-import { User } from "@/domain/entities/User";
+ import { User } from "@/domain/entities/User";
+import { IUser, UserRepoType } from "@/domain/types/person.types";
 import { userModel } from "@/infrastructure/database/user.model";
 import { APIFeatures } from "@/shared/utils/api.feature";
 import { DEFAULT_USER_IMAGE } from "@/types/global.dto";
-import { PersonStatusEnum } from "@/domain/types/person.types";
-
+ 
 export class UserRepoImpl implements UserRepoType {
   private toEntity(doc: IUser): User {
     return new User({
@@ -80,7 +79,7 @@ export class UserRepoImpl implements UserRepoType {
   }
 
   async findDeleted(query: any): Promise<any> {
-    const queryWithTrash = { ...query, status: PersonStatusEnum.ARCHIVED };
+    const queryWithTrash = { ...query, status: 'archived' };
     const features = new APIFeatures(userModel, queryWithTrash);
     const users = await features
       .filter()
@@ -98,7 +97,7 @@ export class UserRepoImpl implements UserRepoType {
 
   async softDelete(id: string, performerId?: string): Promise<User | null> {
     const updateData: any = {
-      status: PersonStatusEnum.ARCHIVED,
+      status: 'archived',
       deletedAt: new Date(),
       image: {
         url: DEFAULT_USER_IMAGE,
@@ -112,7 +111,7 @@ export class UserRepoImpl implements UserRepoType {
   }
 
   async restore(id: string, performerId?: string): Promise<User | null> {
-    const updateData: any = { status: PersonStatusEnum.ACTIVE, deletedAt: null };
+    const updateData: any = { status: 'active', deletedAt: null };
     if (performerId) updateData.updatedBy = performerId;
 
     const doc = await userModel.findByIdAndUpdate(id, updateData, { new: true });

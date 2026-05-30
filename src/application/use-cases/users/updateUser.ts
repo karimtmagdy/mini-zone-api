@@ -1,11 +1,10 @@
 import { User } from "@/domain/entities/User";
-import { UserRepoType } from "@/domain/types/user.types";
-import { EmployeeRepoType } from "@/domain/types/employee.types";
+ 
 import { AppError } from "@/shared/utils/api.error";
-import { UpdateUserDTO } from "@/presentation/validation/user.zod";
-// import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
-import { IUser } from "@/domain/types/user.types";
-
+ // import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
+import { IUser ,EmployeeRepoType,UserRepoType} from "@/domain/types/person.types";
+import { UpdateUserDTO } from "@/shared/schema/person.zod";
+ 
 export class UpdateUser {
   constructor(
     private userRepo: UserRepoType,

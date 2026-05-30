@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { jwtUtil } from "@/application/services/jwt.service";
 import { catchError } from "@/shared/lib/catch.error";
 import { AppError } from "@/shared/utils/api.error";
-import { UserRole } from "@/domain/types/user.types";
+import { RolePerson } from "@/domain/types/person.types";
 
 export const authenticated = catchError(
   async (req: Request, _: Response, next: NextFunction) => {
@@ -21,7 +21,7 @@ export const authenticated = catchError(
 );
 
 export const checkPermission = (
-  roles: UserRole[] = ["super-admin", "admin", "manager", "hr", "viewer"],
+  roles: RolePerson[] = ["super-admin", "admin", "manager", "hr", "viewer"],
 ) =>
   catchError(async (req: Request, _: Response, next: NextFunction) => {
     const user = (req as any).user;
@@ -29,7 +29,7 @@ export const checkPermission = (
 
     if (!user) AppError.unauthorized("No user found");
 
-    if (!requiredRoles.includes(user.role as UserRole)) {
+    if (!requiredRoles.includes(user.role as RolePerson)) {
       AppError.jwtDenied();
     }
     next();

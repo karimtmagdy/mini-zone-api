@@ -1,9 +1,8 @@
 import { Employee } from "@/domain/entities/Employee";
-import { EmployeeRepoType } from "@/domain/types/employee.types";
-import { UserRepoType } from "@/domain/types/user.types";
+ import { UserRepoType ,EmployeeRepoType} from "@/domain/types/person.types";
 import { AppError } from "@/shared/utils/api.error";
-import { CreateEmployeeDTO } from "@/presentation/validation/employee.zod";
-
+ import { CreateEmployeeDTO } from "@/shared/schema/person.zod";
+ 
 export class CreateEmployee {
   constructor(
     private employeeRepo: EmployeeRepoType,

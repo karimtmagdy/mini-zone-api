@@ -1,8 +1,7 @@
 import { User } from "@/domain/entities/User";
-import { UserRepoType } from "@/domain/types/user.types";
-import { AppError } from "@/shared/utils/api.error";
-import { UserRoleEnum } from "@/domain/types/user.types";
-import { NotifyService } from "@/application/services/notify.service";
+ import { AppError } from "@/shared/utils/api.error";
+ import { NotifyService } from "@/application/services/notify.service";
+import { UserRepoType } from "@/domain/types/person.types";
 // import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
 
 export class RegisterUser {

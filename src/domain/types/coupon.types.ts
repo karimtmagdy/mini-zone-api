@@ -5,7 +5,10 @@ export const COUPON_TRANSITIONS = {
   active: ["inactive"],
   inactive: ["active"],
 } as const;
-
+export enum CouponDiscountStatusEnum   {
+  FIXED="fixed",
+  PERCENTAGE="percentage"
+};
 // EXPIRED = "expired",
 export type CouponDiscountStatus = "fixed" | "percentage";
 export type CouponStatus = keyof typeof COUPON_TRANSITIONS;

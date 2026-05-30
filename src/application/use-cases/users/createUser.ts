@@ -1,11 +1,9 @@
 import { User } from "@/domain/entities/User";
-import { UserRepoType } from "@/domain/types/user.types";
-import { EmployeeRepoType } from "@/domain/types/employee.types";
-import { AppError } from "@/shared/utils/api.error";
-import { CreateUserDTO } from "@/presentation/validation/user.zod";
-import { NotifyService } from "@/application/services/notify.service";
+ import { AppError } from "@/shared/utils/api.error";
+ import { NotifyService } from "@/application/services/notify.service";
 // import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
-import { IUser } from "@/domain/types/user.types";
+import { IUser,EmployeeRepoType, UserRepoType,  } from "@/domain/types/person.types";
+import { CreateUserDTO } from "@/shared/schema/person.zod";
 
 export class CreateUser {
   constructor(

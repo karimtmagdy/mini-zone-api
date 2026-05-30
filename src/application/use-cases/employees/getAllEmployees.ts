@@ -1,5 +1,5 @@
 import { Employee } from "@/domain/entities/Employee";
-import { EmployeeRepoType } from "@/domain/types/employee.types";
+import { EmployeeRepoType } from "@/domain/types/person.types";
 import { PaginatedResult } from "@/types/global.dto";
 
 export class GetAllEmployees {

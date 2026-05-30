@@ -3,7 +3,7 @@ import { SubCategory } from "@/domain/entities/SubCategory";
 import { subCategoryModel } from "@/infrastructure/database/subcategory.model";
 import { APIFeatures } from "@/shared/utils/api.feature";
 import {
-  SubCategoryEnum,
+ 
   ISubCategory,
 } from "@/domain/types/subcategory.types";
 import { PaginatedResult } from "@/types/global.dto";
@@ -86,7 +86,7 @@ export class SubCategoryRepoImpl implements SubCategoryRepoType {
   ): Promise<SubCategory | null> {
     const updateData: any = {
       deletedAt: new Date(),
-      status: SubCategoryEnum.ARCHIVED,
+      status: 'archived',
     };
     if (performerId) updateData.deletedBy = performerId;
 
@@ -99,7 +99,7 @@ export class SubCategoryRepoImpl implements SubCategoryRepoType {
   async restore(id: string, performerId?: string): Promise<SubCategory | null> {
     const updateData: any = {
       deletedAt: null,
-      status: SubCategoryEnum.ACTIVE,
+      status: 'active',
     };
     if (performerId) updateData.updatedBy = performerId;
 

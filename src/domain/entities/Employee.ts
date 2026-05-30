@@ -1,5 +1,5 @@
 import { Person } from "./Person";
-import { EmployeeDepartment, EmployeeJobTitle } from "../types/employee.types";
+import { EmployeeDepartment, EmployeeJobTitle } from "@/domain/types/person.types";
 
 export class Employee extends Person {
   public code!: string;
