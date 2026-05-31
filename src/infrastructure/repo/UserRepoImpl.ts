@@ -9,20 +9,23 @@ export class UserRepoImpl implements UserRepoType {
     return new User({
       id: doc.id?.toString(),
       username: doc.username,
+      name: doc.name,
       email: doc.email,
       role: doc.role,
       status: doc.status,
       state: doc.state,
+      gender: doc.gender,
+      age: doc.age,
+      phone: doc.phone,
       password: doc.password,
       twoFactorEnabled: doc.twoFactorEnabled,
       lockedUntil: doc.lockedUntil,
       failedLoginAttempts: doc.failedLoginAttempts,
       lastLoginAt: doc.lastLoginAt,
       slug: doc.slug,
-      // image: doc.image,
+      image: doc.image,
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
-      // employeeId: doc.employeeId?.toString(),
     });
   }
 

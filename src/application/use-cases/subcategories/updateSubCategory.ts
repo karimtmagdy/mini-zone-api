@@ -9,7 +9,8 @@ export class UpdateSubCategory {
     // private recordActivity: RecordActivity,
   ) {}
 
-  async execute(id: string, data: UpdateSubCategoryDTO, performer: IUser) {
+  async execute(id: string, data: UpdateSubCategoryDTO ) {
+  // async execute(id: string, data: UpdateSubCategoryDTO, performer: IUser) {
     const subCategory = await this.subCategoryRepo.findById(id);
     if (!subCategory) throw AppError.notFound("subcategory not found");
 
@@ -20,7 +21,8 @@ export class UpdateSubCategory {
       }
     }
 
-    const updated = await this.subCategoryRepo.update(id, data, performer.id);
+    const updated = await this.subCategoryRepo.update(id, data,  );
+    // const updated = await this.subCategoryRepo.update(id, data, performer.id);
 
     // await this.recordActivity.execute({
     //  user: {

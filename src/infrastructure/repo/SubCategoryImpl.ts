@@ -1,6 +1,7 @@
 import { SubCategoryRepoType } from "@/domain/types/subcategory.types";
 import { SubCategory } from "@/domain/entities/SubCategory";
 import { subCategoryModel } from "@/infrastructure/database/subcategory.model";
+import { productModel } from "@/infrastructure/database/product.model";
 import { APIFeatures } from "@/shared/utils/api.feature";
 import {
  
@@ -9,7 +10,41 @@ import {
 import { PaginatedResult } from "@/types/global.dto";
 
 export class SubCategoryRepoImpl implements SubCategoryRepoType {
-  private toEntity(doc: ISubCategory): SubCategory {
+  private async resolveProductsCount(doc: {
+    _id?: unknown;
+    id?: string;
+  }): Promise<number> {
+    const id = String(doc._id ?? doc.id ?? "");
+    if (!id) return 0;
+
+    return productModel.countDocuments({
+      subcategory: id,
+      deletedAt: null,
+    });
+  }
+
+  private mapCategories(
+    categories: ISubCategory["category"] | undefined,
+  ): { id: string; name: string }[] {
+    if (!categories?.length) return [];
+
+    return categories.map((cat: unknown) => {
+      if (typeof cat === "string") {
+        return { id: cat, name: cat };
+      }
+
+      const doc = cat as Record<string, unknown>;
+      const id = String(doc.id ?? doc._id ?? "");
+      const name =
+        typeof doc.name === "string" && doc.name.trim()
+          ? doc.name.trim()
+          : id;
+
+      return { id, name };
+    });
+  }
+
+  private toEntity(doc: ISubCategory, productsCount?: number): SubCategory {
     return new SubCategory({
       name: doc.name,
       status: doc.status,
@@ -17,8 +52,8 @@ export class SubCategoryRepoImpl implements SubCategoryRepoType {
       image: doc.image,
       id: (doc.id || (doc as any)._id)?.toString(),
       slug: doc.slug,
-      products: doc.products,
-      category: doc.category?.map((id) => id.toString()),
+      products: productsCount ?? doc.products ?? 0,
+      category: this.mapCategories(doc.category),
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
     });
@@ -31,7 +66,14 @@ export class SubCategoryRepoImpl implements SubCategoryRepoType {
     const data = { ...subCategory };
     if (performerId) (data as any).createdBy = performerId;
     const doc = await subCategoryModel.create(data);
-    return this.toEntity(doc);
+    const populated = await subCategoryModel
+      .findById(doc._id)
+      .populate({ path: "category", select: "name" })
+      .populate("products")
+      .lean();
+    const row = (populated ?? doc) as ISubCategory & { _id?: unknown };
+    const productsCount = await this.resolveProductsCount(row);
+    return this.toEntity(row, productsCount);
   }
 
   async findByName(name: string): Promise<SubCategory | null> {
@@ -45,7 +87,9 @@ export class SubCategoryRepoImpl implements SubCategoryRepoType {
       .populate({ path: "category", select: "name" })
       .populate("products")
       .lean();
-    return doc ? this.toEntity(doc) : null;
+    if (!doc) return null;
+    const productsCount = await this.resolveProductsCount(doc);
+    return this.toEntity(doc as ISubCategory, productsCount);
   }
 
   async findAll(query: any): Promise<PaginatedResult<SubCategory>> {
@@ -60,9 +104,16 @@ export class SubCategoryRepoImpl implements SubCategoryRepoType {
       .populate("products")
       .execute();
 
+    const rows = await Promise.all(
+      data.data.map(async (doc: any) => {
+        const productsCount = await this.resolveProductsCount(doc);
+        return this.toEntity(doc, productsCount);
+      }),
+    );
+
     return {
       ...data,
-      data: data.data.map((doc: any) => this.toEntity(doc)),
+      data: rows,
     };
   }
 
@@ -76,7 +127,9 @@ export class SubCategoryRepoImpl implements SubCategoryRepoType {
     const doc = await subCategoryModel.findByIdAndUpdate(id, data, {
       new: true,
       runValidators: true,
-    });
+    })
+      .populate({ path: "category", select: "name" })
+      .populate("products");
     return doc ? this.toEntity(doc) : null;
   }
 

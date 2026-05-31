@@ -36,7 +36,8 @@ export class UserController {
   ) {}
 
   create = catchError(async (req: Request, res: Response) => {
-    const result = await this.createUserUC.execute(req.body, req.user);
+    const result = await this.createUserUC.execute(req.body, );
+    // const result = await this.createUserUC.execute(req.body, req.user);
     const response: ResponseDto<User> = {
       status: "success",
       message: "user has been created",

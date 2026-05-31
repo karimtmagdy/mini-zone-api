@@ -10,7 +10,8 @@ export class UpdateProduct {
     // private recordActivity: RecordActivity,
   ) {}
 
-  async execute(id: string, data: UpdateProductDTO, performer: IUser) {
+  async execute(id: string, data: UpdateProductDTO,  ) {
+  // async execute(id: string, data: UpdateProductDTO, performer: IUser) {
     const product = await this.productRepo.findById(id);
     if (!product) throw AppError.notFound("product not found");
 
@@ -21,7 +22,8 @@ export class UpdateProduct {
       }
     }
 
-    const updated = await this.productRepo.update(id, (data as any), performer.id!);
+    // const updated = await this.productRepo.update(id, (data as any), performer.id!);
+    const updated = await this.productRepo.update(id, (data as any)   );
 
     // await this.recordActivity.execute({
     //  user: {

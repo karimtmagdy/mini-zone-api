@@ -17,7 +17,7 @@ import { IdParamZod } from "@/shared/schema/shard.schema";
 
 const router = Router();
 
-router.use(authenticated);
+// router.use(authenticated);
 
 router.get("/archived", userCtrl.getDeleted);
 router.patch("/restore/:id", userCtrl.restore);

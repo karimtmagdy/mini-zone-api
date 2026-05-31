@@ -11,7 +11,8 @@ export class CreateCategory {
     // private recordActivity: RecordActivity,
   ) {}
 
-  async execute(data: CreateCategoryDTO, performer: IUser): Promise<Category> {
+  async execute(data: CreateCategoryDTO, ): Promise<Category> {
+  // async execute(data: CreateCategoryDTO, performer: IUser): Promise<Category> {
     const isExist = await this.categoryRepo.findByName(data.name);
     if (isExist) {
       throw AppError.conflict("category name already exists");
@@ -20,7 +21,7 @@ export class CreateCategory {
     const category = new Category(data);
     const createdCategory = await this.categoryRepo.create(
       category,
-      performer.id,
+      // performer.id,
     );
 
     // await this.recordActivity.execute({

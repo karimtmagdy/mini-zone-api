@@ -5,7 +5,7 @@ export class SubCategory {
   public description?: string;
   public status!: SubCategoryStatus;
   public image?: { url: string; publicId: string };
-  public category?: string[];
+  public category?: { id: string; name: string }[];
   public readonly id?: string;
   public slug?: string;
   public products?: number;

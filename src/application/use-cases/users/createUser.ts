@@ -13,7 +13,8 @@ export class CreateUser {
     // private recordActivity: RecordActivity,
   ) {}
 
-  async execute(data: CreateUserDTO, performer?: IUser): Promise<User> {
+  async execute(data: CreateUserDTO,  ): Promise<User> {
+  // async execute(data: CreateUserDTO, performer?: IUser): Promise<User> {
     if (!data.email) throw AppError.badRequest("Email is required");
     const email = data.email.toLowerCase();
 
@@ -33,10 +34,11 @@ export class CreateUser {
     }
 
     const user = new User(data);
-    const createdUser = await this.userRepo.create(user, performer?.id);
+    const createdUser = await this.userRepo.create(user);
+    // const createdUser = await this.userRepo.create(user, performer?.id);
     delete createdUser.password;
 
-    const loggingUser = performer || createdUser;
+    // const loggingUser = performer || createdUser;
     // await this.recordActivity.execute({
     //  user: {
     //    username: loggingUser.username,

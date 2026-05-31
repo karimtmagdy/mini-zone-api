@@ -20,8 +20,8 @@ router
   .route("/")
   .get(productCtrl.getAll)
   .post(
-    authenticated,
-    checkPermission(["admin", "super-admin"]),
+    // authenticated,
+    // checkPermission(["admin", "super-admin"]),
     validate(createProductZod),
     productCtrl.create,
   );
@@ -60,8 +60,8 @@ router
   .route("/:id")
   .get(validate(IdParamZod, "params"), productCtrl.getOne)
   .patch(
-    authenticated,
-    checkPermission(["admin", "super-admin"]),
+    // authenticated,
+    // checkPermission(["admin", "super-admin"]),
     validate(IdParamZod, "params"),
     uploadSingleImage("image"),
     validate(updateProductZod),

@@ -8,18 +8,28 @@ export class EmployeeRepoImpl implements EmployeeRepoType {
   private toEntity(doc: IEmployee): Employee {
     return new Employee({
       id: doc.id?.toString(),
-       username: doc.username,
+      username: doc.username,
+      name: doc.name,
       email: doc.email,
       role: doc.role,
       status: doc.status,
       state: doc.state,
+      gender: doc.gender,
+      age: doc.age,
+      phone: doc.phone,
       code: doc.code,
       department: doc.department,
       jobTitle: doc.jobTitle,
       salary: doc.salary,
       hiredAt: doc.hiredAt,
-      managerId: doc.managerId?.toString(),
+      managerId:
+        typeof doc.managerId === "object" && doc.managerId !== null
+          ? String((doc.managerId as { _id?: string; id?: string })._id ??
+              (doc.managerId as { id?: string }).id ??
+              "")
+          : doc.managerId?.toString(),
       password: doc.password,
+      image: doc.image,
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
     });

@@ -9,12 +9,45 @@ import { APIFeatures } from "@/shared/utils/api.feature";
 import {   PaginatedResult } from "@/types/global.dto";
 
 export class ProductRepoImpl implements ProductRepoType {
+  private mapEntityRef(ref: unknown): { id: string; name: string } | null {
+    if (!ref) return null;
+
+    if (typeof ref === "string") {
+      return { id: ref, name: ref };
+    }
+
+    const doc = ref as Record<string, unknown>;
+    const id = String(doc.id ?? doc._id ?? "");
+    const name =
+      typeof doc.name === "string" && doc.name.trim()
+        ? doc.name.trim()
+        : id;
+
+    if (!id && !name) return null;
+    return { id, name };
+  }
+
+  private mapEntityRefs(refs: unknown[] | unknown | undefined) {
+    if (!refs) return [];
+    const list = Array.isArray(refs) ? refs : [refs];
+    return list
+      .map((ref) => this.mapEntityRef(ref))
+      .filter((ref): ref is { id: string; name: string } => ref !== null);
+  }
+
+  private populateQuery(query: any) {
+    return query
+      .populate({ path: "brand", select: "name" })
+      .populate({ path: "category", select: "name" })
+      .populate({ path: "subcategory", select: "name" });
+  }
+
   private toEntity(doc: IProduct): Product {
     return new Product({
       name: doc.name,
       status: doc.status,
-      // images: doc.images , 
-      id: doc.id?.toString(),
+      images: doc.images,
+      id: (doc.id || (doc as any)._id)?.toString(),
       slug: doc.slug,
       description: doc.description,
       price: doc.price,
@@ -23,9 +56,9 @@ export class ProductRepoImpl implements ProductRepoType {
       discount: doc.discount,
       sold: doc.sold,
       colors: doc.colors,
-      category: doc.category,
-      subcategory: doc.subcategory,
-      brand: doc.brand,
+      category: this.mapEntityRef(doc.category) ?? doc.category,
+      subcategory: this.mapEntityRefs(doc.subcategory),
+      brand: this.mapEntityRef(doc.brand) ?? doc.brand,
       ratings: doc.ratings,
       reviews: doc.reviews,
       tags: doc.tags,
@@ -43,8 +76,9 @@ export class ProductRepoImpl implements ProductRepoType {
     //   const uploadedImages = await this.uploadImages(product.images);
     //   data.images = uploadedImages;
     // }
-    const doc = await productModel.create(data  as any);
-    return this.toEntity(doc);
+    const doc = await productModel.create(data as any);
+    const populated = await this.populateQuery(productModel.findById(doc._id)).lean();
+    return this.toEntity((populated ?? doc) as IProduct);
   }
 
   async findByName(name: string): Promise<Product | null> {
@@ -53,8 +87,8 @@ export class ProductRepoImpl implements ProductRepoType {
   }
 
   async findById(id: string): Promise<Product | null> {
-    const doc = await productModel.findById(id).lean();
-    return doc ? this.toEntity(doc) : null;
+    const doc = await this.populateQuery(productModel.findById(id)).lean();
+    return doc ? this.toEntity(doc as IProduct) : null;
   }
 
   async findAll(query: any): Promise<PaginatedResult<Product>> {
@@ -65,12 +99,12 @@ export class ProductRepoImpl implements ProductRepoType {
       .limitFields()
       .paginate()
       .search(["name", "slug", "description"])
-      .populate("brand")
+      .populate({ path: "brand", select: "name" })
       .populate({
         path: "category",
         select: "name",
       })
-      .populate("subcategory")
+      .populate({ path: "subcategory", select: "name" })
       .execute();
 
     return {
@@ -86,11 +120,13 @@ export class ProductRepoImpl implements ProductRepoType {
   ): Promise<Product | null> {
     const data = { ...product };
     if (performerId) (data as any).updatedBy = performerId;
-    const doc = await productModel.findByIdAndUpdate(id, data, {
-      new: true,
-      runValidators: true,
-    });
-    return doc ? this.toEntity(doc) : null;
+    const doc = await this.populateQuery(
+      productModel.findByIdAndUpdate(id, data, {
+        new: true,
+        runValidators: true,
+      }),
+    );
+    return doc ? this.toEntity(doc as IProduct) : null;
   }
 
   async softDelete(id: string, performerId?: string): Promise<Product | null> {

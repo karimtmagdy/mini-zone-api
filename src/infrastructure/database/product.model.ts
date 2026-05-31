@@ -210,7 +210,11 @@ ProductSchema.statics.countProductsForModels = async function (
   if (subcategoryIds && subcategoryIds.length > 0) {
     for (const subCatId of subcategoryIds) {
       const count = await this.countDocuments({ subcategory: subCatId });
-      await subCategoryModel.findByIdAndUpdate(subCatId, { products: count });
+      await subCategoryModel.findByIdAndUpdate(
+        subCatId,
+        { products: count },
+        { strict: false },
+      );
     }
   }
 };

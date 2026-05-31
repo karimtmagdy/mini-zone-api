@@ -8,13 +8,22 @@ import {
 import { IdParamZod } from "@/shared/schema/shard.schema";
 import { uploadSingleImage } from "@/presentation/middlewares/multer.middleware";
 import { uploadToCloudinary } from "@/presentation/middlewares/image.middleware";
+import {
+  authenticated,
+  checkPermission,
+} from "@/presentation/middlewares/authorized";
 
 const router = Router();
 
 router
   .route("/")
   .get(subCategoryCtrl.getAll)
-  .post(validate(createSubCategoryZod), subCategoryCtrl.create);
+  .post(
+    authenticated,
+    checkPermission(["admin", "super-admin"]),
+    validate(createSubCategoryZod),
+    subCategoryCtrl.create,
+  );
 
 router.get("/trash", subCategoryCtrl.getDeleted);
 
@@ -22,16 +31,25 @@ router
   .route("/:id")
   .get(validate(IdParamZod, "params"), subCategoryCtrl.getOne)
   .patch(
+    // authenticated,
+    // checkPermission(["admin", "super-admin"]),
     validate(IdParamZod, "params"),
     uploadSingleImage("image"),
     validate(updateSubCategoryZod),
     uploadToCloudinary("subcategories"),
     subCategoryCtrl.update,
   )
-  .delete(validate(IdParamZod, "params"), subCategoryCtrl.soft);
+  .delete(
+    authenticated,
+    checkPermission(["admin", "super-admin"]),
+    validate(IdParamZod, "params"),
+    subCategoryCtrl.soft,
+  );
 
 router.patch(
   "/restore/:id",
+  authenticated,
+  checkPermission(["admin", "super-admin"]),
   validate(IdParamZod, "params"),
   subCategoryCtrl.restore,
 );

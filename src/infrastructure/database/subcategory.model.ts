@@ -50,7 +50,7 @@ applySoftDelete(SubCategorySchema);
 applyVirtual({
   schema: SubCategorySchema,
   ref: "Product",
-  foreignField: "products",
+  foreignField: "subcategory",
 });
 
 export const subCategoryModel = model<ISubCategory>(
