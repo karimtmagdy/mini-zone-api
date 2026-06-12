@@ -1,7 +1,8 @@
- import { User } from "@/domain/entities/User";
+import { User } from "@/domain/entities/User";
 import { IUser, UserRepoType } from "@/domain/types/person.types";
 import { userModel } from "@/infrastructure/database/user.model";
 import { APIFeatures } from "@/shared/utils/api.feature";
+import { QueryStringDto } from "@/shared/schema/query.schema";
 import { DEFAULT_USER_IMAGE } from "@/types/global.dto";
  
 export class UserRepoImpl implements UserRepoType {
@@ -30,8 +31,8 @@ export class UserRepoImpl implements UserRepoType {
   }
 
   async create(user: User, performerId?: string): Promise<User> {
-    const data = { ...user };
-    if (performerId) (data as any).createdBy = performerId;
+    const data: Partial<IUser> = { ...user };
+    if (performerId) data.createdBy = performerId;
     const doc = await userModel.create(data);
     return this.toEntity(doc);
   }
@@ -56,16 +57,15 @@ export class UserRepoImpl implements UserRepoType {
   }
 
   async update(id: string, user: Partial<User>, performerId?: string): Promise<User | null> {
-    const data = { ...user };
-    if (performerId) (data as any).updatedBy = performerId;
+    const data: Partial<IUser> = { ...user };
+    if (performerId) data.updatedBy = performerId;
     const doc = await userModel.findByIdAndUpdate(id, data, {
       new: true,
       runValidators: true,
     });
     return doc ? this.toEntity(doc) : null;
   }
-// QueryStringDto
-  async getAll(query: any): Promise<any> {
+  async getAll(query: QueryStringDto): Promise<{ meta: (typeof users)["meta"]; data: User[] }> {
     const features = new APIFeatures(userModel, query);
     const users = await features
       .filter()
@@ -77,14 +77,14 @@ export class UserRepoImpl implements UserRepoType {
 
     return {
       meta: users.meta,
-      data: users.data.map((doc: any) => this.toEntity(doc)),
+      data: users.data.map((doc: IUser) => this.toEntity(doc)),
     };
   }
 
-  async findDeleted(query: any): Promise<any> {
+  async findDeleted(query: QueryStringDto): Promise<{ meta: (typeof result)["meta"]; data: User[] }> {
     const queryWithTrash = { ...query, status: 'archived' };
     const features = new APIFeatures(userModel, queryWithTrash);
-    const users = await features
+    const result = await features
       .filter()
       .sort()
       .limitFields()
@@ -93,18 +93,18 @@ export class UserRepoImpl implements UserRepoType {
       .execute();
 
     return {
-      meta: users.meta,
-      data: users.data.map((doc: any) => this.toEntity(doc)),
+      meta: result.meta,
+      data: result.data.map((doc: IUser) => this.toEntity(doc)),
     };
   }
 
   async softDelete(id: string, performerId?: string): Promise<User | null> {
-    const updateData: any = {
+    const updateData: Partial<IUser> = {
       status: 'archived',
       deletedAt: new Date(),
       image: {
         url: DEFAULT_USER_IMAGE,
-        publicId: null,
+        publicId: null as unknown as string,
       },
     };
     if (performerId) updateData.deletedBy = performerId;
@@ -114,7 +114,7 @@ export class UserRepoImpl implements UserRepoType {
   }
 
   async restore(id: string, performerId?: string): Promise<User | null> {
-    const updateData: any = { status: 'active', deletedAt: null };
+    const updateData: Partial<IUser> = { status: 'active', deletedAt: null as unknown as Date };
     if (performerId) updateData.updatedBy = performerId;
 
     const doc = await userModel.findByIdAndUpdate(id, updateData, { new: true });
@@ -127,8 +127,8 @@ export class UserRepoImpl implements UserRepoType {
   }
 
   async bulkUpdate(ids: string[], data: Partial<User>, performerId?: string): Promise<number> {
-    const updateData = { ...data };
-    if (performerId) (updateData as any).updatedBy = performerId;
+    const updateData: Partial<IUser> = { ...data };
+    if (performerId) updateData.updatedBy = performerId;
 
     const result = await userModel.updateMany(
       { _id: { $in: ids } },

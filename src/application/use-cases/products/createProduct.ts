@@ -10,16 +10,19 @@ export class CreateProduct {
     // private recordActivity: RecordActivity,
   ) {}
 
-  async execute(data: CreateProductDTO): Promise<Product> {
-  // async execute(data: CreateProductDTO, performer: IUser): Promise<Product> {
+  async execute(data: CreateProductDTO, performer: IUser): Promise<Product> {
     const isExist = await this.productRepo.findByName(data.name);
     if (isExist) {
       throw AppError.conflict("product name already exists");
     }
 
-    const product = new Product(data as any);
-    // const createdProduct = await this.productRepo.create(product, performer.id!);
-    const createdProduct = await this.productRepo.create(product );
+    const { category, subcategory, ...rest } = data;
+    const product = new Product({
+      ...rest,
+      category: [category],
+      subcategory: subcategory ?? [],
+    });
+    const createdProduct = await this.productRepo.create(product, performer.id!);
 
     // await this.recordActivity.execute({
     //  user: {

@@ -14,6 +14,7 @@ import { BulkDeactivateUsers } from "@/application/use-cases/users/bulkDeactivat
 import { BulkArchiveUsers } from "@/application/use-cases/users/bulkArchiveUsers";
 import { BulkDeleteUsers } from "@/application/use-cases/users/bulkDeleteUsers";
 import { UserRepoImpl } from "@/infrastructure/repo/UserRepoImpl";
+import { queryZod } from "@/shared/schema/query.schema";
 import {
   ResponseDto,
   ResponseWithMetaDto,
@@ -47,7 +48,8 @@ export class UserController {
   });
 
   getAll = catchError(async (req: Request, res: Response) => {
-    const result = await this.getAllUsersUC.execute(req.query);
+    const query = queryZod.parse(req.query);
+    const result = await this.getAllUsersUC.execute(query);
     const response: ResponseWithMetaDto<User[]> = {
       status: "success",
       meta: result.meta,
@@ -97,7 +99,8 @@ export class UserController {
   });
 
   getDeleted = catchError(async (req: Request, res: Response) => {
-    const result = await this.userRepo.findDeleted(req.query);
+    const query = queryZod.parse(req.query);
+    const result = await this.userRepo.findDeleted(query);
     const response: ResponseWithMetaDto<User[]> = {
       status: "success",
       meta: result.meta,

@@ -1,7 +1,8 @@
- import { Employee } from "@/domain/entities/Employee";
-import { EmployeeRepoType, IEmployee } from "@/domain/types/person.types";
+import { Employee } from "@/domain/entities/Employee";
+import { EmployeeDepartment, EmployeeRepoType, IEmployee } from "@/domain/types/person.types";
 import { employeeModel } from "@/infrastructure/database/employee.model";
 import { APIFeatures } from "@/shared/utils/api.feature";
+import { QueryStringDto } from "@/shared/schema/query.schema";
 import { PaginatedResult } from "@/types/global.dto";
  
 export class EmployeeRepoImpl implements EmployeeRepoType {
@@ -36,7 +37,8 @@ export class EmployeeRepoImpl implements EmployeeRepoType {
   }
 
   async create(employee: Employee): Promise<Employee> {
-    const doc = await employeeModel.create(employee as unknown as IEmployee);
+    const data: Partial<IEmployee> = { ...employee };
+    const doc = await employeeModel.create(data);
     return this.toEntity(doc);
   }
 
@@ -50,7 +52,7 @@ export class EmployeeRepoImpl implements EmployeeRepoType {
     return doc ? this.toEntity(doc) : null;
   }
 
-  async findAll(query: any): Promise<PaginatedResult<Employee>> {
+  async findAll(query: QueryStringDto): Promise<PaginatedResult<Employee>> {
     const features = new APIFeatures(employeeModel, query);
     const data = await features
       .filter()
@@ -63,7 +65,7 @@ export class EmployeeRepoImpl implements EmployeeRepoType {
 
     return {
       ...data,
-      data: data.data.map((doc: any) => this.toEntity(doc)),
+      data: data.data.map((doc: IEmployee) => this.toEntity(doc)),
     };
   }
 
@@ -105,10 +107,10 @@ export class EmployeeRepoImpl implements EmployeeRepoType {
       .find({ deletedAt: { $ne: null } })
       .setOptions({ withDeleted: true })
       .lean();
-    return docs.map((doc: any) => this.toEntity(doc));
+    return docs.map((doc: IEmployee) => this.toEntity(doc));
   }
 
-  async exists(filter: any): Promise<boolean> {
+  async exists(filter: Record<string, unknown>): Promise<boolean> {
     const count = await employeeModel.countDocuments(filter);
     return count > 0;
   }
@@ -119,12 +121,12 @@ export class EmployeeRepoImpl implements EmployeeRepoType {
   }
 
   async findByDepartment(department: string): Promise<Employee[]> {
-    const docs = await employeeModel.find({ department }).lean();
-    return docs.map((doc: any) => this.toEntity(doc));
+    const docs = await employeeModel.find({ department: department as EmployeeDepartment }).lean();
+    return docs.map((doc: IEmployee) => this.toEntity(doc));
   }
 
   async findByManager(managerId: string): Promise<Employee[]> {
     const docs = await employeeModel.find({ managerId }).lean();
-    return docs.map((doc: any) => this.toEntity(doc));
+    return docs.map((doc: IEmployee) => this.toEntity(doc));
   }
 }

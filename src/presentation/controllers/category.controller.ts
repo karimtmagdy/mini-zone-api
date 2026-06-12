@@ -31,7 +31,7 @@ export class CategoryController {
 
   create = catchError(async (req: Request, res: Response) => {
     const body = req.body as CreateCategoryDTO;
-    const result = await this.createCategoryUseCase.execute(body, req.user!);
+    const result = await this.createCategoryUseCase.execute(body);
     const response: ResponseDto<Category> = {
       status: "success",
       message: "category created successfully",

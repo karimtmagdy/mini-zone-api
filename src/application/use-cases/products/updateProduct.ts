@@ -1,6 +1,7 @@
 // import { RecordActivity } from "@/application/use-cases/activity-log/recordActivity";
 import { IUser } from "@/domain/types/person.types";
 import { ProductRepoType } from "@/domain/types/product.types";
+import { Product } from "@/domain/entities/Product";
 import { AppError } from "@/shared/utils/api.error";
 import { UpdateProductDTO } from "@/presentation/validation/product.zod";
 
@@ -10,8 +11,7 @@ export class UpdateProduct {
     // private recordActivity: RecordActivity,
   ) {}
 
-  async execute(id: string, data: UpdateProductDTO,  ) {
-  // async execute(id: string, data: UpdateProductDTO, performer: IUser) {
+  async execute(id: string, data: UpdateProductDTO, performer: IUser) {
     const product = await this.productRepo.findById(id);
     if (!product) throw AppError.notFound("product not found");
 
@@ -22,8 +22,14 @@ export class UpdateProduct {
       }
     }
 
-    // const updated = await this.productRepo.update(id, (data as any), performer.id!);
-    const updated = await this.productRepo.update(id, (data as any)   );
+    const { category, subcategory, ...rest } = data;
+    const payload: Partial<Product> = {
+      ...rest,
+      ...(category !== undefined && { category: [category] }),
+      ...(subcategory !== undefined && { subcategory }),
+    };
+
+    const updated = await this.productRepo.update(id, payload, performer.id!);
 
     // await this.recordActivity.execute({
     //  user: {

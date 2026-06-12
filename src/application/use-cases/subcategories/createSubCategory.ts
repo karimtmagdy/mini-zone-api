@@ -19,7 +19,11 @@ export class CreateSubCategory {
       throw AppError.conflict("subcategory name already exists");
     }
 
-    const subCategory = new SubCategory(data);
+    const { category: categoryIds, ...rest } = data;
+    const subCategory = new SubCategory({
+      ...rest,
+      category: categoryIds.map((id) => ({ id, name: "" })),
+    });
     const createdSubCategory = await this.subCategoryRepo.create(
       subCategory,
       performer.id,

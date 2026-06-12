@@ -63,8 +63,11 @@ export class SubCategoryRepoImpl implements SubCategoryRepoType {
     subCategory: SubCategory,
     performerId?: string,
   ): Promise<SubCategory> {
-    const data = { ...subCategory };
-    if (performerId) (data as any).createdBy = performerId;
+    const data: any = {
+      ...subCategory,
+      category: subCategory.category?.map((c) => c.id),
+    };
+    if (performerId) data.createdBy = performerId;
     const doc = await subCategoryModel.create(data);
     const populated = await subCategoryModel
       .findById(doc._id)
@@ -122,15 +125,18 @@ export class SubCategoryRepoImpl implements SubCategoryRepoType {
     subCategory: Partial<SubCategory>,
     performerId?: string,
   ): Promise<SubCategory | null> {
-    const data = { ...subCategory };
-    if (performerId) (data as any).updatedBy = performerId;
+    const data: any = { ...subCategory };
+    if (subCategory.category) {
+      data.category = subCategory.category.map((c) => c.id);
+    }
+    if (performerId) data.updatedBy = performerId;
     const doc = await subCategoryModel.findByIdAndUpdate(id, data, {
       new: true,
       runValidators: true,
     })
       .populate({ path: "category", select: "name" })
       .populate("products");
-    return doc ? this.toEntity(doc) : null;
+    return doc ? this.toEntity(doc as any) : null;
   }
 
   async softDelete(

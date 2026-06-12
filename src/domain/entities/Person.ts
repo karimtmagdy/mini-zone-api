@@ -9,9 +9,12 @@ import { RolePerson } from "../types/person.types";
 export abstract class Person {
   public id?: string;
   public username!: string;
+  public name!: { first: string; last: string };
   public email!: string;
   public slug?: string;
+  public age? :number;
   public password?: string;
+  public phone?: string;
   public role?: RolePerson;
   public status?: PersonStatus;
   public state?: PersonState;

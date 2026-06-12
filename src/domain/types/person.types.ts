@@ -1,6 +1,7 @@
 import { IBaseImage, IBaseMetadata, PaginatedResult } from "@/types/global.dto";
 import { User } from "../entities/User";
 import { Employee } from "../entities/Employee";
+import { QueryStringDto } from "@/shared/schema/query.schema";
  
 export const PERSON_STATE = ["online", "offline"] as const;
 export const PERSON_GENDERS = ["male", "female"] as const;
@@ -102,8 +103,8 @@ export interface UserRepoType {
     user: Partial<User>,
     performerId?: string,
   ): Promise<User | null>;
-  getAll(query: any): Promise<PaginatedResult<User>>;
-  findDeleted(query: any): Promise<User>;
+  getAll(query: QueryStringDto): Promise<PaginatedResult<User>>;
+  findDeleted(query: QueryStringDto): Promise<PaginatedResult<User>>;
   softDelete(id: string, performerId?: string): Promise<User | null>;
   restore(id: string, performerId?: string): Promise<User | null>;
   deleteById(id: string): Promise<boolean>;
@@ -155,12 +156,12 @@ export interface EmployeeRepoType {
   create(employee: Employee): Promise<Employee>;
   findByEmail(email: string): Promise<Employee | null>;
   findById(id: string): Promise<Employee | null>;
-  findAll(query: any): Promise<PaginatedResult<Employee>>;
+  findAll(query: QueryStringDto): Promise<PaginatedResult<Employee>>;
   update(id: string, employee: Partial<Employee>): Promise<Employee | null>;
   softDelete(id: string): Promise<Employee | null>;
   restore(id: string): Promise<Employee | null>;
   findDeleted(): Promise<Employee[]>;
-  exists(filter: any): Promise<boolean>;
+  exists(filter: Record<string, unknown>): Promise<boolean>;
   findLastEmployeeCode(): Promise<string | null>;
   findByDepartment(department: string): Promise<Employee[]>;
   findByManager(managerId: string): Promise<Employee[]>;

@@ -26,7 +26,7 @@ export interface IBaseMetadata {
   updatedAt: Date;
   createdBy: string;
   updatedBy: string;
-  deletedAt: Date;
+  deletedAt: Date | null;
   deletedBy: string;
 }
 export interface IBaseImage {
