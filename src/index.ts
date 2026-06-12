@@ -31,11 +31,7 @@ app.use(async (_req, _res, next) => {
   try {
     await connectDB();
 
-    const shouldSeed =
-      process.env.NODE_ENV === "development" ||
-      process.env.SEED_BRANDS === "true";
-
-    if (shouldSeed && !isSeeded) {
+    if (!isSeeded) {
       isSeeded = true;
       void (async () => {
         try {
@@ -53,7 +49,7 @@ app.use(async (_req, _res, next) => {
               })),
               { ordered: false },
             );
-            console.log("✅ 10000 test brands seeded successfully in background!");
+            console.log("✅ 8 test brands seeded successfully in background!");
           }
         } catch (err) {
           console.error("⚠️ Error seeding test brands in background:", err);
