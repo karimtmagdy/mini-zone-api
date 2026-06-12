@@ -49,7 +49,7 @@ app.use(async (_req, _res, next) => {
               })),
               { ordered: false },
             );
-            console.log("✅ 8 test brands seeded successfully in background!");
+            console.log("✅ 10000 test brands seeded successfully in background!");
           }
         } catch (err) {
           console.error("⚠️ Error seeding test brands in background:", err);
