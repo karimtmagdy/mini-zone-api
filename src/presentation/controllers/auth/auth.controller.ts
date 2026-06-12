@@ -4,11 +4,13 @@ import { LoginUser } from "@/application/use-cases/auth/loginUser";
 import { catchError } from "@/shared/lib/catch.error";
 import { STATUS_CODE } from "@/shared/lib/statuscode";
 import { ResponseDto } from "@/shared/schema/response.schema";
+import { UserRepoType } from "@/domain/types/person.types";
 
 export class AuthController {
   constructor(
     private registerUser: RegisterUser,
     private loginUser: LoginUser,
+    private userRepo: UserRepoType,
   ) {}
 
   register = catchError(async (req: Request, res: Response) => {
@@ -52,4 +54,20 @@ export class AuthController {
 
     res.status(STATUS_CODE.OK).json(response);
   });
+  account = catchError(async (req: Request, res: Response) => {
+    const userId = (req as any).user?.id;
+    if (!userId) {
+      return res.status(STATUS_CODE.UNAUTHORIZED).json({ status: "error", message: "User not authenticated" });
+    }
+    const user = await this.userRepo.findById(userId);
+    if (!user) {
+      return res.status(STATUS_CODE.NOT_FOUND).json({ status: "error", message: "User not found" });
+    }
+    const response: ResponseDto<any> = {
+      status: "success",
+      data: { user },
+    };
+    res.status(STATUS_CODE.OK).json(response);
+  });
 }
+

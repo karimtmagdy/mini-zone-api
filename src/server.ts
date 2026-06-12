@@ -17,7 +17,7 @@ void (async () => {
     //       await import("@/infrastructure/database/brand.model");
     //     await brandModel.deleteMany({ name: /^brand-/ });
     //     await brandModel.insertMany(
-    //       Array.from({ length: 400 }, (_, i) => ({
+    //       Array.from({ length: 10000 }, (_, i) => ({
     //         name: `brand-${i}`,
     //         slug: `brand-${i}`,
     //         status: "onboarding",

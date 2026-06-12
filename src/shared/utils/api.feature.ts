@@ -6,7 +6,7 @@ import { Model, Query, QueryFilter } from "mongoose";
 
 class APIFeatures<T> {
   private model: Model<T>;
-  private query: Query<T[], T>;
+  private query: any;
   private QS: QueryStringDto;
   private FQ: QueryFilter<T>;
   private page: number = 1;
@@ -41,7 +41,7 @@ class APIFeatures<T> {
     queryStr = queryStr.replace(regex, (match) => `$${match}`);
     this.FQ = JSON.parse(queryStr);
 
-    this.query = this.model.find(this.FQ);
+    this.query = this.query.find(this.FQ);
     return this;
   }
   sort(): this {
@@ -94,9 +94,7 @@ class APIFeatures<T> {
         };
       }
 
-      this.query = this.model.find({
-        $and: [this.FQ, searchQuery],
-      } as QueryFilter<T>);
+      this.query = this.query.find(searchQuery);
     }
     return this;
   }

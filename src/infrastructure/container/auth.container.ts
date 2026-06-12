@@ -25,4 +25,5 @@ export const loginUserUseCase = new LoginUser(
 export const authCtrl = new AuthController(
   registerUserUseCase,
   loginUserUseCase,
+  userRepository,
 );
