@@ -2,10 +2,6 @@ import { AppError } from "@/shared/api/api-error";
 import { Types } from "mongoose";
 import { Archivable, Identifiable, StatusAble, Timestamped } from "@/types";
 
-// ============================================================
-// 1. STANDALONE COMPONENTS (each concern fully independent)
-// ============================================================
-
 export type StatusTransitions<TStatus extends string> = Readonly<
   Record<TStatus, readonly TStatus[]>
 >;
@@ -80,10 +76,6 @@ export class IdComponent {
   }
 }
 
-// ============================================================
-// 2. REUSABLE BASE - write boilerplate ONCE, inherit everywhere
-// ============================================================
-
 export interface AggregateRootInit<
   TStatus extends string,
   TTransitions extends StatusTransitions<TStatus>,
@@ -121,7 +113,6 @@ export abstract class AggregateRoot<
     this._statusComp = new StatusComponent(init.status, init.transitions);
   }
 
-  // --- Id ---
   public get _id() {
     return this._idComp._id;
   }
@@ -129,7 +120,6 @@ export abstract class AggregateRoot<
     return this._idComp.id;
   }
 
-  // --- Timestamps ---
   public get createdAt(): Date {
     return this._timestampComp.createdAt;
   }
@@ -137,7 +127,6 @@ export abstract class AggregateRoot<
     return this._timestampComp.updatedAt;
   }
 
-  // --- Archive ---
   public get isArchived(): boolean {
     return this._archiveComp.isArchived;
   }
@@ -157,7 +146,6 @@ export abstract class AggregateRoot<
     this._archiveComp.unarchive();
   }
 
-  // --- Status ---
   public get status(): TStatus {
     return this._statusComp.status;
   }

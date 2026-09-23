@@ -16,8 +16,6 @@ app.get(["/"], (_req, res) => {
     api: "Mini Zone",
     message: "Welcome to the Vercel Backend",
     developer: "karimtmagdy",
-    platform: "Vercel",
-    version: "v1",
     environment: "production",
     time: new Date().toISOString(),
   });

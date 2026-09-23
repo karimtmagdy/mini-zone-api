@@ -2,8 +2,8 @@ import {
   BRAND_TRANSITIONS,
   IBrand,
   TBrandStatus,
-} from "@/app/dto/types/brand-type";
-import { AggregateRoot } from "@/domain/services/status.service";
+} from "@/domain/types/brand.types";
+import { AggregateRoot } from "@/shared/lib/aggregate-root";
 
 export class BrandEntity extends AggregateRoot<
   TBrandStatus,

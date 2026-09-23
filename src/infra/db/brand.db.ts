@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
-import { BRAND_STATUS, BrandDoc } from "@/app/dto/types/brand-type";
+import { BRAND_STATUS } from "@/domain/types/brand.types";
+import { BrandDoc } from "@/app/dto/brand.dto";
 import { applySlugify } from "@/shared/plugin/plugin-slugify";
 
 const BrandDB = new Schema<BrandDoc>(
@@ -31,6 +32,5 @@ BrandDB.virtual("products", {
   foreignField: "brandId",
   localField: "_id",
 });
-// applyVirtual({ schema: BrandDB, ref: "Product", foreign: "brand" });
 BrandDB.index({ name: "text" });
 export const brandDB = model<BrandDoc>("Brands", BrandDB);

@@ -1,9 +1,10 @@
 import { z } from "zod/v4";
-import { BRAND_STATUS, IBrand } from "@/app/dto/types/brand-type";
+import { BRAND_STATUS, IBrand } from "@/domain/types/brand.types";
 
-type Omitted = z.ZodType<Omit<IBrand, "isArchived" | "archivedAt">>;
+const SLUG_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-// id: z.string().regex(/^[a-f\d]{24}$/i, { error: "invalid id" }),
+type Omitted = z.ZodType<Partial<Omit<IBrand, "isArchived">>>;
+
 export const CoreBrand = z.object({
   name: z
     .string({ error: "brand name is required" })
@@ -13,7 +14,14 @@ export const CoreBrand = z.object({
   status: z
     .enum(BRAND_STATUS, { error: "Invalid status value" })
     .default("inactive"),
-  slug: z.string().check(z.slugify()),
+  slug: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .optional()
+    .refine((v) => (v ? SLUG_REGEX.test(v) : true), {
+      error: "slug must contain only lowercase letters, numbers, and hyphens",
+    }),
   products: z.number().int().nonnegative(),
   archivedAt: z.date().nullable(),
 }) satisfies Omitted;

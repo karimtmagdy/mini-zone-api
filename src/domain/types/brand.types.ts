@@ -1,11 +1,5 @@
 import { getStatus } from "@/shared/generator/transitions";
-import {
-  IBaseArchived,
-  IBaseMetaData,
-  IBaseStatus,
-  Identifiable,
-  Timestamped,
-} from "@/types";
+import { IBaseArchived, IBaseStatus } from "@/types";
 
 export const BRAND_TRANSITIONS = {
   active: ["inactive", "archive"],
@@ -24,13 +18,3 @@ export interface IBrandFields {
 
 export interface IBrand
   extends IBrandFields, IBaseStatus<TBrandStatus>, IBaseArchived {}
-
-export type BrandDoc = IBaseMetaData & IBrand;
-
-export interface BrandRoute
-  extends
-    Identifiable,
-    Timestamped,
-    IBrandFields,
-    IBaseStatus<TBrandStatus>,
-    IBaseArchived {}

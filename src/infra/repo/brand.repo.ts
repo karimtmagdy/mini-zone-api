@@ -1,12 +1,12 @@
-import { IBrandImpl } from "@/app/dto/interface/brand-interface";
-import { BrandDoc } from "@/app/dto/types/brand-type";
-import { BrandMapper } from "@/domain/base/factory/brand-factory";
-import { BrandEntity } from "@/domain/entities/brand-entity";
-import { brandDB } from "@/infra/db/brand-db";
+import { IBrandImpl } from "@/domain/ports/brand.repo.port";
+import { BrandDoc } from "@/app/dto/brand.dto";
+import { BrandMapper } from "@/app/mapping/brand.mapper";
+import { BrandEntity } from "@/domain/entities/brand.entity";
+import { brandDB } from "@/infra/db/brand.db";
 import {
   TCreateBrandEX,
   TUpdateBrandEX,
-} from "@/presentation/validator/brand-zod";
+} from "@/presentation/validator/brand.zod";
 import { PaginatedResult, QueryResult } from "@/types";
 import { Model, SortOrder } from "mongoose";
 
@@ -83,7 +83,9 @@ export class BrandImpl implements IBrandImpl {
     return BrandMapper.toDomain(doc.toObject());
   }
 
-  async list(query: Partial<QueryResult>): Promise<PaginatedResult<BrandEntity>> {
+  async list(
+    query: Partial<QueryResult>,
+  ): Promise<PaginatedResult<BrandEntity>> {
     const page = Math.max(1, Number(query.page ?? 1));
     const limit = Math.max(1, Number(query.limit ?? 10));
     const skip = (page - 1) * limit;
@@ -117,7 +119,7 @@ export class BrandImpl implements IBrandImpl {
       this.db.countDocuments(filter),
       this.db
         .find(filter, projection)
-        .sort(sort as any)
+        .sort(sort)
         .skip(skip)
         .limit(limit)
         .lean()
@@ -125,7 +127,7 @@ export class BrandImpl implements IBrandImpl {
     ]);
 
     const pages = Math.ceil(total / limit);
-    const data = docs.map((d) => BrandMapper.toDomain(d as BrandDoc));
+    const data = docs.map((d) => BrandMapper.toDomain(d));
 
     return {
       data,
@@ -140,5 +142,3 @@ export class BrandImpl implements IBrandImpl {
 }
 
 export const brandRepo = new BrandImpl(brandDB);
-
-

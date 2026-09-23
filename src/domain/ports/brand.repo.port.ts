@@ -1,9 +1,9 @@
-import { BrandEntity } from "@/domain/entities/brand-entity";
+import { BrandEntity } from "@/domain/entities/brand.entity";
 import { PaginatedResult, QueryResult } from "@/types";
 import {
   TCreateBrandEX,
   TUpdateBrandEX,
-} from "@/presentation/validator/brand-zod";
+} from "@/presentation/validator/brand.zod";
 
 type Entity = BrandEntity;
 export interface IBrandImpl {

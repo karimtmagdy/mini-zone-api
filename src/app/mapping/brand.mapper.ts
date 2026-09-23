@@ -1,5 +1,6 @@
-import { BrandEntity } from "@/domain/entities/brand-entity";
-import { BrandDoc, BrandRoute, IBrand } from "@/app/dto/types/brand-type";
+import { BrandEntity } from "@/domain/entities/brand.entity";
+import { BrandDoc, BrandRoute } from "@/app/dto/brand.dto";
+import { IBrand } from "@/domain/types/brand.types";
 
 export class BrandMapper {
   static toDomain(doc: BrandDoc): BrandEntity {
