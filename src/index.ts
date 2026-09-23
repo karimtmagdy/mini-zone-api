@@ -1,8 +1,8 @@
 import "dotenv/config";
 import express from "express";
-// import { setupRoutes } from "@/presentation/routes";
 import { connectDB } from "@/infra/config/server/db";
 import { ApplicationConfiguration } from "@/infra/config/app-config";
+import { setupRoutes } from "@/presentation/routes";
 // import { MissingRouteHandler } from "@/presentation/middleware/global-error";
 // import { errorHandler } from "@/shared/middleware/error-handler";
 
@@ -39,7 +39,7 @@ app.use(async (_req, _res, next) => {
   }
 });
 
-// setupRoutes(app);
+setupRoutes(app);
 // LanguageMiddleware(app);
 
 // app.use(errorHandler);
