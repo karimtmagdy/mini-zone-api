@@ -23,6 +23,7 @@ export const CoreBrand = z.object({
       error: "slug must contain only lowercase letters, numbers, and hyphens",
     }),
   products: z.number().int().nonnegative(),
+  isArchived: z.boolean().default(false),
   archivedAt: z.date().nullable(),
 }) satisfies Omitted;
 

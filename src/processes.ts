@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { logger } from "@/shared/lib/logger";
+import { logger } from "@/common/lib/logger";
 
 process.on("uncaughtException", (error) => {
   logger.log("👋 Uncaught Exception: ", error);

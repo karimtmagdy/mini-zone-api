@@ -1,13 +1,13 @@
 import { IBrandImpl } from "@/domain/ports/brand.repo.port";
 import { BrandEntity } from "@/domain/entities/brand.entity";
-import { AppError, ErrorCode } from "@/shared/api/api-error";
+import { AppError, ErrorCode } from "@/common/api/api-error";
 import {
   TCreateBrandEX,
   TUpdateBrandEX,
   TUpdateBrandStatusEX,
 } from "@/presentation/validator/brand.zod";
 import { PaginatedResult, QueryResult } from "@/types";
-import { UseCase } from "@/app/common/use-case";
+import { UseCase } from "@/common/use-case";
 
 export class CreateBrandUC extends UseCase<TCreateBrandEX, BrandEntity> {
   constructor(private readonly repo: IBrandImpl) {
@@ -18,7 +18,7 @@ export class CreateBrandUC extends UseCase<TCreateBrandEX, BrandEntity> {
     const existing = await this.repo.findByName(input.name);
     if (existing) {
       throw new AppError(
-        `Brand with name "${input.name}" already exists`,
+        `brand with name "${input.name}" already exists`,
         409,
         ErrorCode.CONFLICT,
       );
@@ -36,7 +36,7 @@ export class GetBrandByIdUC extends UseCase<string, BrandEntity> {
   async execute(id: string): Promise<BrandEntity> {
     const entity = await this.repo.findById(id);
     if (!entity) {
-      throw new AppError("Brand not found", 404, ErrorCode.NOT_FOUND);
+      throw new AppError("brand not found", 404, ErrorCode.NOT_FOUND);
     }
     return entity;
   }
@@ -56,13 +56,13 @@ export class UpdateBrandUC extends UseCase<
   }): Promise<BrandEntity> {
     const exists = await this.repo.exists(input.id);
     if (!exists) {
-      throw new AppError("Brand not found", 404, ErrorCode.NOT_FOUND);
+      throw new AppError("brand not found", 404, ErrorCode.NOT_FOUND);
     }
     if (input.data.name !== undefined) {
       const dup = await this.repo.findByName(input.data.name);
       if (dup && dup.id !== input.id) {
         throw new AppError(
-          `Brand with name "${input.data.name}" already exists`,
+          `brand with name "${input.data.name}" already exists`,
           409,
           ErrorCode.CONFLICT,
         );
@@ -70,7 +70,7 @@ export class UpdateBrandUC extends UseCase<
     }
     const updated = await this.repo.update(input.id, input.data);
     if (!updated) {
-      throw new AppError("Brand update failed", 400, ErrorCode.BAD_REQUEST);
+      throw new AppError("brand update failed", 400, ErrorCode.BAD_REQUEST);
     }
     return updated;
   }
@@ -84,7 +84,7 @@ export class DeleteBrandUC extends UseCase<string, BrandEntity> {
   async execute(id: string): Promise<BrandEntity> {
     const entity = await this.repo.delete(id);
     if (!entity) {
-      throw new AppError("Brand not found", 404, ErrorCode.NOT_FOUND);
+      throw new AppError("brand not found", 404, ErrorCode.NOT_FOUND);
     }
     return entity;
   }
@@ -98,7 +98,7 @@ export class ArchiveBrandUC extends UseCase<string, BrandEntity> {
   async execute(id: string): Promise<BrandEntity> {
     const entity = await this.repo.archive(id);
     if (!entity) {
-      throw new AppError("Brand not found", 404, ErrorCode.NOT_FOUND);
+      throw new AppError("brand not found", 404, ErrorCode.NOT_FOUND);
     }
     return entity;
   }
@@ -112,7 +112,7 @@ export class RestoreBrandUC extends UseCase<string, BrandEntity> {
   async execute(id: string): Promise<BrandEntity> {
     const entity = await this.repo.restore(id);
     if (!entity) {
-      throw new AppError("Brand not found", 404, ErrorCode.NOT_FOUND);
+      throw new AppError("brand not found", 404, ErrorCode.NOT_FOUND);
     }
     return entity;
   }
@@ -132,12 +132,12 @@ export class UpdateBrandStatusUC extends UseCase<
   }): Promise<BrandEntity> {
     const exists = await this.repo.exists(input.id);
     if (!exists) {
-      throw new AppError("Brand not found", 404, ErrorCode.NOT_FOUND);
+      throw new AppError("brand not found", 404, ErrorCode.NOT_FOUND);
     }
     const updated = await this.repo.update(input.id, input.data);
     if (!updated) {
       throw new AppError(
-        "Brand status update failed",
+        "brand status update failed",
         400,
         ErrorCode.BAD_REQUEST,
       );

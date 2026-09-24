@@ -1,7 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 
-export function CTErr(fn: Function) {
-  return (req: Request, res: Response, next: NextFunction) => {
+export const CTErr =
+  (fn: Function) => async (req: Request, res: Response, next: NextFunction) => {
     fn(req, res, next).catch(next);
   };
-}

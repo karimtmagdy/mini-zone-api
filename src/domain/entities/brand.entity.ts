@@ -3,7 +3,7 @@ import {
   IBrand,
   TBrandStatus,
 } from "@/domain/types/brand.types";
-import { AggregateRoot } from "@/shared/lib/aggregate-root";
+import { AggregateRoot } from "@/common/lib/aggregate-root";
 
 export class BrandEntity extends AggregateRoot<
   TBrandStatus,

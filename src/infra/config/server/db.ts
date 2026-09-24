@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { logger } from "@/shared/lib/logger";
+import { logger } from "@/common/lib/logger";
 
 function getMongoURI(): string {
   const isProduction = process.env.NODE_ENV === "production";

@@ -1,4 +1,4 @@
-import { AppError } from "@/shared/api/api-error";
+import { AppError } from "@/common/api/api-error";
 import { Types } from "mongoose";
 import { Archivable, Identifiable, StatusAble, Timestamped } from "@/types";
 
@@ -153,3 +153,4 @@ export abstract class AggregateRoot<
     this._statusComp.transition(to);
   }
 }
+// protected hasActiveRelations = () => this.products > 0;

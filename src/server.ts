@@ -1,7 +1,7 @@
 import "dotenv/config";
 import "@/processes";
 import { app } from "@/index";
-import { logger } from "@/shared/lib/logger";
+import { logger } from "@/common/lib/logger";
 import { connectDB } from "@/infra/config/server/db";
 
 void (async () => {

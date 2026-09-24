@@ -1,6 +1,6 @@
 import { Express } from "express";
 import brandRouter from "./brand.routes";
-// import categoryRouter from "./category.routes";
+import categoryRouter from "./category.routes";
 // import subcategoryRouter from "./subcategory.routes";
 // import productRouter from "./product.routes";
 // import variantRouter from "./variants.routes";
@@ -22,7 +22,7 @@ import brandRouter from "./brand.routes";
 const publicRoutes: Route[] = [
   // salesOrderRouter,
   brandRouter,
-  // categoryRouter,
+  categoryRouter,
   // subcategoryRouter,
   // productRouter,
   // variantRouter,

@@ -11,6 +11,7 @@ export const ErrorCode = {
   MONGO_DUPLICATE_KEY: "MONGO_DUPLICATE_KEY",
   MONGO_CAST_ERROR: "MONGO_CAST_ERROR",
   MONGO_VALIDATION_ERROR: "MONGO_VALIDATION_ERROR",
+  JWT_MALFORMED: "JWT_MALFORMED",
 } as const;
 
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode][number];

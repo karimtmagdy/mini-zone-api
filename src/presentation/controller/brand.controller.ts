@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CTErr } from "@/shared/lib/catch-error";
+import { CTErr } from "@/common/lib/catch-error";
 import { BrandMapper } from "@/app/mapping/brand.mapper";
 import { brandRepo } from "@/infra/repo/brand.repo";
 import {
@@ -55,7 +55,7 @@ export class BrandController {
       res.status(201).json({
         code: 201,
         status: "success",
-        message: "Brand has been created",
+        message: "brand has been created",
         data: BrandMapper.toRoute(result),
       });
     },
@@ -85,7 +85,7 @@ export class BrandController {
       res.status(200).json({
         code: 200,
         status: "success",
-        message: "Brand has been updated",
+        message: "brand has been updated",
         data: BrandMapper.toRoute(result),
       });
     },
@@ -97,7 +97,7 @@ export class BrandController {
     res.status(200).json({
       code: 200,
       status: "success",
-      message: "Brand has been moved to archived",
+      message: "brand has been moved to archived",
       data: BrandMapper.toRoute(result),
     });
   });
@@ -108,7 +108,7 @@ export class BrandController {
     res.status(200).json({
       code: 200,
       status: "success",
-      message: "Brand has been restored (unarchived)",
+      message: "brand has been restored (unarchived)",
       data: BrandMapper.toRoute(result),
     });
   });
@@ -127,7 +127,7 @@ export class BrandController {
       res.status(200).json({
         code: 200,
         status: "success",
-        message: `Brand status has been updated to ${validated.status}`,
+        message: `brand status has been updated to ${validated.status}`,
         data: BrandMapper.toRoute(result),
       });
     },
@@ -139,7 +139,7 @@ export class BrandController {
     res.status(200).json({
       code: 200,
       status: "success",
-      message: "Brand has been deleted permanently",
+      message: "brand has been deleted permanently",
       data: BrandMapper.toRoute(result),
     });
   });

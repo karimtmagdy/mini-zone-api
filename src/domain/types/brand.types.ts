@@ -1,4 +1,4 @@
-import { getStatus } from "@/shared/generator/transitions";
+import { getStatus } from "@/common/generator/transitions";
 import { IBaseArchived, IBaseStatus } from "@/types";
 
 export const BRAND_TRANSITIONS = {
