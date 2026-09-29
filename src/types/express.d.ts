@@ -1,5 +1,6 @@
 import mongoose, { Schema, Types } from "mongoose";
 import type { Router, Request } from "express";
+import { AccessTokenPayload } from "@/common/middleware/token-payload";
 
 declare global {
   interface MongooseCache {
@@ -31,7 +32,7 @@ declare global {
 declare global {
   namespace Express {
     export interface Request {
-      user?: any;
+      user: AccessTokenPayload;
     }
   }
 }

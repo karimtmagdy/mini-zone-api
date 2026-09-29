@@ -10,6 +10,8 @@ interface ApplyVirtualOptions {
   localField?: string;
   /** The virtual field name on this schema — defaults to lowercase of ref + "s" (e.g. "products") */
   as?: string;
+  /** The match condition for the virtual */
+  // match?: Record<string, unknown>;
 }
 
 export const applyVirtual = ({
@@ -18,6 +20,7 @@ export const applyVirtual = ({
   foreign,
   localField = "_id",
   as,
+  // match = { isArchived: false, archivedAt: null },
 }: ApplyVirtualOptions): void => {
   const virtualName = as ?? `${ref.toLowerCase()}s`;
 
@@ -25,6 +28,7 @@ export const applyVirtual = ({
     ref,
     localField,
     foreignField: foreign,
+
     justOne: false,
   });
 

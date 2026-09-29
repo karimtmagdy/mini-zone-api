@@ -1,6 +1,7 @@
 import { Express } from "express";
 import brandRouter from "./brand.routes";
 import categoryRouter from "./category.routes";
+// import customerRouter from "./customer.routes";
 // import subcategoryRouter from "./subcategory.routes";
 // import productRouter from "./product.routes";
 // import variantRouter from "./variants.routes";
@@ -13,8 +14,6 @@ import categoryRouter from "./category.routes";
 // import couponRouter from "./coupon.routes";
 // import userRouter from "./user.routes";
 // import cartRouter from "./cart.routes";
-
-// import customerRouter from "./customers.routes";
 // import purchaseOrderRouter from "./purchase-order.routes";
 // import suppliersRouter from "./suppliers.routes";
 // import salesOrderRouter from "./sales-order.routes";
@@ -23,6 +22,7 @@ const publicRoutes: Route[] = [
   // salesOrderRouter,
   brandRouter,
   categoryRouter,
+  // customerRouter,
   // subcategoryRouter,
   // productRouter,
   // variantRouter,
