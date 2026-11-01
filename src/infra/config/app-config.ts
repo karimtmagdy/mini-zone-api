@@ -1,63 +1,47 @@
 import express, { type Express } from "express";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
-import morgan from "morgan";
 import { corsOption } from "./cors-option";
-// import compression from "compression";
-// import hpp from "hpp";
+import compression from "compression";
+import hpp from "hpp";
+import { httpLogger } from "@/common/lib/logger";
 
 export function ApplicationConfiguration(app: Express) {
-  app.use(express.json({ limit: "10kb" }));
-  app.use(express.urlencoded({ extended: true }));
+  // 1. Trust first proxy (e.g., AWS ELB, Nginx, Vercel) to correctly identify client IP
+  app.set("trust proxy", 1);
+  // 2. Favicon
+  // const faviconPath = path.join(process.cwd(), "favicon.ico");
+  // app.use(favicon(faviconPath));
+  // app.use(favicon(icon));
+  // 3. Security Headers
   app.use(helmet());
+  // 4. Allow Chrome Private Network Access (HTTPS pages accessing localhost)
+  // app.use((req, res, next) => {
+  //   if (req.headers["access-control-request-private-network"]) {
+  //     res.setHeader("Access-Control-Allow-Private-Network", "true");
+  //   }
+  //   next();
+  // });
+  // 5. Cross-Origin Resource Sharing (CORS)
   app.use(corsOption());
+  // 6. Response Compression ( Gzip/Deflate reduce the size of response  )
+  app.use(compression());
+  // 7. Body Parsers (Read JSON and URL-encoded with a size limit to prevent attacks)
+  app.use(express.json({ limit: "10kb" }));
+  app.use(express.urlencoded({ extended: false }));
+  // 8. Cookie Parser
   app.use(cookieParser());
-  if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
-  // app.use(compression());
-  // app.use(hpp());
+  // 9. HTTP Parameter Pollution Protection
+  app.use(hpp());
+  // 10. Rate Limiting
   // app.use(limiter);
+  // 11. Request Logging (pino-http)
+  // if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
+  app.use(httpLogger);
 }
 
-// // const __filename = fileURLToPath(import.meta.url);
-// const ROOT_DIR = path.resolve();
+// import exSession from 'express-session'
 
-// export function configApp(app: Express) {
-//   // Use serve-favicon library
-//   // You can point this to a real file if you have one, e.g., path.join(ROOT_DIR, "favicon.ico")
-//   const faviconPath = path.join(ROOT_DIR, "favicon.ico");
-
-//   // To avoid "file not found" errors if the file doesn't exist,
-//   // we check for it, or you can just ensure the file exists.
-//   try {
-//     app.use(favicon(faviconPath));
-//   } catch (e) {
-//     // If file doesn't exist, we use a transparent pixel buffer to satisfy the library
-//     const icon = Buffer.from(
-//       "AAABAAEAEBAQAAAAAAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-//       "base64",
-//     );
-//     app.use(favicon(icon));
-//   }
-
-//   // Trust first proxy (e.g., AWS ELB, Nginx) to correctly identify client IP
-//   app.set("trust proxy", 1);
-//   // Allow Chrome Private Network Access (HTTPS pages accessing localhost)
-//   app.use((req, res, next) => {
-//     if (req.headers["access-control-request-private-network"]) {
-//       res.setHeader("Access-Control-Allow-Private-Network", "true");
-//     }
-//     next();
-//   });
-//   // Enable Cross-Origin Resource Sharing (CORS)
-//   app.use(corsOption());
-
-//
-// Enable gzip compression for response bodies
-
-// Prevent HTTP Parameter Pollution
-
-//
-// }
-
+// import from "sanitize-html"
+// import lessHttp from "serverless-http"
 // import favicon from "serve-favicon";
-// import path from "path";
