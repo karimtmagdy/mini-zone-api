@@ -11,10 +11,10 @@ void (async () => {
 
     // 2. start the server after db is ready
     app.listen(process.env.PORT, () => {
-      logger.log(`🚀 Server is started on ${process.env.PORT}`);
+      logger.log(`Server is started on ${process.env.PORT}`);
     });
   } catch (error) {
-    logger.error("🔥 Failed to start server:", error);
+    logger.error("Failed to start server:", error);
     process.exit(1);
   }
 })();

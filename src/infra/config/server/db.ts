@@ -43,7 +43,7 @@ export async function connectDB(): Promise<void> {
     //   mongoose.set("debug", true);
     // }
 
-    logger.log("🔌 Initiating MongoDB connection...");
+    logger.log("Initiating MongoDB connection...");
 
     cache.promise = mongoose.connect(uri, {
       bufferCommands: false,
@@ -56,10 +56,10 @@ export async function connectDB(): Promise<void> {
 
   try {
     await cache.promise;
-    logger.log("✅ MongoDB connected successfully");
+    logger.log("MongoDB connected successfully");
   } catch (error) {
     cache.promise = null;
-    logger.error("❌ MongoDB connection failed:", error);
+    logger.error("MongoDB connection failed:", error);
     throw error;
   }
 }

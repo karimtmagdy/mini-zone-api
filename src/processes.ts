@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 import { logger } from "@/common/lib/logger";
 
 process.on("uncaughtException", (error) => {
-  logger.log("👋 Uncaught Exception: ", error);
+  logger.log("Uncaught Exception: ", error);
   process.exit(1);
 });
 process.on("unhandledRejection", (reason) => {
-  logger.log("👋 Unhandled Rejection: ", reason);
+  logger.log("Unhandled Rejection: ", reason);
   process.exit(1);
 });
 process.on("EADDRINUSE", (error: NodeJS.ErrnoException) => {
@@ -16,13 +16,13 @@ process.on("EADDRINUSE", (error: NodeJS.ErrnoException) => {
   }
 });
 const gracefulShutdown = async (signal: string) => {
-  logger.log(`👋 Received ${signal}. Shutting down gracefully...`);
+  logger.log(`Received ${signal}. Shutting down gracefully...`);
   try {
     await mongoose.connection.close();
-    logger.log("✅ MongoDB connection closed.");
+    logger.log("MongoDB connection closed.");
     process.exit(0);
   } catch (err) {
-    logger.error("❌ Error during shutdown:", err);
+    logger.error("Error during shutdown:", err);
     process.exit(1);
   }
 };
@@ -34,6 +34,6 @@ process.on("SIGUSR2", () => gracefulShutdown("SIGUSR2"));
 
 process.on("exit", (code: number) => {
   if (code === 0) {
-    logger.log(`👋 shutdown server with code ${code}`);
+    logger.log(`shutdown server with code ${code}`);
   }
 });
