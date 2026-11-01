@@ -1,4 +1,3 @@
-import { IBrandImpl } from "@/domain/ports/brand.repo.port";
 import { BrandEntity } from "@/domain/entities/brand.entity";
 import { AppError, ErrorCode } from "@/common/api/api-error";
 import {
@@ -8,6 +7,7 @@ import {
 } from "@/presentation/validator/brand.zod";
 import { PaginatedResult, QueryResult } from "@/types";
 import { UseCase } from "@/common/use-case";
+import { IBrandImpl } from "@/domain/interfaces/brand.repo.impl";
 
 export class CreateBrandUC extends UseCase<TCreateBrandEX, BrandEntity> {
   constructor(private readonly repo: IBrandImpl) {
