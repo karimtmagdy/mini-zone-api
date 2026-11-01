@@ -31,6 +31,7 @@ export const createBrand = CoreBrand.pick({
   name: true,
   status: true,
 }).partial({ status: true });
+
 export const updateBrand = CoreBrand.pick({ name: true, status: true }).partial(
   {
     name: true,

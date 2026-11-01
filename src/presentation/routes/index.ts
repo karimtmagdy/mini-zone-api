@@ -1,5 +1,5 @@
 import { Express } from "express";
-// import brandRouter from "./brand.routes";
+import brandRouter from "./brand.routes";
 // import categoryRouter from "./category.routes";
 // import customerRouter from "./customer.routes";
 // import subcategoryRouter from "./subcategory.routes";
@@ -20,7 +20,7 @@ import { Express } from "express";
 
 const publicRoutes: Route[] = [
   // salesOrderRouter,
-  // brandRouter,
+  brandRouter,
   // categoryRouter,
   // customerRouter,
   // subcategoryRouter,
