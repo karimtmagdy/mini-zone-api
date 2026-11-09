@@ -9,7 +9,7 @@ import brandRouter from "./brand.routes";
 // import warehouseRouter from "./warehouse.routes";
 // import employeeRouter from "./employee.routes";
 // import dashboardRouter from "./dashboard.routes";
-// import authRouter from "./auth.routes";
+import authRouter from "./auth.routes";
 // import profileRouter from "./profile.routes";
 // import couponRouter from "./coupon.routes";
 // import userRouter from "./user.routes";
@@ -32,7 +32,7 @@ const publicRoutes: Route[] = [
   // cartRouter,
   // employeeRouter,
   // dashboardRouter,
-  // authRouter,
+  authRouter,
   // profileRouter,
   // couponRouter,
 ];

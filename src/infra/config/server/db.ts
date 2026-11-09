@@ -33,18 +33,13 @@ export async function connectDB(): Promise<void> {
   if (mongoose.connection.readyState === 1) {
     return;
   }
-
   const cache = getCache();
-
   if (!cache.promise) {
     const uri = getMongoURI();
-
     // if (process.env.NODE_ENV === "development") {
     //   mongoose.set("debug", true);
     // }
-
     logger.log("Initiating MongoDB connection...");
-
     cache.promise = mongoose.connect(uri, {
       bufferCommands: false,
       maxPoolSize: 5,
@@ -53,7 +48,6 @@ export async function connectDB(): Promise<void> {
       connectTimeoutMS: 10_000,
     });
   }
-
   try {
     await cache.promise;
     logger.log("MongoDB connected successfully");

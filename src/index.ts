@@ -39,7 +39,6 @@ app.use(async (_req, _res, next) => {
 
 setupRoutes(app);
 // LanguageMiddleware(app);
-
 // app.use(errorHandler);
 // MissingRouteHandler(app);
 export { app };

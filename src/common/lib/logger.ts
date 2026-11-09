@@ -91,7 +91,7 @@ export const logger = {
 
 export const httpLogger = pinoHttp({
   logger: pinoInstance,
-  // Health Check Noise
+  // Health Check Noise 
   autoLogging: {
     ignore: (req) => req.url === "/health" || req.url === "/favicon.ico",
   },
