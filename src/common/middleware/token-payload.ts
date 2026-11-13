@@ -1,14 +1,8 @@
-import { Types } from "mongoose";
 import { TPermission, TUserRole } from "@/domain/types/user.types";
 
 export interface AccessTokenPayload {
-  sub: string | Types.ObjectId;
+  sub: string;
   role: TUserRole;
   permissions: TPermission[];
+  type: "access";
 }
-// export interface ISession extends IBaseMetaData {
-//   refreshToken: string;
-//   userId: Types.ObjectId;
-//   // deviceInfo: IDeviceInfo;
-//   expiresAt: Date;
-// }

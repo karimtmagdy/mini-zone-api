@@ -36,7 +36,6 @@ export const loginZod = z
       .describe("enter your password"),
   })
   .required();
-// .extend({remember: z.boolean().default(false).optional()});
 
 export const changePassword = z
   .object({

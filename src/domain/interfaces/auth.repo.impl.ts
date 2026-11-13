@@ -15,4 +15,5 @@ export interface IAuthImpl {
     email: string,
     selectPassword?: boolean,
   ): Promise<UserEntity | null>;
+  findById(id: string): Promise<UserEntity | null>;
 }

@@ -30,10 +30,6 @@ export class BrandImpl implements IBrandImpl {
     return BrandMapper.toDomain(doc.toObject());
   }
 
-  // async exists(id: string): Promise<boolean> {
-  //   const count = await this.db.countDocuments({ _id: id });
-  //   return count > 0;
-  // }
   async exists(id: string): Promise<boolean> {
     const exists = await this.db.exists({ _id: id }).lean<BrandDoc>();
     return exists !== null;

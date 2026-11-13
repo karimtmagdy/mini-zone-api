@@ -27,6 +27,12 @@ export class AuthRepo implements IAuthImpl {
     if (!doc) return null;
     return UserMapper.toDomain(doc);
   }
+
+  async findById(id: string): Promise<UserEntity | null> {
+    const doc = await this.db.findById(id).lean<UserDoc>();
+    if (!doc) return null;
+    return UserMapper.toDomain(doc);
+  }
 }
 
 export const authRepo = new AuthRepo(userDB);

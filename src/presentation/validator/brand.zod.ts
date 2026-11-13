@@ -1,7 +1,6 @@
 import { z } from "zod/v4";
 import { BRAND_STATUS, IBrand } from "@/domain/types/brand.types";
-
-const SLUG_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+import { SLUG } from "@/common/zod-default";
 
 type Omitted = z.ZodType<Partial<Omit<IBrand, "isArchived">>>;
 
@@ -14,14 +13,7 @@ export const CoreBrand = z.object({
   status: z
     .enum(BRAND_STATUS, { error: "Invalid status value" })
     .default("inactive"),
-  slug: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .optional()
-    .refine((v) => (v ? SLUG_REGEX.test(v) : true), {
-      error: "slug must contain only lowercase letters, numbers, and hyphens",
-    }),
+  slug: SLUG,
   products: z.number().int().nonnegative(),
   isArchived: z.boolean().default(false),
   archivedAt: z.date().nullable(),
@@ -32,12 +24,10 @@ export const createBrand = CoreBrand.pick({
   status: true,
 }).partial({ status: true });
 
-export const updateBrand = CoreBrand.pick({ name: true, status: true }).partial(
-  {
-    name: true,
-    status: true,
-  },
-);
+export const updateBrand = CoreBrand.pick({
+  name: true,
+  status: true,
+}).partial();
 export const updateBrandStatus = CoreBrand.pick({ status: true });
 export const BrandStatusEnum = z.enum(BRAND_STATUS, {
   error: "Invalid status value",
@@ -47,3 +37,7 @@ export type TCreateBrandEX = z.infer<typeof createBrand>;
 export type TUpdateBrandEX = z.infer<typeof updateBrand>;
 export type TUpdateBrandStatusEX = z.infer<typeof updateBrandStatus>;
 export type TBrandStatusEnum = z.infer<typeof BrandStatusEnum>;
+/** Raw form values (what the user types). */
+export type TBrandDTO = z.input<typeof createBrand>;
+/** Validated/transformed payload that flows into the use case. */
+export type TBrandEX = z.output<typeof createBrand>;

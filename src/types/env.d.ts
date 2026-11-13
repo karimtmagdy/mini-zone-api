@@ -5,8 +5,6 @@ declare namespace NodeJS {
     SERVER_URL: "http://localhost:3000" | "http://localhost:5173";
     CLIENT_URL: "https://mini-zone.vercel.app";
     VERCEL: "production";
-    JWT_REFRESH_TOKEN: string;
-    JWT_REFRESH_TTL: string;
     JWT_ACCESS_TOKEN: string;
     JWT_ACCESS_TTL: string;
     JWT_RESET_SECRET: string;
