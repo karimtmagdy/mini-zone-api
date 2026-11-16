@@ -3,8 +3,7 @@ import express from "express";
 import { connectDB } from "@/infra/config/server/db";
 import { ApplicationConfiguration } from "@/infra/config/app-config";
 import { setupRoutes } from "@/presentation/routes";
-// import { MissingRouteHandler } from "@/presentation/middleware/global-error";
-// import { errorHandler } from "@/shared/middleware/error-handler";
+import { errorHandler } from "@/common/middleware/error-handler";
 
 const app = express();
 ApplicationConfiguration(app);
@@ -39,7 +38,6 @@ app.use(async (_req, _res, next) => {
 
 setupRoutes(app);
 // LanguageMiddleware(app);
-// app.use(errorHandler);
-// MissingRouteHandler(app);
+app.use(errorHandler);
 export { app };
 // export const handler = serverless(app);

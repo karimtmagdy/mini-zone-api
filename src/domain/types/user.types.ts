@@ -12,18 +12,18 @@ export const USER_ROLE = ["customer", "employee", "supplier"] as const;
 export type TUserRole = (typeof USER_ROLE)[number];
 
 export const USER_PERMISSION = [
-  "product.read",
-  "product.create",
-  "product.update",
-  "product.delete",
-  "inventory.read",
-  "inventory.stock_in",
-  "inventory.stock_out",
-  "inventory.transfer",
-  "inventory.adjust",
-  "order.create",
-  "order.read_own",
-  "supplier.read",
+  "product:read",
+  "product:create",
+  "product:update",
+  "product:delete",
+  "inventory:read",
+  "inventory:stock_in",
+  "inventory:stock_out",
+  "inventory:transfer",
+  "inventory:adjust",
+  "order:create",
+  "order:read_own",
+  "supplier:read",
 ] as const;
 export type TPermission = (typeof USER_PERMISSION)[number];
 
@@ -31,7 +31,7 @@ export type TPermission = (typeof USER_PERMISSION)[number];
 export interface IUserFields {
   username: string;
   email: string;
-  password?: string;
+  password: string;
   role: TUserRole;
   permissions: TPermission[];
   slug?: string;
@@ -40,6 +40,4 @@ export interface IUserFields {
 
 // ===== Entity Data Interface =====
 export interface IUser
-  extends IUserFields,
-    IBaseStatus<TUserStatus>,
-    IBaseArchived {}
+  extends IUserFields, IBaseStatus<TUserStatus>, IBaseArchived {}

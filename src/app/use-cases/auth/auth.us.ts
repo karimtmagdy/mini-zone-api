@@ -6,10 +6,9 @@ import type { AccessTokenPayload } from "@/common/middleware/token-payload";
 import { UseCase } from "@/common/use-case";
 import { IAuthImpl } from "@/domain/interfaces/auth.repo.impl";
 import { ISessionImpl } from "@/domain/interfaces/session.repo.impl";
-import { UserEntity } from "@/domain/entities/user.entity";
+import { CustomerEntity } from "@/domain/entities/customer.entity";
 import { SESSION_TTL_MS } from "@/domain/types/session.types";
 import { TLoginEX, TRegisterEX } from "@/presentation/validator/auth.zod";
-import bcrypt from "bcryptjs";
 
 export interface IAuthUser {
   id: string;
@@ -40,7 +39,7 @@ export interface ILogoutInput {
   sessionId?: string | null;
 }
 
-const toAuthUser = (user: UserEntity): IAuthUser => ({
+const toAuthUser = (user: CustomerEntity): IAuthUser => ({
   id: user.id,
   username: user.username,
   email: user.email,
@@ -50,12 +49,12 @@ const toAuthUser = (user: UserEntity): IAuthUser => ({
 
 const sessionExpiry = (): Date => new Date(Date.now() + SESSION_TTL_MS);
 
-export class RegisterAuthUC extends UseCase<TRegisterEX, UserEntity> {
+export class RegisterAuthUC extends UseCase<TRegisterEX, CustomerEntity> {
   constructor(private readonly repo: IAuthImpl) {
     super();
   }
 
-  async execute(data: TRegisterEX): Promise<UserEntity> {
+  async execute(data: TRegisterEX): Promise<CustomerEntity> {
     const existing = await this.repo.findByEmail(data.email);
     if (existing) {
       throw new AppError("email is already registered", 409);
@@ -81,18 +80,15 @@ export class LoginAuthUC extends UseCase<ILoginInput, IAuthSessionResult> {
   }
 
   async execute(data: ILoginInput): Promise<IAuthSessionResult> {
-    const user = await this.repo.findByEmail(data.email, true);
+    const user = await this.repo.findByEmail(data.email);
     if (!user) {
       throw new AppError("invalid email or password", 401);
     }
     if (user.status !== "active") {
       throw new AppError("user account is blocked", 403);
     }
-    if (!user.password) {
-      throw new AppError("invalid email or password", 401);
-    }
 
-    const matched = await bcrypt.compare(data.password, user.password);
+    const matched = await this.repo.verifyPassword(data.email, data.password);
     if (!matched) {
       throw new AppError("invalid email or password", 401);
     }
@@ -117,7 +113,10 @@ export class LoginAuthUC extends UseCase<ILoginInput, IAuthSessionResult> {
   }
 }
 
-export class RefreshSessionUC extends UseCase<IRefreshInput, IAuthSessionResult> {
+export class RefreshSessionUC extends UseCase<
+  IRefreshInput,
+  IAuthSessionResult
+> {
   constructor(
     private readonly repo: IAuthImpl,
     private readonly sessionRepo: ISessionImpl,
@@ -198,12 +197,12 @@ export class LogoutUC extends UseCase<ILogoutInput, void> {
   }
 }
 
-export class GetCurrentAccountUC extends UseCase<string, UserEntity> {
+export class GetCurrentAccountUC extends UseCase<string, CustomerEntity> {
   constructor(private readonly repo: IAuthImpl) {
     super();
   }
 
-  async execute(userId: string): Promise<UserEntity> {
+  async execute(userId: string): Promise<CustomerEntity> {
     const user = await this.repo.findById(userId);
     if (!user) {
       throw new AppError("user not found", 404, ErrorCode.NOT_FOUND);

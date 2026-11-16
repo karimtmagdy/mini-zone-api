@@ -7,7 +7,7 @@ import {
   USER_STATUS_TRANSITIONS,
 } from "../types/user.types";
 
-export class UserEntity extends AggregateRoot<
+export class CustomerEntity extends AggregateRoot<
   TUserStatus,
   typeof USER_STATUS_TRANSITIONS
 > {

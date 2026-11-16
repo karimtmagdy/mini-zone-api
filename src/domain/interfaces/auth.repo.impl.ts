@@ -1,7 +1,7 @@
-import { UserEntity } from "@/domain/entities/user.entity";
+import { CustomerEntity } from "@/domain/entities/customer.entity";
 import { TPermission, TUserRole } from "@/domain/types/user.types";
 
-export interface ICreateUserData {
+export interface ICreateCustomerData {
   username: string;
   email: string;
   password: string;
@@ -10,10 +10,8 @@ export interface ICreateUserData {
 }
 
 export interface IAuthImpl {
-  create(data: ICreateUserData): Promise<UserEntity>;
-  findByEmail(
-    email: string,
-    selectPassword?: boolean,
-  ): Promise<UserEntity | null>;
-  findById(id: string): Promise<UserEntity | null>;
+  create(data: ICreateCustomerData): Promise<CustomerEntity>;
+  findByEmail(email: string): Promise<CustomerEntity | null>;
+  findById(id: string): Promise<CustomerEntity | null>;
+  verifyPassword(email: string, candidate: string): Promise<boolean>;
 }

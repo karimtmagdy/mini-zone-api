@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { HydratedDocument, Query, Schema } from "mongoose";
 import slugify from "slugify";
 
 export const applySlugify = <T extends { slug?: string }>(
@@ -6,7 +6,7 @@ export const applySlugify = <T extends { slug?: string }>(
   field: keyof T,
 ) => {
   // Hook for .save() and .create()
-  schema.pre("save", async function (this: any) {
+  schema.pre("save", async function (this: HydratedDocument<T>) {
     if (this.isModified(field as string) || !this.slug) {
       if (this[field]) {
         const input = String(this[field]);
@@ -25,10 +25,12 @@ export const applySlugify = <T extends { slug?: string }>(
   // Hook for .findOneAndUpdate(), .updateOne(), etc.
   schema.pre(
     ["findOneAndUpdate", "updateOne", "updateMany"],
-    function (this: any) {
-      const update = this.getUpdate();
-      if (update[field]) {
-        const input = String(update[field]);
+    function (this: Query<T, T>) {
+      const update = this.getUpdate() as Record<string, any> | null;
+      if (!update) return;
+      const fieldKey = field as string;
+      if (update[fieldKey]) {
+        const input = String(update[fieldKey]);
         let slug = slugify(input, { lower: true, strict: true });
         if (!slug && input) {
           slug = input
@@ -37,8 +39,8 @@ export const applySlugify = <T extends { slug?: string }>(
             .replace(/[\s\W_]+/g, "-");
         }
         update.slug = slug;
-      } else if (update.$set && update.$set[field]) {
-        const input = String(update.$set[field]);
+      } else if (update.$set && update.$set[fieldKey]) {
+        const input = String(update.$set[fieldKey]);
         let slug = slugify(input, { lower: true, strict: true });
         if (!slug && input) {
           slug = input

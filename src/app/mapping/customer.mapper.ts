@@ -1,9 +1,9 @@
-import { UserEntity } from "@/domain/entities/user.entity";
-import { UserDoc, UserRoute } from "@/domain/dto/user.dto";
+import { CustomerEntity } from "@/domain/entities/customer.entity";
+import { CustomerDoc, CustomerRoute } from "@/domain/dto/user.dto";
 import { IUser } from "@/domain/types/user.types";
 
-export class UserMapper {
-  static toDomain(doc: UserDoc): UserEntity {
+export class CustomerMapper {
+  static toDomain(doc: CustomerDoc): CustomerEntity {
     const data: IUser = {
       username: doc.username,
       email: doc.email,
@@ -17,7 +17,7 @@ export class UserMapper {
       archivedAt: doc.archivedAt ?? null,
     };
 
-    return new UserEntity({
+    return new CustomerEntity({
       id: doc._id.toString(),
       data,
       createdAt: doc.createdAt,
@@ -25,7 +25,7 @@ export class UserMapper {
     });
   }
 
-  static toPersistence(entity: UserEntity) {
+  static toPersistence(entity: CustomerEntity) {
     return {
       username: entity.username,
       email: entity.email,
@@ -37,7 +37,7 @@ export class UserMapper {
     };
   }
 
-  static toRoute(entity: UserEntity): UserRoute {
+  static toRoute(entity: CustomerEntity): CustomerRoute {
     return {
       id: entity.id,
       username: entity.username,

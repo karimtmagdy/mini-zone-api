@@ -7,16 +7,17 @@ import {
 } from "@/types";
 import { IUserFields, TUserStatus } from "@/domain/types/user.types";
 
-export type UserDoc = IBaseMetaData &
+export type CustomerDoc = IBaseMetaData &
   IUserFields &
   IBaseStatus<TUserStatus> &
   IBaseArchived;
 
 // Export alias for convenience
-export type TUserDoc = UserDoc;
+export type TCustomerDoc = CustomerDoc;
 
-export interface UserRoute
-  extends Identifiable,
+export interface CustomerRoute
+  extends
+    Identifiable,
     Timestamped,
     Omit<IUserFields, "password">,
     IBaseStatus<TUserStatus>,
