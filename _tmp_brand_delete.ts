@@ -11,9 +11,9 @@ import mongoose from "mongoose";
 
   const col = mongoose.connection.collection("brands");
 
-  const matched = await col.countDocuments({ status: "archived" });
-  const res = await col.deleteMany({ status: "archived" });
-  const remainingInactive = await col.countDocuments({ status: "archived" });
+  const matched = await col.countDocuments({ status: "inactive" });
+  const res = await col.deleteMany({ status: "inactive" });
+  const remainingInactive = await col.countDocuments({ status: "inactive" });
   const totalRemaining = await col.countDocuments({});
 
   console.log(
