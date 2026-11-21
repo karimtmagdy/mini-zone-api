@@ -6,6 +6,7 @@ import {
   TPermission,
   USER_STATUS_TRANSITIONS,
 } from "../types/user.types";
+import { TPersonGender } from "../types/person.types";
 
 export class CustomerEntity extends AggregateRoot<
   TUserStatus,
@@ -18,6 +19,11 @@ export class CustomerEntity extends AggregateRoot<
   public permissions: TPermission[];
   public readonly slug?: string;
   public readonly passwordChangedAt?: Date;
+  // public age: number;
+  // public gender: TPersonGender;
+  public lockedUntil?: Date;
+  public failedLoginAttempts: number;
+  public lastLoginAt: Date;
 
   constructor(params: {
     id: string;
@@ -39,8 +45,16 @@ export class CustomerEntity extends AggregateRoot<
     this.email = params.data.email;
     this.password = params.data.password;
     this.role = params.data.role;
+    // this.age = params.data.age;
+    // this.gender = params.data.gender;
     this.permissions = params.data.permissions;
+    this.failedLoginAttempts = params.data.failedLoginAttempts;
+    this.lastLoginAt = params.data.lastLoginAt;
     this.slug = params.data.slug;
     this.passwordChangedAt = params.data.passwordChangedAt;
+    this.lockedUntil = params.data.lockedUntil;
+  }
+  isLocked(): boolean {
+    return !!this.lockedUntil && this.lockedUntil > new Date();
   }
 }

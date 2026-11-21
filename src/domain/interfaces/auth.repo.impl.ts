@@ -1,5 +1,6 @@
 import { CustomerEntity } from "@/domain/entities/customer.entity";
 import { TPermission, TUserRole } from "@/domain/types/user.types";
+import { TPersonGender } from "../types/person.types";
 
 export interface ICreateCustomerData {
   username: string;
@@ -7,6 +8,8 @@ export interface ICreateCustomerData {
   password: string;
   role: TUserRole;
   permissions: TPermission[];
+  age?: number;
+  gender?: TPersonGender;
 }
 
 export interface IAuthImpl {

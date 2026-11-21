@@ -54,6 +54,7 @@ export class BrandImpl implements IBrandImpl {
     if (!doc) return null;
     const entity = BrandMapper.toDomain(doc.toObject());
     entity.archive();
+    if (entity.status !== "archive") entity.transition("archive");
     const updated = await this.db.findByIdAndUpdate(
       id,
       BrandMapper.toPersistence(entity),
@@ -68,6 +69,7 @@ export class BrandImpl implements IBrandImpl {
     if (!doc) return null;
     const entity = BrandMapper.toDomain(doc.toObject());
     entity.unarchive();
+    if (entity.status !== "active") entity.transition("active");
     const updated = await this.db.findByIdAndUpdate(
       id,
       BrandMapper.toPersistence(entity),

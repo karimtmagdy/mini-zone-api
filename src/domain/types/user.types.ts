@@ -36,6 +36,9 @@ export interface IUserFields {
   permissions: TPermission[];
   slug?: string;
   passwordChangedAt?: Date;
+  lockedUntil?: Date;
+  failedLoginAttempts: number;
+  lastLoginAt: Date;
 }
 
 // ===== Entity Data Interface =====

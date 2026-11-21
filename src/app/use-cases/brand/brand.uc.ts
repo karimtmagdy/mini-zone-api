@@ -96,6 +96,13 @@ export class ArchiveBrandUC extends UseCase<string, BrandEntity> {
   }
 
   async execute(id: string): Promise<BrandEntity> {
+    const existing = await this.repo.findById(id);
+    if (!existing) {
+      throw new AppError("brand not found", 404, ErrorCode.NOT_FOUND);
+    }
+    if (existing.isArchived) {
+      throw new AppError("brand already archived", 409, ErrorCode.CONFLICT);
+    }
     const entity = await this.repo.archive(id);
     if (!entity) {
       throw new AppError("brand not found", 404, ErrorCode.NOT_FOUND);
@@ -110,6 +117,13 @@ export class RestoreBrandUC extends UseCase<string, BrandEntity> {
   }
 
   async execute(id: string): Promise<BrandEntity> {
+    const existing = await this.repo.findById(id);
+    if (!existing) {
+      throw new AppError("brand not found", 404, ErrorCode.NOT_FOUND);
+    }
+    if (!existing.isArchived) {
+      throw new AppError("brand already restored", 409, ErrorCode.CONFLICT);
+    }
     const entity = await this.repo.restore(id);
     if (!entity) {
       throw new AppError("brand not found", 404, ErrorCode.NOT_FOUND);

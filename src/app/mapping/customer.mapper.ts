@@ -8,8 +8,13 @@ export class CustomerMapper {
       username: doc.username,
       email: doc.email,
       password: doc.password,
+      // age: doc.age ?? null,
+      // gender: doc.gender,
+      failedLoginAttempts: doc.failedLoginAttempts,
+      lastLoginAt: doc.lastLoginAt,
       role: doc.role,
       permissions: doc.permissions,
+
       status: doc.status,
       slug: doc.slug,
       passwordChangedAt: doc.passwordChangedAt,
@@ -28,6 +33,12 @@ export class CustomerMapper {
   static toPersistence(entity: CustomerEntity) {
     return {
       username: entity.username,
+      failedLoginAttempts: entity.failedLoginAttempts,
+      lastLoginAt: entity.lastLoginAt,
+      // age: entity.age ?? null,
+      // gender: entity.gender,
+      password: entity.password,
+      lockedUntil: entity.lockedUntil,
       email: entity.email,
       role: entity.role,
       status: entity.status,
@@ -46,11 +57,16 @@ export class CustomerMapper {
       permissions: entity.permissions,
       status: entity.status,
       slug: entity.slug,
+      failedLoginAttempts: entity.failedLoginAttempts,
+      lastLoginAt: entity.lastLoginAt,
       passwordChangedAt: entity.passwordChangedAt,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
       isArchived: entity.isArchived,
-      archivedAt: entity.archivedAt,
+      archivedAt: entity.archivedAt ?? null,
+      lockedUntil: entity.lockedUntil,
+      // age: entity.age ?? null,
+      // gender: entity.gender,
     };
   }
 }

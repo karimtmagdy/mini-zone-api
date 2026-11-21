@@ -2,7 +2,7 @@ import { AppError, ErrorCode } from "@/common/api/api-error";
 import { generateSessionId, hashToken } from "@/common/lib/token-hash";
 import { defaultRolePermissions } from "@/common/rule/role-permission";
 import { JwtService } from "@/common/services/jwt";
-import type { AccessTokenPayload } from "@/common/middleware/token-payload";
+// import type { AccessTokenPayload } from "@/common/middleware/token-payload";
 import { UseCase } from "@/common/use-case";
 import { IAuthImpl } from "@/domain/interfaces/auth.repo.impl";
 import { ISessionImpl } from "@/domain/interfaces/session.repo.impl";
@@ -38,13 +38,21 @@ export interface IRefreshInput extends ITokenContext {
 export interface ILogoutInput {
   sessionId?: string | null;
 }
+export interface IAuthUserWithLock extends IAuthUser {
+  lockedUntil?: Date;
+  failedLoginAttempts: number;
+  lastLoginAt?: Date;
+}
 
-const toAuthUser = (user: CustomerEntity): IAuthUser => ({
+const toAuthUser = (user: CustomerEntity): IAuthUserWithLock => ({
   id: user.id,
   username: user.username,
   email: user.email,
   role: user.role,
   permissions: user.permissions,
+  lockedUntil: user.lockedUntil,
+  failedLoginAttempts: user.failedLoginAttempts,
+  lastLoginAt: user.lastLoginAt,
 });
 
 const sessionExpiry = (): Date => new Date(Date.now() + SESSION_TTL_MS);
@@ -83,6 +91,9 @@ export class LoginAuthUC extends UseCase<ILoginInput, IAuthSessionResult> {
     const user = await this.repo.findByEmail(data.email);
     if (!user) {
       throw new AppError("invalid email or password", 401);
+    }
+    if (user.isLocked()) {
+      throw new AppError("user account is locked", 403);
     }
     if (user.status !== "active") {
       throw new AppError("user account is blocked", 403);
@@ -155,6 +166,9 @@ export class RefreshSessionUC extends UseCase<
     if (!user) {
       throw new AppError("user not found", 401, ErrorCode.UNAUTHORIZED);
     }
+    if (user.isLocked()) {
+      throw new AppError("user account is locked", 403, ErrorCode.FORBIDDEN);
+    }
     if (user.status !== "active") {
       throw new AppError("user account is blocked", 403, ErrorCode.FORBIDDEN);
     }
@@ -206,6 +220,9 @@ export class GetCurrentAccountUC extends UseCase<string, CustomerEntity> {
     const user = await this.repo.findById(userId);
     if (!user) {
       throw new AppError("user not found", 404, ErrorCode.NOT_FOUND);
+    }
+    if (user.isLocked()) {
+      throw new AppError("user account is locked", 403, ErrorCode.FORBIDDEN);
     }
     if (user.status !== "active") {
       throw new AppError("user account is blocked", 403, ErrorCode.FORBIDDEN);

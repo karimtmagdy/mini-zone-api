@@ -7,8 +7,11 @@ import {
 } from "@/types";
 import { IUserFields, TUserStatus } from "@/domain/types/user.types";
 
+import { IPersonFields } from "@/domain/types/person.types";
+
 export type CustomerDoc = IBaseMetaData &
   IUserFields &
+  IPersonFields &
   IBaseStatus<TUserStatus> &
   IBaseArchived;
 

@@ -44,10 +44,16 @@ const CustomerDB = new Schema<CustomerDoc>(
       default: "active",
       index: true,
     },
+    age: { type: Number, default: null },
+    gender: { type: String, default: null },
+    lockedUntil: { type: Date, default: null },
     slug: { type: String, trim: true, lowercase: true, unique: true },
     passwordChangedAt: { type: Date, default: null },
+    failedLoginAttempts: { type: Number, default: 0 },
+    lastLoginAt: { type: Date, default: null },
     isArchived: { type: Boolean, default: false, index: true },
     archivedAt: { type: Date, select: false, default: null },
+    // address
   },
   { timestamps: true },
 );

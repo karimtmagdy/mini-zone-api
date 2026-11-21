@@ -23,11 +23,12 @@ const BrandDB = new Schema<BrandDoc>(
     },
     slug: { type: String, trim: true, lowercase: true, unique: true },
     isArchived: { type: Boolean, default: false, index: true },
-    archivedAt: { type: Date, select: false, default: null },
+    archivedAt: { type: Date, default: null },
   },
   { timestamps: true },
 );
 applySlugify(BrandDB, "name");
 applyVirtual({ schema: BrandDB, ref: "Product", foreign: "brandId" });
 BrandDB.index({ name: "text" });
+// BrandDB.index({ archivedAt: 1 }, { expireAfterSeconds: 90 * 24 * 60 * 60 }); // 90 days
 export const brandDB = model<BrandDoc>("Brands", BrandDB);
