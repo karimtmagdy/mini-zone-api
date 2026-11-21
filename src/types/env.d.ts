@@ -14,7 +14,7 @@ declare namespace NodeJS {
     ROUND_SALT: number;
     GEN_VERIFY_TOKEN: string;
 
-    mack_MONGODB_URI: string;
+    MINI_ZONE_MONGODB_URI: string;
     DB_LOCAL: string;
     DB_PASS: string;
 

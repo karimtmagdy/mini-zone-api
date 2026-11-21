@@ -5,7 +5,7 @@ function getMongoURI(): string {
   const isProduction = process.env.NODE_ENV === "production";
   // const isProduction = process.env.VERCEL === "1";
   const uri = isProduction
-    ? process.env.mack_MONGODB_URI
+    ? process.env.MINI_ZONE_MONGODB_URI
     : process.env.DB_LOCAL;
   if (!uri) {
     throw new Error(
@@ -16,7 +16,7 @@ function getMongoURI(): string {
   }
   logger.log({
     NODE_ENV: process.env.NODE_ENV,
-    URI: process.env.mack_MONGODB_URI ? "EXISTS" : "MISSING",
+    URI: process.env.MINI_ZONE_MONGODB_URI ? "EXISTS" : "MISSING",
   });
   return uri;
 }
