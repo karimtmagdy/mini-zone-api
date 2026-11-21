@@ -11,9 +11,9 @@ import mongoose from "mongoose";
 
   const col = mongoose.connection.collection("brands");
 
-  const matched = await col.countDocuments({ status: "inactive" });
-  const res = await col.deleteMany({ status: "inactive" });
-  const remainingInactive = await col.countDocuments({ status: "inactive" });
+  const matched = await col.countDocuments({ status: "onboarding" });
+  const res = await col.deleteMany({ status: "onboarding" });
+  const remainingInactive = await col.countDocuments({ status: "onboarding" });
   const totalRemaining = await col.countDocuments({});
 
   console.log(
