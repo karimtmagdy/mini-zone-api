@@ -3,10 +3,11 @@ import {
   PERSON_GENDER,
   PERSON_STATE,
 } from "@/domain/types/person.types";
+import { slugField } from "@/infra/db/fields/slug.field";
 import { Schema } from "mongoose";
 
 export const PersonDB = new Schema<IPersonFields>({
-  slug: { type: String, trim: true, lowercase: true, unique: true },
+  slug: slugField,
   //   name: {
   //     first: { type: String, trim: true, lowercase: true, default: "" },
   //     last: { type: String, trim: true, lowercase: true, default: "" },

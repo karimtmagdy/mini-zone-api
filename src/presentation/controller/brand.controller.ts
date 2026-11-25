@@ -53,7 +53,6 @@ export class BrandController {
       const validated = createBrand.parse(req.body);
       const result = await this.createUC.execute(validated);
       res.status(201).json({
-        code: 201,
         status: "success",
         message: "brand has been created",
         data: BrandMapper.toRoute(result),
@@ -65,7 +64,6 @@ export class BrandController {
     const { brandId } = req.params;
     const result = await this.getByIdUC.execute(brandId);
     res.status(200).json({
-      code: 200,
       status: "success",
       data: BrandMapper.toRoute(result),
     });
@@ -83,7 +81,6 @@ export class BrandController {
         data: validated,
       });
       res.status(200).json({
-        code: 200,
         status: "success",
         message: "brand has been updated",
         data: BrandMapper.toRoute(result),
@@ -95,7 +92,6 @@ export class BrandController {
     const { brandId } = req.params;
     const result = await this.archiveUC.execute(brandId);
     res.status(200).json({
-      code: 200,
       status: "success",
       message: "brand has been moved to archived",
       data: BrandMapper.toRoute(result),
@@ -106,7 +102,6 @@ export class BrandController {
     const { brandId } = req.params;
     const result = await this.restoreUC.execute(brandId);
     res.status(200).json({
-      code: 200,
       status: "success",
       message: "brand has been restored (unarchived)",
       data: BrandMapper.toRoute(result),
@@ -125,7 +120,6 @@ export class BrandController {
         data: validated,
       });
       res.status(200).json({
-        code: 200,
         status: "success",
         message: `brand status has been updated to ${validated.status}`,
         data: BrandMapper.toRoute(result),
@@ -137,7 +131,6 @@ export class BrandController {
     const { brandId } = req.params;
     const result = await this.deleteUC.execute(brandId);
     res.status(200).json({
-      code: 200,
       status: "success",
       message: "brand has been deleted permanently",
       data: BrandMapper.toRoute(result),

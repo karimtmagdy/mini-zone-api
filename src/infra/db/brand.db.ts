@@ -3,6 +3,8 @@ import { BRAND_STATUS } from "@/domain/types/brand.types";
 import { BrandDoc } from "@/domain/dto/brand.dto";
 import { applySlugify } from "@/common/plugin/plugin-slugify";
 import { applyVirtual } from "@/common/plugin/plugin-virtual";
+import { slugField } from "@/infra/db/fields/slug.field";
+import { archiveFields } from "@/infra/db/fields/archive.field";
 
 const BrandDB = new Schema<BrandDoc>(
   {
@@ -21,9 +23,8 @@ const BrandDB = new Schema<BrandDoc>(
       default: "inactive",
       index: true,
     },
-    slug: { type: String, trim: true, lowercase: true, unique: true },
-    isArchived: { type: Boolean, default: false, index: true },
-    archivedAt: { type: Date, default: null },
+    slug: slugField,
+    ...archiveFields,
   },
   { timestamps: true },
 );

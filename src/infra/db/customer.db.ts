@@ -2,6 +2,7 @@ import { HydratedDocument, Query, Schema, model } from "mongoose";
 import { USER_ROLE, USER_STATUS } from "@/domain/types/user.types";
 import { CustomerDoc } from "@/domain/dto/user.dto";
 import { applySlugify } from "@/common/plugin/plugin-slugify";
+import { slugField } from "@/infra/db/fields/slug.field";
 import bcrypt from "bcryptjs";
 
 // Password hashing / comparing lives only in this file.
@@ -47,7 +48,7 @@ const CustomerDB = new Schema<CustomerDoc>(
     age: { type: Number, default: null },
     gender: { type: String, default: null },
     lockedUntil: { type: Date, default: null },
-    slug: { type: String, trim: true, lowercase: true, unique: true },
+    slug: slugField,
     passwordChangedAt: { type: Date, default: null },
     failedLoginAttempts: { type: Number, default: 0 },
     lastLoginAt: { type: Date, default: null },
