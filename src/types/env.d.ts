@@ -16,8 +16,7 @@ declare namespace NodeJS {
 
     MONGODB_URI: string;
     DB_LOCAL: string;
-    DB_PASS: string;
-
+ 
     WEBHOOK_PASSWORD: string;
     STRIPE_SECRET_KEY: string;
     CLOUDINARY_API_URL: string;
