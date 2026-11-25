@@ -2,6 +2,7 @@ import { CustomerEntity } from "@/domain/entities/customer.entity";
 import {
   IAuthImpl,
   ICreateCustomerData,
+  IUpdateUserAccess,
 } from "@/domain/interfaces/auth.repo.impl";
 import { CustomerDoc } from "@/domain/dto/user.dto";
 import { Model } from "mongoose";
@@ -31,6 +32,21 @@ export class AuthRepo implements IAuthImpl {
 
   async verifyPassword(email: string, candidate: string): Promise<boolean> {
     return verifyCustomerPassword(email, candidate);
+  }
+
+  async updateAccess(
+    id: string,
+    data: IUpdateUserAccess,
+  ): Promise<CustomerEntity | null> {
+    const doc = await this.db
+      .findByIdAndUpdate(
+        id,
+        { role: data.role, permissions: data.permissions },
+        { new: true },
+      )
+      .lean<CustomerDoc>();
+    if (!doc) return null;
+    return CustomerMapper.toDomain(doc);
   }
 }
 

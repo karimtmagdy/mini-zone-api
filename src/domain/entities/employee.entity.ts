@@ -3,7 +3,7 @@ import {
   EMP_TRANSITIONS,
   EmpDepartment,
   EmpJob,
-  EmpRole,
+  EmpJobRole,
   IEmployee,
   TEmployeeStatus,
 } from "../types/employee.types";
@@ -12,13 +12,14 @@ export class EmployeeEntity extends AggregateRoot<
   TEmployeeStatus,
   typeof EMP_TRANSITIONS
 > {
+  public userId: string;
   public code: string;
   public department: EmpDepartment;
   public job: EmpJob;
+  public jobRole: EmpJobRole;
   public salary: number;
   public hiredAt: Date;
-  leftAt?: Date;
-  public role: EmpRole;
+  public leftAt?: Date | null;
 
   constructor(params: {
     id: string;
@@ -36,12 +37,13 @@ export class EmployeeEntity extends AggregateRoot<
       archivedAt: params.data.archivedAt,
     });
 
+    this.userId = params.data.userId;
     this.code = params.data.code;
     this.department = params.data.department;
-    this.role = params.data.role;
+    this.job = params.data.job;
+    this.jobRole = params.data.jobRole;
+    this.salary = params.data.salary;
     this.hiredAt = params.data.hiredAt;
     this.leftAt = params.data.leftAt;
-    this.salary = params.data.salary;
-    this.job = params.data.job;
   }
 }

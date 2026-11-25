@@ -25,7 +25,7 @@ export const requirePermissions = (
       next(new AppError("Authentication required", 401));
       return;
     }
-    const allowed = req.user.permissions.some((permission) =>
+    const allowed = permissions.every((permission) =>
       req.user!.permissions.includes(permission),
     );
     if (!allowed) {

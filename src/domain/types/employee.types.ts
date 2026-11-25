@@ -13,6 +13,7 @@ export const EMP_DEPARTMENT = [
   "it",
 ] as const;
 export type EmpDepartment = (typeof EMP_DEPARTMENT)[number];
+
 export const EMP_JOBS = [
   "specialist",
   "coordinator",
@@ -45,13 +46,14 @@ export const EMP_STATUS = getStatus(EMP_TRANSITIONS);
 export type TEmployeeStatus = (typeof EMP_STATUS)[number];
 
 export interface IEmployeeFields {
+  userId: string;
   code: string;
   department: EmpDepartment;
   job: EmpJob;
   jobRole: EmpJobRole;
   salary: number;
   hiredAt: Date;
-  leftAt?: Date;
+  leftAt?: Date | null;
 }
 
 export interface IEmployee

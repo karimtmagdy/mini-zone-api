@@ -1,14 +1,15 @@
 import { AppError, ErrorCode } from "@/common/api/api-error";
 import { generateSessionId, hashToken } from "@/common/lib/token-hash";
-import { defaultRolePermissions } from "@/common/rule/role-permission";
+import { permissionsForUserRole } from "@/common/rule/role-permission";
 import { JwtService } from "@/common/services/jwt";
-// import type { AccessTokenPayload } from "@/common/middleware/token-payload";
 import { UseCase } from "@/common/use-case";
 import { IAuthImpl } from "@/domain/interfaces/auth.repo.impl";
+import { IEmployeeImpl } from "@/domain/interfaces/employee.repo.impl";
 import { ISessionImpl } from "@/domain/interfaces/session.repo.impl";
 import { CustomerEntity } from "@/domain/entities/customer.entity";
 import { SESSION_TTL_MS } from "@/domain/types/session.types";
 import { TLoginEX, TRegisterEX } from "@/presentation/validator/auth.zod";
+import { syncUserAccess } from "./sync-access";
 
 export interface IAuthUser {
   id: string;
@@ -72,7 +73,7 @@ export class RegisterAuthUC extends UseCase<TRegisterEX, CustomerEntity> {
       email: data.email,
       password: data.password,
       role: "customer",
-      permissions: defaultRolePermissions.customer,
+      permissions: permissionsForUserRole("customer"),
     });
     return created;
   }
@@ -82,20 +83,21 @@ export class LoginAuthUC extends UseCase<ILoginInput, IAuthSessionResult> {
   constructor(
     private readonly repo: IAuthImpl,
     private readonly sessionRepo: ISessionImpl,
+    private readonly employeeRepo: IEmployeeImpl,
     private readonly jwt: JwtService,
   ) {
     super();
   }
 
   async execute(data: ILoginInput): Promise<IAuthSessionResult> {
-    const user = await this.repo.findByEmail(data.email);
-    if (!user) {
+    const found = await this.repo.findByEmail(data.email);
+    if (!found) {
       throw new AppError("invalid email or password", 401);
     }
-    if (user.isLocked()) {
+    if (found.isLocked()) {
       throw new AppError("user account is locked", 403);
     }
-    if (user.status !== "active") {
+    if (found.status !== "active") {
       throw new AppError("user account is blocked", 403);
     }
 
@@ -103,6 +105,9 @@ export class LoginAuthUC extends UseCase<ILoginInput, IAuthSessionResult> {
     if (!matched) {
       throw new AppError("invalid email or password", 401);
     }
+
+    // Recompute permissions from role (+ employee jobRole) so Compass edits stick.
+    const user = await syncUserAccess(found, this.repo, this.employeeRepo);
 
     const token = this.jwt.issue({
       sub: user.id,
@@ -131,6 +136,7 @@ export class RefreshSessionUC extends UseCase<
   constructor(
     private readonly repo: IAuthImpl,
     private readonly sessionRepo: ISessionImpl,
+    private readonly employeeRepo: IEmployeeImpl,
     private readonly jwt: JwtService,
   ) {
     super();
@@ -162,16 +168,18 @@ export class RefreshSessionUC extends UseCase<
       throw new AppError("session has expired", 401, ErrorCode.JWT_EXPIRED);
     }
 
-    const user = await this.repo.findById(session.userId);
-    if (!user) {
+    const found = await this.repo.findById(session.userId);
+    if (!found) {
       throw new AppError("user not found", 401, ErrorCode.UNAUTHORIZED);
     }
-    if (user.isLocked()) {
+    if (found.isLocked()) {
       throw new AppError("user account is locked", 403, ErrorCode.FORBIDDEN);
     }
-    if (user.status !== "active") {
+    if (found.status !== "active") {
       throw new AppError("user account is blocked", 403, ErrorCode.FORBIDDEN);
     }
+
+    const user = await syncUserAccess(found, this.repo, this.employeeRepo);
 
     // Rotate: issue a fresh session id and revoke the presented one.
     const sessionId = generateSessionId();
@@ -212,24 +220,27 @@ export class LogoutUC extends UseCase<ILogoutInput, void> {
 }
 
 export class GetCurrentAccountUC extends UseCase<string, CustomerEntity> {
-  constructor(private readonly repo: IAuthImpl) {
+  constructor(
+    private readonly repo: IAuthImpl,
+    private readonly employeeRepo: IEmployeeImpl,
+  ) {
     super();
   }
 
   async execute(userId: string): Promise<CustomerEntity> {
-    const user = await this.repo.findById(userId);
-    if (!user) {
+    const found = await this.repo.findById(userId);
+    if (!found) {
       throw new AppError("user not found", 404, ErrorCode.NOT_FOUND);
     }
-    if (user.isLocked()) {
+    if (found.isLocked()) {
       throw new AppError("user account is locked", 403, ErrorCode.FORBIDDEN);
     }
-    if (user.status !== "active") {
+    if (found.status !== "active") {
       throw new AppError("user account is blocked", 403, ErrorCode.FORBIDDEN);
     }
-    if (user.isArchived) {
+    if (found.isArchived) {
       throw new AppError("user account is archived", 403, ErrorCode.FORBIDDEN);
     }
-    return user;
+    return syncUserAccess(found, this.repo, this.employeeRepo);
   }
 }

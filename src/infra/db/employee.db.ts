@@ -4,11 +4,21 @@ import {
   EMP_ROLE,
   EMP_STATUS,
 } from "@/domain/types/employee.types";
-import { Schema, model } from "mongoose";
-const EmployeeDB = new Schema(
+import { EmployeeDoc } from "@/domain/dto/employee.dto";
+import { archiveFields } from "@/infra/db/fields/archive.field";
+import { Schema, Types, model } from "mongoose";
+
+const EmployeeDB = new Schema<EmployeeDoc>(
   {
-    code: { type: String, required: true, unique: true },
-    salary: { type: Number },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "Customer",
+      required: true,
+      unique: true,
+      index: true,
+    },
+    code: { type: String, required: true, unique: true, index: true },
+    salary: { type: Number, default: 0, min: 0 },
     hiredAt: { type: Date, default: Date.now },
     leftAt: { type: Date, default: null },
     department: {
@@ -21,19 +31,25 @@ const EmployeeDB = new Schema(
       required: true,
       enum: { values: EMP_JOBS, message: "{VALUE} is not supported" },
     },
-    role: {
+    jobRole: {
       type: String,
       required: true,
       enum: { values: EMP_ROLE, message: "{VALUE} is not supported" },
+      index: true,
     },
     status: {
       type: String,
       enum: { values: EMP_STATUS, message: "{VALUE} is not supported" },
-      default: "inactive",
+      default: "pending",
       index: true,
     },
+    ...archiveFields,
   },
   { timestamps: true },
 );
-EmployeeDB.index({ name: "text" });
-export const employeeDB = model("Employee", EmployeeDB);
+
+EmployeeDB.index({ department: 1, jobRole: 1 });
+
+export const employeeDB = model<EmployeeDoc>("Employee", EmployeeDB);
+
+export type EmployeeObjectId = Types.ObjectId;

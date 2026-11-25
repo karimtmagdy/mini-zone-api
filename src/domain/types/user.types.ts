@@ -22,8 +22,23 @@ export const USER_PERMISSION = [
   "inventory:transfer",
   "inventory:adjust",
   "order:create",
+  "order:read",
   "order:read_own",
+  "order:update",
+  "order:delete",
   "supplier:read",
+  "supplier:create",
+  "supplier:update",
+  "brand:read",
+  "brand:create",
+  "brand:update",
+  "brand:delete",
+  "employee:read",
+  "employee:create",
+  "employee:update",
+  "employee:delete",
+  "customer:read",
+  "customer:update",
 ] as const;
 export type TPermission = (typeof USER_PERMISSION)[number];
 

@@ -15,6 +15,7 @@ import {
   registerZod,
 } from "../validator/auth.zod";
 import { authRepo } from "@/infra/repo/auth.repo";
+import { employeeRepo } from "@/infra/repo/employee.repo";
 import { sessionRepo } from "@/infra/repo/session.repo";
 import { jwtUtil } from "@/common/services/jwt";
 import {
@@ -122,8 +123,8 @@ export class AuthController {
 
 export const ctrlAuth = new AuthController(
   new RegisterAuthUC(authRepo),
-  new LoginAuthUC(authRepo, sessionRepo, jwtUtil),
-  new RefreshSessionUC(authRepo, sessionRepo, jwtUtil),
+  new LoginAuthUC(authRepo, sessionRepo, employeeRepo, jwtUtil),
+  new RefreshSessionUC(authRepo, sessionRepo, employeeRepo, jwtUtil),
   new LogoutUC(sessionRepo),
-  new GetCurrentAccountUC(authRepo),
+  new GetCurrentAccountUC(authRepo, employeeRepo),
 );

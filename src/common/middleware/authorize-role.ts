@@ -10,7 +10,7 @@ export const authorizeRoles = (
       next(new AppError("authentication required", 401));
       return;
     }
-    if (allowedRoles.includes(req.user.role)) {
+    if (!allowedRoles.includes(req.user.role)) {
       next(
         new AppError("You do not have permission to access this resource", 403),
       );
