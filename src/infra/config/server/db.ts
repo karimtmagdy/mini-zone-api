@@ -41,6 +41,7 @@ export async function connectDB(): Promise<void> {
     // }
     logger.log("Initiating MongoDB connection...");
     cache.promise = mongoose.connect(uri, {
+      dbName: "mini-zone-api",
       bufferCommands: false,
       maxPoolSize: 5,
       serverSelectionTimeoutMS: 10_000,
