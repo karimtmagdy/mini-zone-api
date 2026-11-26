@@ -180,7 +180,10 @@ export class EmployeeController {
   remove = CTErr(
     async (req: Request<{ employeeId: string }>, res: Response) => {
       const { employeeId } = req.params;
-      const result = await this.deleteUC.execute(employeeId);
+      const result = await this.deleteUC.execute({
+        id: employeeId,
+        actorId: req.user.sub,
+      });
       res.status(200).json({
         status: "success",
         message: "employee has been deleted permanently",

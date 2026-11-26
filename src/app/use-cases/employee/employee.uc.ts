@@ -218,7 +218,10 @@ export class UpdateEmployeeUC extends UseCase<
   }
 }
 
-export class DeleteEmployeeUC extends UseCase<string, EmployeeEntity> {
+export class DeleteEmployeeUC extends UseCase<
+  { id: string; actorId: string },
+  EmployeeEntity
+> {
   constructor(
     private readonly repo: IEmployeeImpl,
     private readonly authRepo: IAuthImpl,
@@ -226,8 +229,30 @@ export class DeleteEmployeeUC extends UseCase<string, EmployeeEntity> {
     super();
   }
 
-  async execute(id: string): Promise<EmployeeEntity> {
-    const entity = await this.repo.delete(id);
+  async execute(input: {
+    id: string;
+    actorId: string;
+  }): Promise<EmployeeEntity> {
+    const existing = await this.repo.findById(input.id);
+    if (!existing) {
+      throw new AppError("employee not found", 404, ErrorCode.NOT_FOUND);
+    }
+    if (existing.userId === input.actorId) {
+      throw new AppError(
+        "you cannot delete your own account",
+        403,
+        ErrorCode.FORBIDDEN,
+      );
+    }
+    if (existing.jobRole === "admin") {
+      throw new AppError(
+        "the main admin account cannot be deleted",
+        403,
+        ErrorCode.FORBIDDEN,
+      );
+    }
+
+    const entity = await this.repo.delete(input.id);
     if (!entity) {
       throw new AppError("employee not found", 404, ErrorCode.NOT_FOUND);
     }
